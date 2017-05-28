@@ -290,10 +290,33 @@ canvas.height = window.innerHeight;
 var c = canvas.getContext('2d');
 
 document.addEventListener("keydown", keyDownTextField, false);
-var lap_lines = (0, _overlapping_lines2.default)();
-var flickering_circle = (0, _flickering_circle2.default)();
 var big_trailing_circle = new _big_trailing_circle2.default();
-var many_mini_circles = (0, _many_mini_circles2.default)();
+
+function MovingArray(options) {
+  var defaultOptions = {
+    length: 1500,
+    interval: 1,
+    clear: false
+  };
+  options = Object.assign(defaultOptions, options);
+
+  var runFunc = setInterval(function () {
+    if (options.clear) {
+      c.clearRect(0, 0, innerWidth, innerHeight);
+    }
+    options.array.forEach(function (obj) {
+      return obj.update();
+    });
+  }, options.interval);
+
+  setTimeout(function () {
+    clearInterval(runFunc);
+    c.clearRect(0, 0, innerWidth, innerHeight);
+    options.array.forEach(function (obj) {
+      return obj.reset();
+    });
+  }, options.length);
+}
 
 function keyDownTextField(e) {
   var keyInput = e.key;
@@ -301,33 +324,13 @@ function keyDownTextField(e) {
   switch (keyInput) {
 
     case 'a':
-      var aInterval = setInterval(function () {
-        return lap_lines.forEach(function (circle) {
-          return circle.update();
-        });
-      }, 1);
-      setTimeout(function () {
-        clearInterval(aInterval);
-        c.clearRect(0, 0, innerWidth, innerHeight);
-        lap_lines.forEach(function (circle) {
-          circle.reset();
-        });
-      }, 1500);
+      var lap_lines = (0, _overlapping_lines2.default)();
+      MovingArray({ array: lap_lines });
       break;
 
     case 's':
-      var sInterval = setInterval(function () {
-        return flickering_circle.forEach(function (circle) {
-          return circle.update();
-        });
-      }, 1);
-      setTimeout(function () {
-        clearInterval(sInterval);
-        c.clearRect(0, 0, innerWidth, innerHeight);
-        flickering_circle.forEach(function (circle) {
-          circle.reset();
-        });
-      }, 1500);
+      var flickering_circle = (0, _flickering_circle2.default)();
+      MovingArray({ array: flickering_circle });
       break;
 
     case 'd':
@@ -342,19 +345,11 @@ function keyDownTextField(e) {
       break;
 
     case 'f':
-      var fInterval = setInterval(function () {
-        c.clearRect(0, 0, innerWidth, innerHeight);
-        many_mini_circles.forEach(function (circle) {
-          return circle.update();
-        });
-      }, 1);
-      setTimeout(function () {
-        clearInterval(fInterval);
-        many_mini_circles.forEach(function (circle) {
-          circle.reset();
-        });
-        c.clearRect(0, 0, innerWidth, innerHeight);
-      }, 1500);
+      var many_mini_circles = (0, _many_mini_circles2.default)();
+      MovingArray({
+        array: many_mini_circles,
+        clear: true
+      });
       break;
     case 'g':
       var gInterval = setInterval(function () {

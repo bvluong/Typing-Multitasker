@@ -12,10 +12,32 @@ var c = canvas.getContext('2d');
 
 
 document.addEventListener("keydown", keyDownTextField, false);
-const lap_lines = newLapLines();
-const flickering_circle = newFlickeringCircle();
 const big_trailing_circle = new BigTrailingCircle;
-const many_mini_circles = newManyMiniCircles();
+
+function MovingArray(options) {
+  const defaultOptions = {
+    length: 1500,
+    interval: 1,
+    clear: false
+  };
+  options = Object.assign(defaultOptions,options);
+
+  const runFunc = setInterval(() => {
+    if (options.clear) {
+      c.clearRect(0, 0, innerWidth, innerHeight);
+      }
+    options.array.forEach(obj => obj.update());
+  }, options.interval);
+
+  setTimeout( () => {
+    clearInterval(runFunc);
+    c.clearRect(0, 0, innerWidth, innerHeight);
+    options.array.forEach(obj => obj.reset());
+  }, options.length);
+}
+
+
+
 
 function keyDownTextField(e) {
   const keyInput = e.key;
@@ -23,21 +45,13 @@ function keyDownTextField(e) {
   switch (keyInput) {
 
     case 'a':
-      const aInterval = setInterval(() => lap_lines.forEach(circle => circle.update()), 1);
-      setTimeout( () => {
-        clearInterval(aInterval);
-        c.clearRect(0, 0, innerWidth, innerHeight);
-        lap_lines.forEach(circle => {circle.reset();});
-      }, 1500);
+      const lap_lines = newLapLines();
+      MovingArray( {array: lap_lines} );
       break;
 
     case 's':
-      const sInterval = setInterval(() => flickering_circle.forEach(circle => circle.update()), 1);
-      setTimeout( () => {
-        clearInterval(sInterval);
-        c.clearRect(0, 0, innerWidth, innerHeight);
-        flickering_circle.forEach(circle => {circle.reset();});
-      }, 1500);
+      const flickering_circle = newFlickeringCircle();
+      MovingArray( { array: flickering_circle });
       break;
 
     case 'd':
@@ -52,21 +66,16 @@ function keyDownTextField(e) {
       break;
 
     case 'f':
-      const fInterval = setInterval(() => {
-        c.clearRect(0, 0, innerWidth, innerHeight);
-        many_mini_circles.forEach(circle => circle.update());
-      }, 1);
-      setTimeout( () => {
-        clearInterval(fInterval);
-        many_mini_circles.forEach(circle => {circle.reset();
-        });
-        c.clearRect(0, 0, innerWidth, innerHeight);
-      }, 1500);
+      const many_mini_circles = newManyMiniCircles();
+      MovingArray( {
+        array:many_mini_circles,
+        clear:true
+      });
       break;
     case 'g':
       const gInterval = setInterval(() => {
         const lights_sign = new LightsSign;
-        lights_sign.update()
+        lights_sign.update();
       }, 4);
       setTimeout( () => {
         clearInterval(gInterval);
