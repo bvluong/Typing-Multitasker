@@ -290,7 +290,6 @@ canvas.height = window.innerHeight;
 var c = canvas.getContext('2d');
 
 document.addEventListener("keydown", keyDownTextField, false);
-var big_trailing_circle = new _big_trailing_circle2.default();
 
 function MovingArray(options) {
   var defaultOptions = {
@@ -308,13 +307,44 @@ function MovingArray(options) {
       return obj.update();
     });
   }, options.interval);
-
   setTimeout(function () {
     clearInterval(runFunc);
     c.clearRect(0, 0, innerWidth, innerHeight);
     options.array.forEach(function (obj) {
       return obj.reset();
     });
+  }, options.length);
+}
+
+function MovingObject(options) {
+  var defaultOptions = {
+    length: 2000,
+    interval: 50
+  };
+  options = Object.assign(defaultOptions, options);
+  var runFunc = setInterval(function () {
+    options.object.update();
+  }, options.interval);
+  setTimeout(function () {
+    clearInterval(runFunc);
+    options.object.reset();
+    c.clearRect(0, 0, innerWidth, innerHeight);
+  }, options.length);
+}
+
+function FlashingWord(options) {
+  var defaultOptions = {
+    length: 2000,
+    interval: 10
+  };
+  options = Object.assign(defaultOptions, options);
+  var runFunc = setInterval(function () {
+    var object = new options.class();
+    object.update();
+  }, options.interval);
+  setTimeout(function () {
+    clearInterval(runFunc);
+    c.clearRect(0, 0, innerWidth, innerHeight);
   }, options.length);
 }
 
@@ -334,33 +364,19 @@ function keyDownTextField(e) {
       break;
 
     case 'd':
-      var dInterval = setInterval(function () {
-        big_trailing_circle.update();
-      }, 50);
-      setTimeout(function () {
-        clearInterval(dInterval);
-        big_trailing_circle.reset();
-        c.clearRect(0, 0, innerWidth, innerHeight);
-      }, 2000);
+      var big_trailing_circle = new _big_trailing_circle2.default();
+      MovingObject({ object: big_trailing_circle });
       break;
 
     case 'f':
       var many_mini_circles = (0, _many_mini_circles2.default)();
-      MovingArray({
-        array: many_mini_circles,
-        clear: true
-      });
+      MovingArray({ array: many_mini_circles, clear: true });
       break;
+
     case 'g':
-      var gInterval = setInterval(function () {
-        var lights_sign = new _lights_sign2.default();
-        lights_sign.update();
-      }, 4);
-      setTimeout(function () {
-        clearInterval(gInterval);
-        c.clearRect(0, 0, innerWidth, innerHeight);
-      }, 2000);
+      FlashingWord({ class: _lights_sign2.default });
       break;
+
     default:
       console.log("not valid key");
   }

@@ -12,7 +12,8 @@ var c = canvas.getContext('2d');
 
 
 document.addEventListener("keydown", keyDownTextField, false);
-const big_trailing_circle = new BigTrailingCircle;
+
+
 
 function MovingArray(options) {
   const defaultOptions = {
@@ -28,7 +29,6 @@ function MovingArray(options) {
       }
     options.array.forEach(obj => obj.update());
   }, options.interval);
-
   setTimeout( () => {
     clearInterval(runFunc);
     c.clearRect(0, 0, innerWidth, innerHeight);
@@ -36,8 +36,37 @@ function MovingArray(options) {
   }, options.length);
 }
 
+function MovingObject(options) {
+  const defaultOptions = {
+    length: 2000,
+    interval: 50,
+  };
+  options = Object.assign(defaultOptions,options);
+  const runFunc = setInterval(() => {
+    options.object.update();
+  }, options.interval);
+  setTimeout( () => {
+    clearInterval(runFunc);
+    options.object.reset();
+    c.clearRect(0, 0, innerWidth, innerHeight);
+  }, options.length);
+}
 
-
+function FlashingWord(options) {
+  const defaultOptions = {
+    length: 2000,
+    interval: 10,
+  };
+  options = Object.assign(defaultOptions,options);
+  const runFunc = setInterval(() => {
+    const object = new options.class;
+    object.update();
+  }, options.interval);
+  setTimeout( () => {
+    clearInterval(runFunc);
+    c.clearRect(0, 0, innerWidth, innerHeight);
+  }, options.length);
+}
 
 function keyDownTextField(e) {
   const keyInput = e.key;
@@ -55,33 +84,19 @@ function keyDownTextField(e) {
       break;
 
     case 'd':
-      const dInterval = setInterval(() => {
-        big_trailing_circle.update();
-      }, 50);
-      setTimeout( () => {
-        clearInterval(dInterval);
-        big_trailing_circle.reset();
-        c.clearRect(0, 0, innerWidth, innerHeight);
-      }, 2000);
+      const big_trailing_circle = new BigTrailingCircle;
+      MovingObject( { object: big_trailing_circle } );
       break;
 
     case 'f':
       const many_mini_circles = newManyMiniCircles();
-      MovingArray( {
-        array:many_mini_circles,
-        clear:true
-      });
+      MovingArray( { array:many_mini_circles, clear:true });
       break;
+      
     case 'g':
-      const gInterval = setInterval(() => {
-        const lights_sign = new LightsSign;
-        lights_sign.update();
-      }, 4);
-      setTimeout( () => {
-        clearInterval(gInterval);
-        c.clearRect(0, 0, innerWidth, innerHeight);
-      }, 2000);
+      FlashingWord({ class: LightsSign } );
       break;
+
     default:
     console.log("not valid key");
   }
