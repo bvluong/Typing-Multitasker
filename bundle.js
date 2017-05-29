@@ -601,6 +601,10 @@ function updateLetter(letter, time) {
   letter.y += Math.sin(Math.PI * 2 / 2 * (time / 2000)) * 10;
 }
 
+function removeLetter(obj) {
+  stage.removeChild(obj);
+}
+
 function addLetter(letter) {
   stage.addChild(letter);
 }
@@ -611,21 +615,19 @@ createjs.Ticker.addEventListener("tick", tick);
 createjs.Ticker.setFPS(50);
 createjs.Ticker.setInterval(20);
 
+var start_time = 0;
+setInterval(function () {
+  start_time += 1500;
+  letters_array.push([letterK(), start_time]);
+}, 1500);
+
 function tick(event) {
-  if (event.time % 2000 < 10) {
-    var start_time = event.time;
-    letters_array.push([letterK(), start_time]);
-  }
+
   letters_array.forEach(function (letter) {
     updateLetter(letter[0], event.time - letter[1]);
   });
 
-  // this will log a steadily increasing value:
   stage.update(event);
-}
-
-function removeLetter(obj) {
-  stage.removeChild(obj);
 }
 
 document.addEventListener("keydown", keyDownTextField, false);

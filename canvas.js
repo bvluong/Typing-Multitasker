@@ -22,8 +22,6 @@ inputCircle.x = innerWidth/2;
 inputCircle.y = innerHeight/2;
 stage.addChild(inputCircle);
 
-
-
 var circle = new createjs.Shape();
 circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 20);
 circle.x = innerWidth/2;
@@ -44,6 +42,10 @@ function updateLetter(letter,time) {
 
 }
 
+function removeLetter(obj) {
+  stage.removeChild(obj);
+}
+
 function addLetter(letter) {
   stage.addChild(letter);
 }
@@ -55,23 +57,18 @@ createjs.Ticker.addEventListener("tick", tick);
 createjs.Ticker.setFPS(50);
 createjs.Ticker.setInterval(20);
 
+let start_time = 0;
+setInterval(() => {
+  start_time += 1500;
+  letters_array.push([letterK(),start_time]);
+}, 1500);
 
 function tick(event) {
-  if (event.time % 2000 < 10) {
-    let start_time = event.time;
-    letters_array.push([letterK(),start_time]);
-  }
+
   letters_array.forEach( (letter) => {
     updateLetter(letter[0] ,event.time-letter[1]); });
 
-
-  // this will log a steadily increasing value:
   stage.update(event);
-}
-
-
-function removeLetter(obj) {
-  stage.removeChild(obj);
 }
 
 
