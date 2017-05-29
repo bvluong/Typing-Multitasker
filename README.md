@@ -23,17 +23,18 @@ This app will consist of a single screen with game board, game controls, and nav
 
 This project will be implemented with the following technologies:
 
-- Vanilla JavaScript - For the game logic, ie switch statements for when correct/incorrect keys are pressed/
-- HTML5 Canvas & easel - for creating animations, backgrounds, and rendering shapes
-- Webpack - to bundle up all the code and allow for import/export
-- Babel - for compiling javascript.
-- yuki-createjs - to allow easal to work with webpack bundler
+- Vanilla JavaScript - For the game logic, ie switch statements for when correct/incorrect keys are pressed.
+- HTML5 Canvas & Easeljs - For creating animations, backgrounds, and rendering shapes.
+- Webpack - To bundle up all the code and allow for import/export.
+- Babel - For compiling javascript.
+- yuki-createjs - To allow Easaljs to work with webpack bundler.
 
-In addition to the webpack entry file, there will be three scripts involved in this project:
+`canvas.js`: this script will handle the game logic. Such as intervals to generate letters, when correct keys are pressed, when incorrect keys are pressed, and when to increase the difficulty.
 
-`canvas.js`: this script will handle the logic
+`circle.js`: will generate the background circles.
 
-`circle.js`: will generate the circle and animations
+`letters.js`: will generate the letters floating in outer circle.
+
 
 ### Implementation Timeline
 
