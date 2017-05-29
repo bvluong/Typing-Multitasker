@@ -2,7 +2,7 @@
 
 ### Background
 
-Typing Multitasker is a typing game that utilizes rhythm, timing, and multi-tasking inspired by  **Gyroshi**. Typing MultiTasker is a 1-player game that plays out on three circles that rotate with letters. Once the letter reaches the top of the circle, the user will need to hit the correct key in order to raise their life bar. The game starts off with one circle of rotating letters, but as the game progresses other circles will  appear and rotating their own letters.
+Typing Multitasker is a typing game that utilizes rhythm, timing, and multi-tasking inspired by  **Gyroshi**. A single player game that plays out on three circles which rotate with a pair of letters. Once the letter reaches the top of the circle, the user will need to hit the correct key in order to raise their life bar. The game starts off with one circle of rotating letters, but as the game progresses other circles will  appear and rotating their own letters. In additional to more circles appearing, the speed at which the letters revolve around the circle will also increase.
 
 ### Functionality & MVP  
 
@@ -10,6 +10,7 @@ Typing Multitasker is a typing game that utilizes rhythm, timing, and multi-task
 - [ ] Letters will rotate inside the circle and disappear after one rotation.
 - [ ] A combo meter to show how many letters that are hit in a row.
 - [ ] Life bar that will end the game if a certain number of incorrect keys are hit.
+- [ ] Start and Restart button for when the player loses
 - [ ] A production Readme
 
 ### Wireframes
@@ -22,11 +23,11 @@ This app will consist of a single screen with game board, game controls, and nav
 
 This project will be implemented with the following technologies:
 
-- Vanilla JavaScript and jQuery
-- HTML5 Canvas
-- Webpack
-- Babel
-- Easel?
+- Vanilla JavaScript - For the game logic, ie switch statements for when correct/incorrect keys are pressed/
+- HTML5 Canvas & easel - for creating animations, backgrounds, and rendering shapes
+- Webpack - to bundle up all the code and allow for import/export
+- Babel - for compiling javascript.
+- yuki-createjs - to allow easal to work with webpack bundler
 
 In addition to the webpack entry file, there will be three scripts involved in this project:
 
@@ -48,3 +49,5 @@ In addition to the webpack entry file, there will be three scripts involved in t
 
 - [ ] Animations/Sounds in the background when letters clicked correctly
 - [ ] The input circle moves along the outer circle.
+- [ ] The outer circles also start moving.
+- [ ] Music for when certain combo lengths are reached.
