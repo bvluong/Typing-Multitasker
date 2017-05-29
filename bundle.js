@@ -63,11 +63,81 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var canvas = document.getElementById('root');
+
+var c = canvas.getContext('2d');
+
+var BigTrailingCircle = function () {
+  function BigTrailingCircle() {
+    _classCallCheck(this, BigTrailingCircle);
+
+    this.x = innerWidth / 2;
+    this.y = innerHeight / 2;
+    this.dx = Math.PI * 2 / 100;
+    this.dy = Math.PI * 2 / 100;
+    this.startPoint = 0;
+    this.endPoint = Math.PI * 2 / 100;
+    this.radius = (innerHeight + innerWidth) / 6;
+    this.color = 'magenta';
+  }
+
+  _createClass(BigTrailingCircle, [{
+    key: 'draw',
+    value: function draw() {
+      c.beginPath();
+      c.arc(this.x, this.y, this.radius, this.startPoint, this.endPoint, false);
+      c.strokeStyle = this.color;
+      c.lineWidth = 30;
+      c.stroke();
+    }
+  }, {
+    key: 'update',
+    value: function update() {
+      c.clearRect(0, 0, innerWidth, innerHeight);
+      if (this.endPoint >= Math.PI * 2) {
+        this.dx = Math.PI * 2 / 100;
+        this.dy = 0;
+      }
+      this.startPoint += this.dx;
+      this.endPoint += this.dy;
+
+      this.draw();
+    }
+  }, {
+    key: 'reset',
+    value: function reset() {
+      this.dx = 0;
+      this.dy = Math.PI * 2 / 100;
+      this.startPoint = 0;
+      this.endPoint = Math.PI * 2 / 100;
+    }
+  }]);
+
+  return BigTrailingCircle;
+}();
+
+exports.default = BigTrailingCircle;
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -166,7 +236,141 @@ function newFlickeringCircle() {
 exports.default = newFlickeringCircle;
 
 /***/ }),
-/* 1 */
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var canvas = document.getElementById('root');
+var c = canvas.getContext('2d');
+
+var LightsSign = function () {
+  function LightsSign() {
+    _classCallCheck(this, LightsSign);
+
+    this.x = innerWidth / 2;
+    this.y = innerHeight / 2;
+    this.text = "LIGHTS";
+    this.color = ['#0000CD', '#00FFFF', '#6495ED', '#00008B'][Math.floor(Math.random() * 4)];
+  }
+
+  _createClass(LightsSign, [{
+    key: 'draw',
+    value: function draw() {
+      c.font = '100px Iceland';
+      c.fillStyle = this.color;
+      c.textAlign = 'center';
+      c.fillText(this.text, this.x, this.y);
+    }
+  }, {
+    key: 'update',
+    value: function update() {
+      this.draw();
+    }
+  }]);
+
+  return LightsSign;
+}();
+
+exports.default = LightsSign;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var canvas = document.getElementById('root');
+var c = canvas.getContext('2d');
+
+var ManyMiniCircles = function () {
+  function ManyMiniCircles(x, y, dx, dy, radius, color) {
+    _classCallCheck(this, ManyMiniCircles);
+
+    this.x = x;
+    this.y = y;
+    this.dx = dx;
+    this.dy = dy;
+    this.radius = radius;
+    this.color = color;
+    this.default = { x: x, y: y, dx: dx, dy: dy, radius: radius, color: color };
+  }
+
+  _createClass(ManyMiniCircles, [{
+    key: 'draw',
+    value: function draw() {
+      c.beginPath();
+      c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+      c.strokeStyle = this.color;
+      c.fillStyle = this.color;
+      c.fill();
+    }
+  }, {
+    key: 'update',
+    value: function update() {
+      if (this.x + this.radius > innerWidth || this.x - this.radius < 0) {
+        this.dx = -this.dx;
+      }
+
+      if (this.y + this.radius > innerHeight || this.y - this.radius < 0) {
+        this.dy = -this.dy;
+      }
+
+      this.x += this.dx;
+      this.y += this.dy;
+      this.draw();
+    }
+  }, {
+    key: 'reset',
+    value: function reset() {
+      this.x = this.default['x'];
+      this.y = this.default['y'];
+      this.dx = this.default['dx'];
+      this.dy = this.default['dy'];
+      this.radius = this.default['radius'];
+      this.color = this.default['color'];
+    }
+  }]);
+
+  return ManyMiniCircles;
+}();
+
+function newManyMiniCircles() {
+  var circleArray = [];
+  for (var i = 0; i < 800; i++) {
+    var radius = 2;
+    var x = Math.random() * (innerWidth - radius * 2) + radius;
+    var y = Math.random() * (innerHeight - radius * 2) + radius;
+    var dx = (Math.random() - 0.5) * 2;
+    var dy = (Math.random() - 0.5) * 2;
+    var color = ['blue', 'red', 'black', 'orange'][Math.floor(Math.random() * 4)];
+    circleArray.push(new ManyMiniCircles(x, y, dx, dy, radius, color));
+  }
+  return circleArray;
+}
+
+exports.default = newManyMiniCircles;
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -256,31 +460,35 @@ function newLapLines() {
 exports.default = newLapLines;
 
 /***/ }),
-/* 2 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _overlapping_lines = __webpack_require__(1);
+var _overlapping_lines = __webpack_require__(4);
 
 var _overlapping_lines2 = _interopRequireDefault(_overlapping_lines);
 
-var _flickering_circle = __webpack_require__(0);
+var _flickering_circle = __webpack_require__(1);
 
 var _flickering_circle2 = _interopRequireDefault(_flickering_circle);
 
-var _big_trailing_circle = __webpack_require__(3);
+var _big_trailing_circle = __webpack_require__(0);
 
 var _big_trailing_circle2 = _interopRequireDefault(_big_trailing_circle);
 
-var _many_mini_circles = __webpack_require__(4);
+var _many_mini_circles = __webpack_require__(3);
 
 var _many_mini_circles2 = _interopRequireDefault(_many_mini_circles);
 
-var _lights_sign = __webpack_require__(5);
+var _lights_sign = __webpack_require__(2);
 
 var _lights_sign2 = _interopRequireDefault(_lights_sign);
+
+var _moving_letters = __webpack_require__(6);
+
+var _moving_letters2 = _interopRequireDefault(_moving_letters);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -288,6 +496,14 @@ var canvas = document.getElementById('root');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 var c = canvas.getContext('2d');
+
+c.beginPath();
+c.arc(innerWidth / 2, innerHeight / 2, 50, 0, Math.PI * 2, false);
+c.strokeStyle = 'blue';
+c.stroke();
+
+var moving_letter = new _moving_letters2.default();
+MovingObject({ object: moving_letter, length: 50000 });
 
 document.addEventListener("keydown", keyDownTextField, false);
 
@@ -319,10 +535,21 @@ function MovingArray(options) {
 function MovingObject(options) {
   var defaultOptions = {
     length: 2000,
-    interval: 50
+    interval: 40
   };
   options = Object.assign(defaultOptions, options);
   var runFunc = setInterval(function () {
+    c.clearRect(0, 0, innerWidth, innerHeight);
+    c.beginPath();
+    c.arc(innerWidth / 2, innerHeight / 2, 50, 0, Math.PI * 2, false);
+    c.strokeStyle = 'blue';
+    c.stroke();
+
+    c.beginPath();
+    c.arc(innerWidth / 2, innerHeight / 2 + 100, 200, 0, Math.PI * 2, false);
+    c.strokeStyle = 'blue';
+    c.stroke();
+
     options.object.update();
   }, options.interval);
   setTimeout(function () {
@@ -356,6 +583,7 @@ function keyDownTextField(e) {
     case 'a':
       var lap_lines = (0, _overlapping_lines2.default)();
       MovingArray({ array: lap_lines });
+
       break;
 
     case 's':
@@ -365,7 +593,7 @@ function keyDownTextField(e) {
 
     case 'd':
       var big_trailing_circle = new _big_trailing_circle2.default();
-      MovingObject({ object: big_trailing_circle });
+      MovingObject({ object: big_trailing_circle, length: 10000 });
       break;
 
     case 'f':
@@ -375,15 +603,24 @@ function keyDownTextField(e) {
 
     case 'g':
       FlashingWord({ class: _lights_sign2.default });
+      var audio = document.getElementById("audio");
+      audio.play();
       break;
 
+    case 'r':
+      if (moving_letter.x < innerWidth / 2 + 50 && moving_letter.x > innerWidth / 2 - 50 && moving_letter.y < innerHeight / 2 + 50 && moving_letter.y > innerHeight / 2 - 50) {
+        console.log("it works");
+      } else {
+        console.log('You missed');
+      }
+      break;
     default:
       console.log("not valid key");
   }
 }
 
 /***/ }),
-/* 3 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -398,175 +635,21 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var canvas = document.getElementById('root');
-
 var c = canvas.getContext('2d');
 
-var BigTrailingCircle = function () {
-  function BigTrailingCircle() {
-    _classCallCheck(this, BigTrailingCircle);
+var MovingLetter = function () {
+  function MovingLetter() {
+    _classCallCheck(this, MovingLetter);
 
     this.x = innerWidth / 2;
     this.y = innerHeight / 2;
-    this.dx = 0;
-    this.dy = Math.PI * 2 / 20;
-    this.startPoint = 0;
-    this.endPoint = Math.PI * 2 / 20;
-    this.radius = (innerHeight + innerWidth) / 6;
-    this.color = 'magenta';
-  }
-
-  _createClass(BigTrailingCircle, [{
-    key: 'draw',
-    value: function draw() {
-      c.beginPath();
-      c.arc(this.x, this.y, this.radius, this.startPoint, this.endPoint, false);
-      c.strokeStyle = this.color;
-      c.lineWidth = 30;
-      c.stroke();
-    }
-  }, {
-    key: 'update',
-    value: function update() {
-      c.clearRect(0, 0, innerWidth, innerHeight);
-      if (this.endPoint >= Math.PI * 2) {
-        this.dx = Math.PI * 2 / 20;
-        this.dy = 0;
-      }
-      this.startPoint += this.dx;
-      this.endPoint += this.dy;
-
-      this.draw();
-    }
-  }, {
-    key: 'reset',
-    value: function reset() {
-      this.dx = 0;
-      this.dy = Math.PI * 2 / 20;
-      this.startPoint = 0;
-      this.endPoint = Math.PI * 2 / 50;
-    }
-  }]);
-
-  return BigTrailingCircle;
-}();
-
-exports.default = BigTrailingCircle;
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var canvas = document.getElementById('root');
-var c = canvas.getContext('2d');
-
-var ManyMiniCircles = function () {
-  function ManyMiniCircles(x, y, dx, dy, radius, color) {
-    _classCallCheck(this, ManyMiniCircles);
-
-    this.x = x;
-    this.y = y;
-    this.dx = dx;
-    this.dy = dy;
-    this.radius = radius;
-    this.color = color;
-    this.default = { x: x, y: y, dx: dx, dy: dy, radius: radius, color: color };
-  }
-
-  _createClass(ManyMiniCircles, [{
-    key: 'draw',
-    value: function draw() {
-      c.beginPath();
-      c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-      c.strokeStyle = this.color;
-      c.fillStyle = this.color;
-      c.fill();
-    }
-  }, {
-    key: 'update',
-    value: function update() {
-      if (this.x + this.radius > innerWidth || this.x - this.radius < 0) {
-        this.dx = -this.dx;
-      }
-
-      if (this.y + this.radius > innerHeight || this.y - this.radius < 0) {
-        this.dy = -this.dy;
-      }
-
-      this.x += this.dx;
-      this.y += this.dy;
-      this.draw();
-    }
-  }, {
-    key: 'reset',
-    value: function reset() {
-      this.x = this.default['x'];
-      this.y = this.default['y'];
-      this.dx = this.default['dx'];
-      this.dy = this.default['dy'];
-      this.radius = this.default['radius'];
-      this.color = this.default['color'];
-    }
-  }]);
-
-  return ManyMiniCircles;
-}();
-
-function newManyMiniCircles() {
-  var circleArray = [];
-  for (var i = 0; i < 800; i++) {
-    var radius = 2;
-    var x = Math.random() * (innerWidth - radius * 2) + radius;
-    var y = Math.random() * (innerHeight - radius * 2) + radius;
-    var dx = (Math.random() - 0.5) * 2;
-    var dy = (Math.random() - 0.5) * 2;
-    var color = ['blue', 'red', 'black', 'orange'][Math.floor(Math.random() * 4)];
-    circleArray.push(new ManyMiniCircles(x, y, dx, dy, radius, color));
-  }
-  return circleArray;
-}
-
-exports.default = newManyMiniCircles;
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var canvas = document.getElementById('root');
-var c = canvas.getContext('2d');
-
-var LightsSign = function () {
-  function LightsSign() {
-    _classCallCheck(this, LightsSign);
-
-    this.x = innerWidth / 2;
-    this.y = innerHeight / 2;
-    this.text = "LIGHTS";
+    this.dx = Math.PI * 2 / 100;
+    this.dy = Math.PI * 2 / 100;
+    this.text = "F";
     this.color = ['#0000CD', '#00FFFF', '#6495ED', '#00008B'][Math.floor(Math.random() * 4)];
   }
 
-  _createClass(LightsSign, [{
+  _createClass(MovingLetter, [{
     key: 'draw',
     value: function draw() {
       c.font = '100px Iceland';
@@ -577,14 +660,29 @@ var LightsSign = function () {
   }, {
     key: 'update',
     value: function update() {
+
+      this.x += Math.cos(this.dx) * 10;
+      this.y += Math.sin(this.dy) * 10;
+
+      this.dx += Math.PI * 2 / 100;
+      this.dy += Math.PI * 2 / 100;
+
       this.draw();
+    }
+  }, {
+    key: 'reset',
+    value: function reset() {
+      this.x = innerWidth / 2;
+      this.y = innerHeight / 2;
+      this.dx = Math.PI * 2 / 100;
+      this.dy = Math.PI * 2 / 100;
     }
   }]);
 
-  return LightsSign;
+  return MovingLetter;
 }();
 
-exports.default = LightsSign;
+exports.default = MovingLetter;
 
 /***/ })
 /******/ ]);

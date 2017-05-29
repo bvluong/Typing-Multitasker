@@ -6,10 +6,10 @@ class BigTrailingCircle {
   constructor() {
     this.x = innerWidth/2;
     this.y = innerHeight/2;
-    this.dx = 0;
-    this.dy = (Math.PI * 2)/20;
+    this.dx = (Math.PI * 2)/100;
+    this.dy = (Math.PI * 2)/100;
     this.startPoint = 0;
-    this.endPoint = (Math.PI * 2)/20;
+    this.endPoint = (Math.PI * 2)/100;
     this.radius = (innerHeight+innerWidth)/6;
     this.color = 'magenta';
 
@@ -26,7 +26,7 @@ class BigTrailingCircle {
   update() {
     c.clearRect(0, 0, innerWidth, innerHeight);
     if ( this.endPoint >= Math.PI * 2) {
-      this.dx = (Math.PI * 2)/20;
+      this.dx = (Math.PI * 2)/100;
       this.dy = 0;
     }
     this.startPoint += this.dx;
@@ -37,9 +37,9 @@ class BigTrailingCircle {
 
   reset() {
     this.dx = 0;
-    this.dy = (Math.PI * 2)/20;
+    this.dy = (Math.PI * 2)/100;
     this.startPoint = 0;
-    this.endPoint = (Math.PI * 2)/50;
+    this.endPoint = (Math.PI * 2)/100;
   }
 }
 
