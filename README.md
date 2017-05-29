@@ -6,8 +6,6 @@ Typing Multitasker is a typing game that utilizes rhythm, timing, and multi-task
 
 ### Functionality & MVP  
 
-With this Conway's Game of Life simulator, users will be able to:
-
 - [ ] Click on Letter inside circle and obtain feedback(sound/animation) if hit correctly.
 - [ ] Letters will rotate inside the circle and disappear after one rotation.
 - [ ] A combo meter to show how many letters that are hit in a row.
