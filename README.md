@@ -28,6 +28,7 @@ This project will be implemented with the following technologies:
 - HTML5 Canvas
 - Webpack
 - Babel
+- Easel?
 
 In addition to the webpack entry file, there will be three scripts involved in this project:
 
@@ -37,27 +38,13 @@ In addition to the webpack entry file, there will be three scripts involved in t
 
 ### Implementation Timeline
 
-**Day 1**:
+**Day 1**: Setup files, babel, webpack, canvas, and easel.js
 
-**Day 2**: Dedicate this day to learning the `Easel.js` API.  First, build out the `Cell` object to connect to the `Board` object.  Then, use `board.js` to create and render at least the square grid, ideally all 3 grid types.  Build in the ability to toggle the live/dead states on click for each cell.  Goals for the day:
+**Day 2**: Create and handle the game logic for one circle so that when the letter is within 50pixels of the input circle that a correct response is returned.
 
-- Complete the `cell.js` module (constructor, update functions)
-- Render a square grid to the `Canvas` using `Easel.js`
-- Make each cell in the grid clickable, toggling the state of the square on click
-- Do the same for triangular and hexagonal grids
+**Day 3**: Add more letters into the circle so that a constant stream of letters will appear within a circle.
 
-**Day 3**: Create the automata logic backend.  Build out modular functions for handling the different grid types along with their unique neighbor checks and rule sets.  Incorporate the automata logic into the `Board.js` rendering.  Goals for the day:
-
-- Export an `Automata` object with correct type and handling logic
-- Have a functional grid on the `Canvas` frontend that correctly handles iterations from one generation of the game to the next
-
-
-**Day 4**: Install the controls for the user to interact with the game.  Style the frontend, making it polished and professional.  Goals for the day:
-
-- Create controls for game speed, stop, start, reset, and shape type
-- Have a styled `Canvas`, nice looking controls and title
-- If time: include buttons on the side to toggle the color scheme of the cells
-
+**Day 4**: Style the frontend, add different colors to the circles. Add some fade or movement as
 
 ### Bonus features
 
