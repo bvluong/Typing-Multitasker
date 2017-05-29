@@ -36,7 +36,7 @@ In addition to the webpack entry file, there will be three scripts involved in t
 
 ### Implementation Timeline
 
-**Day 1**: Setup files, babel, webpack, canvas, and easel.js
+**Day 1**: Setup files, babel, webpack, canvas, and easel.js. Create a factory function to generate moving letters that will appear after a set interval. Create a switch function to manage the event listener for key strokes.
 
 **Day 2**: Create and handle the game logic for one circle so that when the letter is within 50pixels of the input circle that a correct response is returned.
 

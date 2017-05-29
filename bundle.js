@@ -525,7 +525,16 @@ function newLapLines() {
 exports.default = newLapLines;
 
 /***/ }),
-/* 6 */,
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(11)
+__webpack_require__(12)
+__webpack_require__(13)
+__webpack_require__(14)
+
+
+/***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -556,7 +565,7 @@ var _moving_letters = __webpack_require__(4);
 
 var _moving_letters2 = _interopRequireDefault(_moving_letters);
 
-__webpack_require__(8);
+__webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -565,168 +574,82 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 var c = canvas.getContext('2d');
 
-var moving_letters = [];
-for (var i = 0; i < 5; i++) {
-  moving_letters.push(new _moving_letters2.default());
-}
-// MovingArray({ array: moving_letters,  length: 50000, interval: 50, clear:true});
-
-
-//
-// document.addEventListener("keydown", keyDownTextField, false);
-//
-// function MovingArray(options) {
-//   const defaultOptions = {
-//     length: 1500,
-//     interval: 1,
-//     clear: false
-//   };
-//   options = Object.assign(defaultOptions,options);
-//
-//   const runFunc = setInterval(() => {
-//     if (options.clear) {
-//       c.clearRect(0, 0, innerWidth, innerHeight);
-//       }
-//     options.array.forEach(obj => obj.update());
-//
-//   }, options.interval);
-//   setTimeout( () => {
-//     clearInterval(runFunc);
-//     c.clearRect(0, 0, innerWidth, innerHeight);
-//     options.array.forEach(obj => obj.reset());
-//   }, options.length);
-// }
-//
-// function MovingObject(options) {
-//   const defaultOptions = {
-//     length: 2000,
-//     interval: 40,
-//   };
-//   options = Object.assign(defaultOptions,options);
-//   const runFunc = setInterval(() => {
-//     c.beginPath();
-//     c.arc(innerWidth/2, innerHeight/2, 50, 0, Math.PI * 2, false);
-//     c.strokeStyle = 'blue';
-//     c.stroke();
-//
-//     c.beginPath();
-//     c.arc(innerWidth/2, innerHeight/2+150, 150, 0, Math.PI * 2, false);
-//     c.strokeStyle = 'blue';
-//     c.stroke();
-//     options.object.update();
-//   }, options.interval);
-//   setTimeout( () => {
-//     clearInterval(runFunc);
-//     options.object.reset();
-//     c.clearRect(0, 0, innerWidth, innerHeight);
-//   }, options.length);
-// }
-//
-// function FlashingWord(options) {
-//   const defaultOptions = {
-//     length: 2000,
-//     interval: 10,
-//   };
-//   options = Object.assign(defaultOptions,options);
-//   const runFunc = setInterval(() => {
-//     const object = new options.class;
-//     object.update();
-//   }, options.interval);
-//   setTimeout( () => {
-//     clearInterval(runFunc);
-//     c.clearRect(0, 0, innerWidth, innerHeight);
-//   }, options.length);
-// }
-//
-// function keyDownTextField(e) {
-//   const keyInput = e.key;
-//
-//   switch (keyInput) {
-//
-//     case 'a':
-//       const lap_lines = newLapLines();
-//       MovingArray( {array: lap_lines} );
-//
-//       break;
-//
-//     case 's':
-//       const flickering_circle = newFlickeringCircle();
-//       MovingArray( { array: flickering_circle });
-//       break;
-//
-//     case 'd':
-//       const big_trailing_circle = new BigTrailingCircle;
-//       MovingObject( { object: big_trailing_circle, length: 10000 } );
-//       break;
-//
-//     case 'f':
-//       const many_mini_circles = newManyMiniCircles();
-//       MovingArray( { array:many_mini_circles, clear:true });
-//       break;
-//
-//     case 'g':
-//       FlashingWord({ class: LightsSign } );
-//       var audio = document.getElementById("audio");
-//       audio.play();
-//       break;
-//
-//     case 'r':
-//     if ((moving_letter.x < (innerWidth/2)+50 && moving_letter.x > (innerWidth/2)-50) &&
-//         (moving_letter.y < (innerHeight/2)+50 && moving_letter.y > (innerHeight/2)-50))
-//      {
-//          FlashingWord({ class: LightsSign } );
-//     } else {
-//       console.log('You missed');
-//     }
-//     break;
-//     default:
-//     console.log("not valid key");
-//   }
-// }
-
-
 var stage = new createjs.Stage("root");
-var circle = new createjs.Shape();
-circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 20);
-circle.x = innerWidth / 2;
-circle.y = innerHeight / 2;
 
 var inputCircle = new createjs.Shape();
 inputCircle.graphics.beginStroke("DeepSkyBlue").drawCircle(0, 0, 40);
 inputCircle.x = innerWidth / 2;
 inputCircle.y = innerHeight / 2;
-
-stage.addChild(circle);
 stage.addChild(inputCircle);
-stage.update();
+
+var circle = new createjs.Shape();
+circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 20);
+circle.x = innerWidth / 2;
+circle.y = innerHeight / 2;
+stage.addChild(circle);
+
+function letterK() {
+  var object = new createjs.Text("r", "20px Arial", "#ff7700");
+  object.x = innerWidth / 2;
+  object.y = innerHeight / 2;
+  stage.addChild(object);
+  return object;
+}
+
+function updateLetter(letter, time) {
+  letter.x += Math.cos(Math.PI * 2 / 2 * (time / 2000)) * 10;
+  letter.y += Math.sin(Math.PI * 2 / 2 * (time / 2000)) * 10;
+}
+
+function addLetter(letter) {
+  stage.addChild(letter);
+}
+
+var letters_array = [[circle, 0]];
 
 createjs.Ticker.addEventListener("tick", tick);
-createjs.Ticker.setInterval(1000);
 createjs.Ticker.setFPS(50);
-var dx = Math.PI * 2 / 50;
-var dy = Math.PI * 2 / 50;
+createjs.Ticker.setInterval(20);
+
 function tick(event) {
-  // move 100 pixels per second (elapsedTimeInMS / 1000msPerSecond * pixelsPerSecond):
-  circle.x += Math.cos(dx) * 20;
-  circle.y += Math.sin(dy) * 20;
-  dx += Math.PI * 2 / 50;
-  dy += Math.PI * 2 / 50;
+  if (event.time % 2000 < 10) {
+    var start_time = event.time;
+    letters_array.push([letterK(), start_time]);
+  }
+  letters_array.forEach(function (letter) {
+    updateLetter(letter[0], event.time - letter[1]);
+  });
+
   // this will log a steadily increasing value:
-  stage.update();
+  stage.update(event);
+}
+
+function removeLetter(obj) {
+  stage.removeChild(obj);
+}
+
+document.addEventListener("keydown", keyDownTextField, false);
+
+function keyDownTextField(e) {
+  var keyInput = e.key;
+  switch (keyInput) {
+    case 'r':
+    // if ((circle2.x < inputCircle.x+50 && circle2.x > inputCircle.x-50) &&
+    //     (circle2.y < inputCircle.y+50 && circle2.y > inputCircle.y-50))
+    //  {
+    //    console.log(circle2.text);
+    //    console.log("it works");
+    // } else {
+    //   console.log('You missed');
+    // }
+    // break;
+    default:
+      console.log("not valid key");
+  }
 }
 
 /***/ }),
 /* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(12)
-__webpack_require__(13)
-__webpack_require__(14)
-__webpack_require__(15)
-
-
-/***/ }),
-/* 9 */
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -735,7 +658,7 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports) {
 
 var g;
@@ -762,7 +685,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -790,7 +713,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports) {
 
 /*!
@@ -14209,7 +14132,7 @@ window.createjs = window.createjs || {};
 
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -15198,7 +15121,7 @@ window.createjs = window.createjs || {};
 ;(function () {
   // Detect the `define` function exposed by asynchronous module loaders. The
   // strict `define` check is necessary for compatibility with `r.js`.
-  var isLoader = "function" === "function" && __webpack_require__(9);
+  var isLoader = "function" === "function" && __webpack_require__(8);
 
   // A set of types used to distinguish objects from primitives.
   var objectTypes = {
@@ -21514,10 +21437,10 @@ window.createjs = window.createjs || {};
 
 }());
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)(module), __webpack_require__(10)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)(module), __webpack_require__(9)))
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports) {
 
 /*!
@@ -29472,7 +29395,7 @@ window.createjs = window.createjs || {};
 
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports) {
 
 /*!
