@@ -2,13 +2,14 @@
 
 ### Background
 
-Typing Multitasker is a typing game that utilizes rhythm, timing, and multi-tasking inspired by  **Gyroshi**. A single player game that plays out on three circles which rotate with a pair of letters. Once the letter reaches the top of the circle, the user will need to hit the correct key in order to raise their life bar. The game starts off with one circle of rotating letters, but as the game progresses other circles will  appear and rotating their own letters. In additional to more circles appearing, the speed at which the letters revolve around the circle will also increase.
+Typing Multitasker is a typing game that utilizes rhythm, timing, and multi-tasking inspired by  **Gyroshi**. This is a single player game that is played  three circles which rotate with a pair of letters. Once the letter reaches the top of the circle, the user will need to hit the correct key in order to raise their life bar. The game starts off with one circle of rotating letters, but as the game progresses other circles will  appear and rotating their own letters. In additional to more circles appearing, the speed at which the letters revolve around the circle will also increase.
 
 Game Instructions:
 
 - When a letter floats over the circle above the outer circle, press the corresponding letter on the keyboard
-- The difficulty will increase at 30 second intervals.
-- More circles will be added on as difficulty increases.
+- The life bar will gradually decrease as time passes. Once your life bar is depleted, the game is over.
+- Hitting the correct letters at the right time will increase your life bar.
+- Keep playing until you lose, try to set your highest combo or longest time alive.
 
 ### Functionality & MVP  
 
