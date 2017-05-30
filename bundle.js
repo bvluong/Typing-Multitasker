@@ -86,13 +86,13 @@ __webpack_require__(9)
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createletterR = exports.createCircle = undefined;
+exports.lifeBarBorder = exports.lifeBar = exports.outerCircle = exports.createletterR = exports.createCircle = undefined;
 
 __webpack_require__(0);
 
 var createCircle = exports.createCircle = function createCircle() {
   var inputCircle = new createjs.Shape();
-  inputCircle.graphics.beginStroke("DeepSkyBlue").drawCircle(0, 0, 40);
+  inputCircle.graphics.beginStroke("DeepSkyBlue").drawCircle(0, 0, (innerWidth + innerHeight) / 32);
   inputCircle.x = innerWidth / 2;
   inputCircle.y = innerHeight / 2;
   return inputCircle;
@@ -100,9 +100,36 @@ var createCircle = exports.createCircle = function createCircle() {
 
 var createletterR = exports.createletterR = function createletterR() {
   var object = new createjs.Text("r", "20px Arial", "#ff7700");
-  object.x = innerWidth / 2;
-  object.y = innerHeight / 2;
+  object.x = innerWidth / 2 - 5;
+  object.y = innerHeight / 2 - 20;
   return object;
+};
+
+var outerCircle = exports.outerCircle = function outerCircle() {
+  var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : innerWidth / 2;
+  var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : innerHeight / 2;
+
+  var outercircle = new createjs.Shape();
+  outercircle.graphics.beginStroke("DeepSkyBlue").drawCircle(0, 0, (innerWidth + innerHeight) / 12);
+  outercircle.x = x;
+  outercircle.y = y + (innerWidth + innerHeight) / 12;
+  return outercircle;
+};
+
+var lifeBar = exports.lifeBar = function lifeBar() {
+  var lifebar = new createjs.Shape();
+  lifebar.graphics.beginFill("red").drawRect(0, 0, 80, 200);
+  lifebar.x = innerWidth / 16;
+  lifebar.y = innerHeight / 1.7;
+  return lifebar;
+};
+
+var lifeBarBorder = exports.lifeBarBorder = function lifeBarBorder() {
+  var lifebar = new createjs.Shape();
+  lifebar.graphics.beginStroke("black").drawRect(0, 0, 80, 200);
+  lifebar.x = innerWidth / 16;
+  lifebar.y = innerHeight / 1.7;
+  return lifebar;
 };
 
 /***/ }),
@@ -134,14 +161,17 @@ var Game = function () {
     this.letters_array = [];
     this.counter = 0;
     this.tick = this.tick.bind(this);
-    this.lifebar = 100000;
+    this.lifepoints = 1000;
+    this.lifeBar = (0, _objects.lifeBar)();
   }
 
   _createClass(Game, [{
     key: 'first_level',
     value: function first_level() {
-      var inputCircle = (0, _objects.createCircle)();
-      this.stage.addChild(inputCircle);
+      this.stage.addChild((0, _objects.createCircle)());
+      this.stage.addChild((0, _objects.outerCircle)());
+      this.stage.addChild((0, _objects.lifeBarBorder)());
+      this.stage.addChild(this.lifeBar);
       this.stage.update();
     }
   }, {
@@ -152,8 +182,8 @@ var Game = function () {
       var start_time = 0;
       this.startLetters = setInterval(function () {
         start_time += _this.random_intervals[_this.counter];
-        var newObj = _this.stage.addChild((0, _objects.createletterR)());
-        _this.letters_array.push([newObj, start_time]);
+        var letter = _this.stage.addChild((0, _objects.createletterR)());
+        _this.letters_array.push({ letter: letter, start_time: start_time });
       }, this.random_intervals[this.counter]);
     }
   }, {
@@ -168,6 +198,7 @@ var Game = function () {
       letter.y += Math.sin(Math.PI * 2 / 2 * (time / 3000)) * 3;
       if (letter.x >= 465 && time > 3000) {
         this.stage.removeChild(letter);
+        this.letters_array.shift();
       }
     }
   }, {
@@ -192,25 +223,30 @@ var Game = function () {
     value: function tick(event) {
       var _this2 = this;
 
-      this.letters_array.forEach(function (letter) {
-        _this2.updateLetter(letter[0], event.time - letter[1]);
+      this.letters_array.forEach(function (obj) {
+        _this2.updateLetter(obj.letter, event.time - obj.start_time);
       });
-      this.lifebar -= 1;
-      console.log(this.lifebar);
-      this.stage.update(event);
+      this.lifepoints -= 1;
+      this.lifeBar.scaleY -= 0.001;
+      if (this.lifepoints > 1) {
+        this.stage.update(event);
+      } else {
+        event.remove();
+        console.log("Game Over");
+      }
     }
   }, {
     key: 'letterPositions',
     value: function letterPositions() {
-      return this.letters_array.map(function (letter) {
-        return [letter[0].x, letter[0].y];
+      return this.letters_array.map(function (obj) {
+        return [obj.letter.x, obj.letter.y];
       });
     }
   }, {
     key: 'inCircle',
     value: function inCircle() {
-      return this.letters_array.some(function (letter) {
-        return letter[0].x < innerWidth / 2 + 50 && letter[0].x > innerWidth / 2 - 50 && letter[0].y < innerHeight / 2 + 50 && letter[0].y > innerHeight / 2 - 50 && letter[1] > 3000;
+      return this.letters_array.some(function (obj) {
+        return obj.letter.x < innerWidth / 2 + 50 && obj.letter.x > innerWidth / 2 - 50 && obj.letter.y < innerHeight / 2 + 50 && obj.letter.y > innerHeight / 2 - 50 && obj.start_time > 3000;
       });
     }
   }]);
@@ -223,10 +259,6 @@ newGame.first_level();
 newGame.generateLetters();
 newGame.addEvent();
 
-setTimeout(function () {
-  return newGame.stopLetters();
-}, 10000);
-
 document.addEventListener("keydown", keyDownTextField, false);
 
 function keyDownTextField(e) {
@@ -235,7 +267,8 @@ function keyDownTextField(e) {
     case 'r':
       console.log(newGame.inCircle());
       if (newGame.inCircle()) {
-        newGame.lifebar += 300;
+        newGame.lifepoints += 300;
+        newGame.lifeBar.scaleY += .3;
       }
     default:
       console.log("not valid key");
