@@ -1,5 +1,5 @@
 import 'yuki-createjs';
-import { createCircle, createletterR } from './animation/background_circle';
+import { createCircle, createletterR } from './animation/objects';
 
 
 var canvas = document.getElementById('root');
@@ -7,74 +7,84 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 var c = canvas.getContext('2d');
 
-var stage = new createjs.Stage("root");
-
-let inputCircle = createCircle();
-stage.addChild(inputCircle);
-
-// class Letters {
-//   constructor() {
-//     this.letters_array = [];
-//   }
-//
-//   createletterR() {
-//     let object = new createjs.Text("r", "20px Arial", "#ff7700");
-//     object.x = innerWidth/2;
-//     object.y = innerHeight/2;
-//     stage.addChild(object);
-//     this.letters_array.push(object);
-//   }
-//
-// }
-//
-
-function createletterR() {
-  let object = new createjs.Text("r", "20px Arial", "#ff7700");
-  object.x = innerWidth/2;
-  object.y = innerHeight/2;
-  stage.addChild(object);
-  return object;
-}
-
-function generateLetters() {
-  let start_time = 0;
-  setInterval(() => {
-    start_time += random_intervals[counter];
-    letters_array.push([createletterR(),start_time]);
-  }, random_intervals[counter]);
-}
-
-function updateLetter(letter,time) {
-  letter.x += Math.cos( ((Math.PI*2) /2) * (time / 3000))*3;
-  letter.y += Math.sin( ((Math.PI*2) /2) * (time / 3000))*3;
-  if (letter.x >= 465 && time > 3000) {
-    stage.removeChild(letter);
+class Game {
+  constructor() {
+      this.random_intervals = [3333, 1500, 2000, 6000, 3000];
+      this.stage = new createjs.Stage("root");
+      this.letters_array = [];
+      this.counter = 0;
+      this.tick = this.tick.bind(this);
+      this.lifebar = 100000;
   }
+
+  first_level() {
+    let inputCircle = createCircle()
+    this.stage.addChild(inputCircle);
+    this.stage.update();
+  }
+
+  generateLetters() {
+    let start_time = 0;
+    this.startLetters = setInterval(() => {
+      start_time += this.random_intervals[this.counter];
+      let newObj = this.stage.addChild(createletterR());
+      this.letters_array.push([newObj,start_time]);
+    }, this.random_intervals[this.counter]);
+  }
+
+  stopLetters() {
+    clearInterval(this.startLetters);
+  }
+
+  updateLetter(letter,time) {
+    letter.x += Math.cos( ((Math.PI*2) /2) * (time / 3000))*3;
+    letter.y += Math.sin( ((Math.PI*2) /2) * (time / 3000))*3;
+    if (letter.x >= 465 && time > 3000) {
+      this.stage.removeChild(letter);
+    }
+  }
+
+  removeLetter(obj) {
+    this.stage.removeChild(obj);
+  }
+
+  addLetter(letter) {
+    this.stage.addChild(letter);
+  }
+
+  addEvent() {
+    createjs.Ticker.addEventListener("tick", this.tick);
+    createjs.Ticker.setFPS(50);
+    createjs.Ticker.setInterval(20);
+  }
+
+  tick(event) {
+    this.letters_array.forEach( (letter) => {
+      this.updateLetter(letter[0] ,event.time-letter[1]); });
+    this.lifebar -= 1
+    console.log(this.lifebar);
+    this.stage.update(event);
+  }
+
+  letterPositions() {
+    return this.letters_array.map(letter => [letter[0].x,letter[0].y]);
+  }
+
+  inCircle() {
+    return this.letters_array.some(letter =>
+      (letter[0].x < (innerWidth/2)+50 && letter[0].x > (innerWidth/2)-50) &&
+      (letter[0].y < (innerHeight/2)+50 && letter[0].y  > (innerHeight/2)-50) &&
+      letter[1] > 3000);
+  }
+
 }
 
-function removeLetter(obj) {
-  stage.removeChild(obj);
-}
+let newGame = new Game;
+newGame.first_level();
+newGame.generateLetters();
+newGame.addEvent();
 
-function addLetter(letter) {
-  stage.addChild(letter);
-}
-
-const letters_array = [];
-const random_intervals = [3333, 1500, 2000, 6000, 3000];
-let counter = 0;
-
-
-createjs.Ticker.addEventListener("tick", tick);
-createjs.Ticker.setFPS(50);
-createjs.Ticker.setInterval(20);
-generateLetters();
-
-function tick(event) {
-  letters_array.forEach( (letter) => {
-    updateLetter(letter[0] ,event.time-letter[1]); });
-  stage.update(event);
-}
+setTimeout(() => newGame.stopLetters(), 10000 );
 
 
 document.addEventListener("keydown", keyDownTextField, false);
@@ -83,18 +93,10 @@ function keyDownTextField(e) {
   const keyInput = e.key;
   switch (keyInput) {
     case 'r':
-    if (length) {
-
+    console.log(newGame.inCircle());
+      if (newGame.inCircle()) {
+        newGame.lifebar += 300;
     }
-    // if ((circle2.x < inputCircle.x+50 && circle2.x > inputCircle.x-50) &&
-    //     (circle2.y < inputCircle.y+50 && circle2.y > inputCircle.y-50))
-    //  {
-    //    console.log(circle2.text);
-    //    console.log("it works");
-    // } else {
-    //   console.log('You missed');
-    // }
-    // break;
     default:
     console.log("not valid key");
   }
