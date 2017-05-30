@@ -2,7 +2,7 @@ import 'yuki-createjs';
 import { createCircle, outerCircle,
           lifeBar,
           lifeBarBorder,
-          createletterR } from './animation/objects';
+          createLetter } from './animation/objects';
 
 
 var canvas = document.getElementById('root');
@@ -19,6 +19,8 @@ class Game {
       this.tick = this.tick.bind(this);
       this.lifepoints = 1000;
       this.lifeBar = lifeBar();
+      this.firstLetters = ['f','j'];
+      this.eventTime = 0;
 
   }
 
@@ -34,7 +36,8 @@ class Game {
     let start_time = 0;
     this.startLetters = setInterval(() => {
       start_time += this.random_intervals[this.counter];
-      let letter = this.stage.addChild(createletterR());
+      let letter = this.stage
+        .addChild(createLetter(this.firstLetters[Math.floor(Math.random()+0.5)] ));
       this.letters_array.push({ letter, start_time });
     }, this.random_intervals[this.counter]);
   }
@@ -53,7 +56,9 @@ class Game {
   }
 
   removeLetter(obj) {
-    this.stage.removeChild(obj);
+    this.stage.removeChild(this.letters_array[0].letter);
+    console.log(this.letters_array.shift());
+    console.log(this.letters_array);
   }
 
   addLetter(letter) {
@@ -71,6 +76,7 @@ class Game {
       this.updateLetter(obj.letter ,event.time-obj.start_time); });
     this.lifepoints -= 1;
     this.lifeBar.scaleY -= 0.001;
+    this.eventTime = event.time;
     if (this.lifepoints>1) {
       this.stage.update(event);
     } else {
@@ -84,11 +90,11 @@ class Game {
     return this.letters_array.map(obj => [obj.letter.x,obj.letter.y]);
   }
 
-  inCircle() {
+  inCircle(letter) {
     return this.letters_array.some(obj =>
       (obj.letter.x < (innerWidth/2)+50 && obj.letter.x > (innerWidth/2)-50) &&
       (obj.letter.y < (innerHeight/2)+50 && obj.letter.y  > (innerHeight/2)-50) &&
-      obj.start_time > 3000);
+      this.eventTime - obj.start_time > 5000 && obj.letter.text === letter);
   }
 
 }
@@ -103,14 +109,21 @@ document.addEventListener("keydown", keyDownTextField, false);
 
 function keyDownTextField(e) {
   const keyInput = e.key;
-  switch (keyInput) {
-    case 'r':
-    console.log(newGame.inCircle());
-      if (newGame.inCircle()) {
-        newGame.lifepoints += 300;
-        newGame.lifeBar.scaleY += .3;
-    }
-    default:
-    console.log("not valid key");
-  }
+  if (newGame.inCircle(keyInput)) {
+    newGame.removeLetter();
+    newGame.lifepoints += 300;
+    newGame.lifeBar.scaleY += .3;
+} else {
+  newGame.lifeBar.scaleY -= 0.1;
+  newGame.lifepoints -= 100;
+}
+  // switch (keyInput) {
+  //   case 'j':
+  //     if (newGame.inCircle('j')) {
+  //       newGame.lifepoints += 300;
+  //       newGame.lifeBar.scaleY += .3;
+  //   }
+  //   default:
+  //   console.log("not valid key");
+  // }
 }

@@ -9,8 +9,8 @@ export const createCircle = () => {
   return inputCircle;
 };
 
-export const createletterR = () => {
-  let object = new createjs.Text("r", "20px Arial", "#ff7700");
+export const createLetter = (letter = 'r') => {
+  let object = new createjs.Text(letter, "20px Arial", "#ff7700");
   object.x = innerWidth/2-5;
   object.y = innerHeight/2-20;
   return object;

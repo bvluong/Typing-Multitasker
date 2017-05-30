@@ -86,7 +86,7 @@ __webpack_require__(9)
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.lifeBarBorder = exports.lifeBar = exports.outerCircle = exports.createletterR = exports.createCircle = undefined;
+exports.lifeBarBorder = exports.lifeBar = exports.outerCircle = exports.createLetter = exports.createCircle = undefined;
 
 __webpack_require__(0);
 
@@ -98,8 +98,10 @@ var createCircle = exports.createCircle = function createCircle() {
   return inputCircle;
 };
 
-var createletterR = exports.createletterR = function createletterR() {
-  var object = new createjs.Text("r", "20px Arial", "#ff7700");
+var createLetter = exports.createLetter = function createLetter() {
+  var letter = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'r';
+
+  var object = new createjs.Text(letter, "20px Arial", "#ff7700");
   object.x = innerWidth / 2 - 5;
   object.y = innerHeight / 2 - 20;
   return object;
@@ -163,6 +165,8 @@ var Game = function () {
     this.tick = this.tick.bind(this);
     this.lifepoints = 1000;
     this.lifeBar = (0, _objects.lifeBar)();
+    this.firstLetters = ['f', 'j'];
+    this.eventTime = 0;
   }
 
   _createClass(Game, [{
@@ -182,7 +186,7 @@ var Game = function () {
       var start_time = 0;
       this.startLetters = setInterval(function () {
         start_time += _this.random_intervals[_this.counter];
-        var letter = _this.stage.addChild((0, _objects.createletterR)());
+        var letter = _this.stage.addChild((0, _objects.createLetter)(_this.firstLetters[Math.floor(Math.random() + 0.5)]));
         _this.letters_array.push({ letter: letter, start_time: start_time });
       }, this.random_intervals[this.counter]);
     }
@@ -204,7 +208,9 @@ var Game = function () {
   }, {
     key: 'removeLetter',
     value: function removeLetter(obj) {
-      this.stage.removeChild(obj);
+      this.stage.removeChild(this.letters_array[0].letter);
+      console.log(this.letters_array.shift());
+      console.log(this.letters_array);
     }
   }, {
     key: 'addLetter',
@@ -228,6 +234,7 @@ var Game = function () {
       });
       this.lifepoints -= 1;
       this.lifeBar.scaleY -= 0.001;
+      this.eventTime = event.time;
       if (this.lifepoints > 1) {
         this.stage.update(event);
       } else {
@@ -244,9 +251,11 @@ var Game = function () {
     }
   }, {
     key: 'inCircle',
-    value: function inCircle() {
+    value: function inCircle(letter) {
+      var _this3 = this;
+
       return this.letters_array.some(function (obj) {
-        return obj.letter.x < innerWidth / 2 + 50 && obj.letter.x > innerWidth / 2 - 50 && obj.letter.y < innerHeight / 2 + 50 && obj.letter.y > innerHeight / 2 - 50 && obj.start_time > 3000;
+        return obj.letter.x < innerWidth / 2 + 50 && obj.letter.x > innerWidth / 2 - 50 && obj.letter.y < innerHeight / 2 + 50 && obj.letter.y > innerHeight / 2 - 50 && _this3.eventTime - obj.start_time > 5000 && obj.letter.text === letter;
       });
     }
   }]);
@@ -263,16 +272,23 @@ document.addEventListener("keydown", keyDownTextField, false);
 
 function keyDownTextField(e) {
   var keyInput = e.key;
-  switch (keyInput) {
-    case 'r':
-      console.log(newGame.inCircle());
-      if (newGame.inCircle()) {
-        newGame.lifepoints += 300;
-        newGame.lifeBar.scaleY += .3;
-      }
-    default:
-      console.log("not valid key");
+  if (newGame.inCircle(keyInput)) {
+    newGame.removeLetter();
+    newGame.lifepoints += 300;
+    newGame.lifeBar.scaleY += .3;
+  } else {
+    newGame.lifeBar.scaleY -= 0.1;
+    newGame.lifepoints -= 100;
   }
+  // switch (keyInput) {
+  //   case 'j':
+  //     if (newGame.inCircle('j')) {
+  //       newGame.lifepoints += 300;
+  //       newGame.lifeBar.scaleY += .3;
+  //   }
+  //   default:
+  //   console.log("not valid key");
+  // }
 }
 
 /***/ }),
