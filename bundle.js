@@ -194,7 +194,7 @@ var Game = function () {
   function Game() {
     _classCallCheck(this, Game);
 
-    this.random_intervals = [1222, 2700, 4000];
+    this.random_intervals = [1222, 2700, 4333];
     this.stage = new createjs.Stage("root");
     this.letters_array = [];
     this.tick = this.tick.bind(this);
@@ -274,8 +274,10 @@ var Game = function () {
       this.stage.addChild(this.Combo);
       this.startLetters = setInterval(function () {
         _this3.start_time += _this3.random_intervals[0];
-        var letter = _this3.stage.addChild((0, _objects.createLetter)(_this3.firstLetters[Math.floor(Math.random() * 4)]));
-        _this3.letters_array.push({ letter: letter, start_time: _this3.start_time });
+        if (Math.floor(Math.random() * 6) < 4) {
+          var letter = _this3.stage.addChild((0, _objects.createLetter)(_this3.firstLetters[Math.floor(Math.random() * 4)]));
+          _this3.letters_array.push({ letter: letter, start_time: _this3.start_time });
+        }
       }, this.random_intervals[0]);
     }
   }, {
@@ -286,8 +288,8 @@ var Game = function () {
   }, {
     key: 'updateLetter',
     value: function updateLetter(letter, time) {
-      letter.x += Math.cos(Math.PI * 2 / 2 * (time / 3000)) * 3;
-      letter.y += Math.sin(Math.PI * 2 / 2 * (time / 3000)) * 3;
+      letter.x += Math.cos(Math.PI * 2 / 4 * (time / 3000)) * 1.5;
+      letter.y += Math.sin(Math.PI * 2 / 4 * (time / 3000)) * 1.5;
       if (letter.y < 10 && letter.x > 10 && time > 6000) {
         this.stage.removeChild(letter);
         this.letters_array.shift();

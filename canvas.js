@@ -19,7 +19,7 @@ let count = 0;
 
 class Game {
   constructor() {
-      this.random_intervals = [1222, 2700, 4000];
+      this.random_intervals = [1222, 2700, 4333];
       this.stage = new createjs.Stage("root");
       this.letters_array = [];
       this.tick = this.tick.bind(this);
@@ -90,9 +90,11 @@ class Game {
     this.stage.addChild(this.Combo);
     this.startLetters = setInterval(() => {
       this.start_time += this.random_intervals[0];
-      let letter = this.stage
-        .addChild(createLetter(this.firstLetters[Math.floor(Math.random()*4)] ));
-      this.letters_array.push({ letter, start_time: this.start_time });
+      if (Math.floor(Math.random()*6) < 4) {
+        let letter = this.stage
+          .addChild(createLetter(this.firstLetters[Math.floor(Math.random()*4)] ));
+        this.letters_array.push({ letter, start_time: this.start_time });
+      }
     }, this.random_intervals[0]);
   }
 
@@ -101,8 +103,8 @@ class Game {
   }
 
   updateLetter(letter,time) {
-    letter.x += Math.cos( ((Math.PI*2) /2) * (time / 3000))*3;
-    letter.y += Math.sin( ((Math.PI*2) /2) * (time / 3000))*3;
+    letter.x += Math.cos( ((Math.PI*2) /4) * (time / 3000))*1.5;
+    letter.y += Math.sin( ((Math.PI*2) /4) * (time / 3000))*1.5;
     if (letter.y < 10 && letter.x > 10 && time > 6000) {
       this.stage.removeChild(letter);
       this.letters_array.shift();
