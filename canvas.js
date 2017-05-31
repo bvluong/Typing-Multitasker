@@ -122,6 +122,8 @@ class Game {
   }
 
   removeLetter() {
+    let audio = document.getElementById('audio');
+    audio.play();
     this.stage.removeChild(this.letters_array[0].letter);
     this.letters_array.shift();
   }
@@ -193,7 +195,6 @@ class Game {
       ( obj.letter.y < 5 &&
       this.eventTime-this.pauseTime - obj.start_time > 5000 && obj.letter.children[1].text === letter));
   }
-
 }
 
 const start = document.getElementById('start');
@@ -237,5 +238,4 @@ function keyDownTextField(e) {
     newGame.lifepoints -= 50;
     newGame.comboCount = 0;
   }
-
-  }
+}

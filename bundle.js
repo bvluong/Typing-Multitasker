@@ -309,6 +309,8 @@ var Game = function () {
   }, {
     key: 'removeLetter',
     value: function removeLetter() {
+      var audio = document.getElementById('audio');
+      audio.play();
       this.stage.removeChild(this.letters_array[0].letter);
       this.letters_array.shift();
     }
