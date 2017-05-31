@@ -5,13 +5,15 @@ import { createCircle, outerCircle,
           Timer,
           Combo,
           gameOver,
-          createLetter } from './animation/objects';
+          createLetter,
+          Awesome,
+          Bad} from './animation/objects';
 
 
 var canvas = document.getElementById('root');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-canvas.style.background = "#B6CCA1";
+canvas.style.background = "black";
 var c = canvas.getContext('2d');
 
 let count = 0;
@@ -31,11 +33,14 @@ class Game {
       this.Timer = Timer();
       this.comboCount = 0;
       this.Combo = Combo();
+      this.frequency = 4;
+      this.innerCircle = createCircle();
+      this.outerCircle = outerCircle();
   }
 
   first_level() {
-    this.stage.addChild(outerCircle());
-    this.stage.addChild(createCircle());
+    this.stage.addChild(this.outerCircle);
+    this.stage.addChild(this.innerCircle);
     this.stage.addChild(lifeBarBorder());
     this.stage.addChild(this.lifeBar);
     this.lifeBar.scaleY = 0;
@@ -79,18 +84,21 @@ class Game {
   generateLetters() {
     this.start_time = 0;
     this.second_stage = setTimeout(()=> {
+      this.frequency = 6;
       this.second_level();
       this.generateLevel2();
     }, 30000);
     this.third_stage = setTimeout(()=> {
+      this.frequency = 8;
       this.third_level();
       this.generateLevel3();
     }, 60000);
+
     this.stage.addChild(this.Timer);
     this.stage.addChild(this.Combo);
     this.startLetters = setInterval(() => {
       this.start_time += this.random_intervals[0];
-      if (Math.floor(Math.random()*6) < 4) {
+      if (Math.floor(Math.random()*this.frequency) < 4) {
         let letter = this.stage
           .addChild(createLetter(this.firstLetters[Math.floor(Math.random()*4)] ));
         this.letters_array.push({ letter, start_time: this.start_time });
@@ -98,36 +106,48 @@ class Game {
     }, this.random_intervals[0]);
   }
 
+
   stopLetters() {
     clearInterval(this.startLetters);
   }
 
-  updateLetter(letter,time) {
-    letter.x += Math.cos( ((Math.PI*2) /4) * (time / 3000))*1.5;
-    letter.y += Math.sin( ((Math.PI*2) /4) * (time / 3000))*1.5;
+  updateLetter(letter,time, speed = [2,3]) {
+    letter.x += Math.cos( ((Math.PI*2) /speed[0]) * (time / 3000))*speed[1];
+    letter.y += Math.sin( ((Math.PI*2) /speed[0]) * (time / 3000))*speed[1];
     if (letter.y < 10 && letter.x > 10 && time > 6000) {
       this.stage.removeChild(letter);
       this.letters_array.shift();
       this.lifepoints -= 125;
       this.lifeBar.scaleY += .125;
+
+      this.incorrectKeyAnimation(letter.children);
     }
   }
 
-  increase_lifepoints() {
-    if (this.lifepoints<=800) {
-      this.lifepoints += 125;
-      this.lifeBar.scaleY -= .125;
-    } else if (this.lifepoints> 800) {
-      this.lifepoints = 1000;
-      this.lifeBar.scaleY = 0;
-    }
-  }
 
-  removeLetter() {
+  correctKeyAnimation(letter) {
     let audio = document.getElementById('audio');
     audio.play();
-    this.stage.removeChild(this.letters_array[0].letter);
-    this.letters_array.shift();
+    let awesome = Awesome(letter.x, letter.y);
+    this.stage.addChild(awesome);
+    createjs.Tween.get(awesome).to({alpha: 0},500);
+    this.innerCircle.alpha = 1;
+    this.outerCircle.alpha = 1;
+    this.innerCircle.scaleX = 1.1;
+    this.innerCircle.scaleY = 1.1;
+    createjs.Tween.get(this.innerCircle).to({alpha: 1.2, scaleX: 1, scaleY: 1},700);
+    createjs.Tween.get(this.outerCircle).to({alpha: 1.2},700);
+  }
+
+  incorrectKeyAnimation(letter) {
+    let bad = Bad(letter[1].x, letter[1].y);
+    this.stage.addChild(bad);
+    createjs.Tween.get(bad).to({alpha: 0},500);
+    this.comboCount = 0;
+    this.innerCircle.alpha = 0.7;
+    this.outerCircle.alpha = 0.7
+    createjs.Tween.get(this.innerCircle).to({alpha: 1},700);
+    createjs.Tween.get(this.outerCircle).to({alpha: 1},700);
   }
 
   addLetter(letter) {
@@ -141,8 +161,20 @@ class Game {
     createjs.Ticker.paused = false;
   }
 
-  gameOver() {
-    return this.lifepoints <= 1;
+  updateBackground() {
+    if (this.comboCount > 10) {
+      canvas.style.background = "#0d0d0d";
+    } else if (this.comboCount > 20) {
+      canvas.style.background = "#1a1a1a";
+    } else if (this.comboCount > 30) {
+      canvas.style.background = "#262626";
+    } else if (this.comboCount > 40) {
+      canvas.style.background = "#333333";
+    } else if (this.comboCount > 50) {
+      canvas.style.background = "#404040";
+    } else {
+      canvas.style.background = "black";
+    }
   }
 
   tick(event) {
@@ -153,6 +185,8 @@ class Game {
     this.eventTime = event.runTime;
     this.Timer.text = `Timer: ${Math.round((this.eventTime-this.pauseTime)/1000)}`;
     this.Combo.text = `Combo ${this.comboCount}`;
+
+    this.updateBackground()
 
     if (this.lifepoints>1) {
       this.stage.update(event);
@@ -167,7 +201,27 @@ class Game {
       document.getElementById('start').style.visibility = 'visible';
       document.getElementById('instructions').style.visibility = 'visible';
     }
+  }
+
+  increase_lifepoints() {
+    if (this.lifepoints<=800) {
+      this.lifepoints += 125;
+      this.lifeBar.scaleY -= .125;
+    } else if (this.lifepoints> 800) {
+      this.lifepoints = 1000;
+      this.lifeBar.scaleY = 0;
     }
+  }
+
+  removeLetter() {
+    this.correctKeyAnimation(this.letters_array[0].letter.children[1]);
+    this.stage.removeChild(this.letters_array[0].letter);
+    this.letters_array.shift();
+  }
+
+  gameOver() {
+    return this.lifepoints <= 1;
+  }
 
   clear_intervals() {
     clearInterval(this.levelTwo);

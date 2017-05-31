@@ -15,10 +15,17 @@ button {
   height: 30px;
   font-size: 20px;
   border-radius: 3px;
-  background: #F5E0B7;
+  background: transparent;
+  border: 1px solid white;
+  color: white;
   font-family: Roboto;
   bottom: 30%;
   right: 50px;
+}
+
+button:hover {
+  cursor: pointer;
+  border: 3px solid white;
 }
 
 h3 {
@@ -38,6 +45,7 @@ h3 {
   width: 180px;
   bottom: 12%;
   right: 0;
+  color: white
 }
 
 h2 {

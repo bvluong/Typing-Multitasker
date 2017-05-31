@@ -86,7 +86,7 @@ __webpack_require__(9)
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.gameOver = exports.Combo = exports.Timer = exports.lifeBarBorder = exports.lifeBar = exports.outerCircle = exports.createLetter = exports.createCircle = undefined;
+exports.Bad = exports.Awesome = exports.gameOver = exports.Combo = exports.Timer = exports.lifeBarBorder = exports.lifeBar = exports.outerCircle = exports.createLetter = exports.createCircle = undefined;
 
 __webpack_require__(0);
 
@@ -95,7 +95,7 @@ var createCircle = exports.createCircle = function createCircle() {
   var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : innerHeight / 2;
 
   var inputCircle = new createjs.Shape();
-  inputCircle.graphics.setStrokeStyle(10, "round").beginFill("#F87060").beginStroke("#F1F0CC").drawCircle(0, 0, 30);
+  inputCircle.graphics.setStrokeStyle(10, "round").beginFill("#228DFF").beginStroke("#FF9900").drawCircle(0, 0, 30);
   inputCircle.x = x;
   inputCircle.y = y;
   return inputCircle;
@@ -106,11 +106,11 @@ var createLetter = exports.createLetter = function createLetter() {
   var x = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : innerWidth / 2;
   var y = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : innerHeight / 2;
 
-  var object = new createjs.Text(letter, "30px Roboto", "#102542");
+  var object = new createjs.Text(letter, "30px Roboto", "white");
   object.x = x - 10;
   object.y = y - 17;
   var inputCircle = new createjs.Shape();
-  inputCircle.graphics.setStrokeStyle(3, "round").beginStroke("black").drawCircle(0, 0, 20);
+  inputCircle.graphics.setStrokeStyle(3, "round").beginStroke("white").drawCircle(0, 0, 20);
   inputCircle.x = x;
   inputCircle.y = y;
 
@@ -124,7 +124,7 @@ var outerCircle = exports.outerCircle = function outerCircle() {
   var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : innerHeight / 2;
 
   var outercircle = new createjs.Shape();
-  outercircle.graphics.setStrokeStyle(10, "round").beginStroke("#F1F0CC").drawCircle(0, 0, 130);
+  outercircle.graphics.setStrokeStyle(10, "round").beginStroke("#FF9900").drawCircle(0, 0, 130);
   outercircle.x = x;
   outercircle.y = y + 130;
   return outercircle;
@@ -132,7 +132,7 @@ var outerCircle = exports.outerCircle = function outerCircle() {
 
 var lifeBar = exports.lifeBar = function lifeBar() {
   var lifebar = new createjs.Shape();
-  lifebar.graphics.beginFill("#B6CCA1").drawRect(0, 0, 80, 200);
+  lifebar.graphics.beginFill("white").drawRect(0, 0, 80, 200);
   lifebar.x = innerWidth / 16;
   lifebar.y = innerHeight / 1.7;
   return lifebar;
@@ -140,30 +140,44 @@ var lifeBar = exports.lifeBar = function lifeBar() {
 
 var lifeBarBorder = exports.lifeBarBorder = function lifeBarBorder() {
   var lifebar = new createjs.Shape();
-  lifebar.graphics.setStrokeStyle(5).beginFill("#F87060").beginStroke("black").drawRect(0, 0, 80, 200);
+  lifebar.graphics.setStrokeStyle(5).beginFill("#FF1177").beginStroke("white").drawRect(0, 0, 80, 200);
   lifebar.x = innerWidth / 16;
   lifebar.y = innerHeight / 1.7;
   return lifebar;
 };
 
 var Timer = exports.Timer = function Timer() {
-  var object = new createjs.Text('Timer', "30px Roboto", "#102542");
+  var object = new createjs.Text('Timer', "30px Roboto", "white");
   object.x = innerWidth / 2.2;
   object.y = 10;
   return object;
 };
 
 var Combo = exports.Combo = function Combo() {
-  var object = new createjs.Text('Combo', "30px Roboto", "#102542");
+  var object = new createjs.Text('Combo', "30px Roboto", "white");
   object.x = 10;
   object.y = 10;
   return object;
 };
 
 var gameOver = exports.gameOver = function gameOver() {
-  var object = new createjs.Text('GAME OVER', "50px Roboto", "#102542");
+  var object = new createjs.Text('GAME OVER', "50px Roboto", "white");
   object.x = innerWidth / 2.5;
   object.y = 50;
+  return object;
+};
+
+var Awesome = exports.Awesome = function Awesome(x, y) {
+  var object = new createjs.Text('Awesome!', "20px Baloo", "grey");
+  object.x = x / 1.05;
+  object.y = y / 1.2;
+  return object;
+};
+
+var Bad = exports.Bad = function Bad(x, y) {
+  var object = new createjs.Text('Bad!', "20px Baloo", "grey");
+  object.x = x / 1.05;
+  object.y = y / 1.2;
   return object;
 };
 
@@ -185,7 +199,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var canvas = document.getElementById('root');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-canvas.style.background = "#B6CCA1";
+canvas.style.background = "black";
 var c = canvas.getContext('2d');
 
 var count = 0;
@@ -206,13 +220,16 @@ var Game = function () {
     this.Timer = (0, _objects.Timer)();
     this.comboCount = 0;
     this.Combo = (0, _objects.Combo)();
+    this.frequency = 4;
+    this.innerCircle = (0, _objects.createCircle)();
+    this.outerCircle = (0, _objects.outerCircle)();
   }
 
   _createClass(Game, [{
     key: 'first_level',
     value: function first_level() {
-      this.stage.addChild((0, _objects.outerCircle)());
-      this.stage.addChild((0, _objects.createCircle)());
+      this.stage.addChild(this.outerCircle);
+      this.stage.addChild(this.innerCircle);
       this.stage.addChild((0, _objects.lifeBarBorder)());
       this.stage.addChild(this.lifeBar);
       this.lifeBar.scaleY = 0;
@@ -263,18 +280,21 @@ var Game = function () {
 
       this.start_time = 0;
       this.second_stage = setTimeout(function () {
+        _this3.frequency = 6;
         _this3.second_level();
         _this3.generateLevel2();
       }, 30000);
       this.third_stage = setTimeout(function () {
+        _this3.frequency = 8;
         _this3.third_level();
         _this3.generateLevel3();
       }, 60000);
+
       this.stage.addChild(this.Timer);
       this.stage.addChild(this.Combo);
       this.startLetters = setInterval(function () {
         _this3.start_time += _this3.random_intervals[0];
-        if (Math.floor(Math.random() * 6) < 4) {
+        if (Math.floor(Math.random() * _this3.frequency) < 4) {
           var letter = _this3.stage.addChild((0, _objects.createLetter)(_this3.firstLetters[Math.floor(Math.random() * 4)]));
           _this3.letters_array.push({ letter: letter, start_time: _this3.start_time });
         }
@@ -288,13 +308,104 @@ var Game = function () {
   }, {
     key: 'updateLetter',
     value: function updateLetter(letter, time) {
-      letter.x += Math.cos(Math.PI * 2 / 4 * (time / 3000)) * 1.5;
-      letter.y += Math.sin(Math.PI * 2 / 4 * (time / 3000)) * 1.5;
+      var speed = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [2, 3];
+
+      letter.x += Math.cos(Math.PI * 2 / speed[0] * (time / 3000)) * speed[1];
+      letter.y += Math.sin(Math.PI * 2 / speed[0] * (time / 3000)) * speed[1];
       if (letter.y < 10 && letter.x > 10 && time > 6000) {
         this.stage.removeChild(letter);
         this.letters_array.shift();
         this.lifepoints -= 125;
         this.lifeBar.scaleY += .125;
+
+        this.incorrectKeyAnimation(letter.children);
+      }
+    }
+  }, {
+    key: 'correctKeyAnimation',
+    value: function correctKeyAnimation(letter) {
+      var audio = document.getElementById('audio');
+      audio.play();
+      var awesome = (0, _objects.Awesome)(letter.x, letter.y);
+      this.stage.addChild(awesome);
+      createjs.Tween.get(awesome).to({ alpha: 0 }, 500);
+      this.innerCircle.alpha = 1;
+      this.outerCircle.alpha = 1;
+      this.innerCircle.scaleX = 1.1;
+      this.innerCircle.scaleY = 1.1;
+      createjs.Tween.get(this.innerCircle).to({ alpha: 1.2, scaleX: 1, scaleY: 1 }, 700);
+      createjs.Tween.get(this.outerCircle).to({ alpha: 1.2 }, 700);
+    }
+  }, {
+    key: 'incorrectKeyAnimation',
+    value: function incorrectKeyAnimation(letter) {
+      var bad = (0, _objects.Bad)(letter[1].x, letter[1].y);
+      this.stage.addChild(bad);
+      createjs.Tween.get(bad).to({ alpha: 0 }, 500);
+      this.comboCount = 0;
+      this.innerCircle.alpha = 0.7;
+      this.outerCircle.alpha = 0.7;
+      createjs.Tween.get(this.innerCircle).to({ alpha: 1 }, 700);
+      createjs.Tween.get(this.outerCircle).to({ alpha: 1 }, 700);
+    }
+  }, {
+    key: 'addLetter',
+    value: function addLetter(letter) {
+      this.stage.addChild(letter);
+    }
+  }, {
+    key: 'addEvent',
+    value: function addEvent() {
+      createjs.Ticker.addEventListener('tick', this.tick);
+      createjs.Ticker.setFPS(50);
+      createjs.Ticker.setInterval(20);
+      createjs.Ticker.paused = false;
+    }
+  }, {
+    key: 'updateBackground',
+    value: function updateBackground() {
+      if (this.comboCount > 10) {
+        canvas.style.background = "#0d0d0d";
+      } else if (this.comboCount > 20) {
+        canvas.style.background = "#1a1a1a";
+      } else if (this.comboCount > 30) {
+        canvas.style.background = "#262626";
+      } else if (this.comboCount > 40) {
+        canvas.style.background = "#333333";
+      } else if (this.comboCount > 50) {
+        canvas.style.background = "#404040";
+      } else {
+        canvas.style.background = "black";
+      }
+    }
+  }, {
+    key: 'tick',
+    value: function tick(event) {
+      var _this4 = this;
+
+      this.letters_array.forEach(function (obj) {
+        _this4.updateLetter(obj.letter, event.runTime - _this4.pauseTime - obj.start_time);
+      });
+      this.lifepoints -= 1;
+      this.lifeBar.scaleY += 0.001;
+      this.eventTime = event.runTime;
+      this.Timer.text = 'Timer: ' + Math.round((this.eventTime - this.pauseTime) / 1000);
+      this.Combo.text = 'Combo ' + this.comboCount;
+
+      this.updateBackground();
+
+      if (this.lifepoints > 1) {
+        this.stage.update(event);
+      } else {
+        this.pauseTime = event.runTime;
+        createjs.Ticker.paused = true;
+        createjs.Ticker.removeAllEventListeners();
+        this.stage.addChild((0, _objects.gameOver)());
+        this.stage.update();
+
+        this.clear_intervals();
+        document.getElementById('start').style.visibility = 'visible';
+        document.getElementById('instructions').style.visibility = 'visible';
       }
     }
   }, {
@@ -311,56 +422,14 @@ var Game = function () {
   }, {
     key: 'removeLetter',
     value: function removeLetter() {
-      var audio = document.getElementById('audio');
-      audio.play();
+      this.correctKeyAnimation(this.letters_array[0].letter.children[1]);
       this.stage.removeChild(this.letters_array[0].letter);
       this.letters_array.shift();
-    }
-  }, {
-    key: 'addLetter',
-    value: function addLetter(letter) {
-      this.stage.addChild(letter);
-    }
-  }, {
-    key: 'addEvent',
-    value: function addEvent() {
-      createjs.Ticker.addEventListener('tick', this.tick);
-      createjs.Ticker.setFPS(50);
-      createjs.Ticker.setInterval(20);
-      createjs.Ticker.paused = false;
     }
   }, {
     key: 'gameOver',
     value: function gameOver() {
       return this.lifepoints <= 1;
-    }
-  }, {
-    key: 'tick',
-    value: function tick(event) {
-      var _this4 = this;
-
-      this.letters_array.forEach(function (obj) {
-        _this4.updateLetter(obj.letter, event.runTime - _this4.pauseTime - obj.start_time);
-      });
-      this.lifepoints -= 1;
-      this.lifeBar.scaleY += 0.001;
-      this.eventTime = event.runTime;
-      this.Timer.text = 'Timer: ' + Math.round((this.eventTime - this.pauseTime) / 1000);
-      this.Combo.text = 'Combo ' + this.comboCount;
-
-      if (this.lifepoints > 1) {
-        this.stage.update(event);
-      } else {
-        this.pauseTime = event.runTime;
-        createjs.Ticker.paused = true;
-        createjs.Ticker.removeAllEventListeners();
-        this.stage.addChild((0, _objects.gameOver)());
-        this.stage.update();
-
-        this.clear_intervals();
-        document.getElementById('start').style.visibility = 'visible';
-        document.getElementById('instructions').style.visibility = 'visible';
-      }
     }
   }, {
     key: 'clear_intervals',
