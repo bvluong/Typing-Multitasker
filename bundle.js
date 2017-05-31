@@ -91,23 +91,28 @@ exports.Combo = exports.Timer = exports.lifeBarBorder = exports.lifeBar = export
 __webpack_require__(0);
 
 var createCircle = exports.createCircle = function createCircle() {
+  var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : innerWidth / 2;
+  var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : innerHeight / 2;
+
   var inputCircle = new createjs.Shape();
   inputCircle.graphics.setStrokeStyle(10, "round").beginFill("#F87060").beginStroke("#F1F0CC").drawCircle(0, 0, 30);
-  inputCircle.x = innerWidth / 2;
-  inputCircle.y = innerHeight / 2;
+  inputCircle.x = x;
+  inputCircle.y = y;
   return inputCircle;
 };
 
 var createLetter = exports.createLetter = function createLetter() {
   var letter = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'r';
+  var x = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : innerWidth / 2;
+  var y = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : innerHeight / 2;
 
   var object = new createjs.Text(letter, "30px Roboto", "#102542");
-  object.x = innerWidth / 2 - 10;
-  object.y = innerHeight / 2 - 17;
+  object.x = x - 10;
+  object.y = y - 17;
   var inputCircle = new createjs.Shape();
   inputCircle.graphics.setStrokeStyle(3, "round").beginStroke("black").drawCircle(0, 0, 20);
-  inputCircle.x = innerWidth / 2;
-  inputCircle.y = innerHeight / 2;
+  inputCircle.x = x;
+  inputCircle.y = y;
 
   var button1 = new createjs.Container();
   button1.addChild(inputCircle, object);
@@ -182,12 +187,11 @@ var Game = function () {
   function Game() {
     _classCallCheck(this, Game);
 
-    this.random_intervals = [1111, 1500, 2000, 6000, 3000];
+    this.random_intervals = [1700, 2500, 2000, 6000, 3000];
     this.stage = new createjs.Stage("root");
     this.letters_array = [];
-    this.counter = 0;
     this.tick = this.tick.bind(this);
-    this.lifepoints = 1000;
+    this.lifepoints = 30000;
     this.lifeBar = (0, _objects.lifeBar)();
     this.firstLetters = ['F', 'J'];
     this.eventTime = 0;
@@ -208,29 +212,38 @@ var Game = function () {
       this.stage.update();
     }
   }, {
-    key: 'increase_lifepoints',
-    value: function increase_lifepoints() {
-      if (this.lifepoints <= 800) {
-        this.lifepoints += 125;
-        this.lifeBar.scaleY -= .125;
-      } else if (this.lifepoints > 800) {
-        this.lifepoints = 1000;
-        this.lifeBar.scaleY = 0;
-      }
+    key: 'second_level',
+    value: function second_level() {
+      this.stage.addChild((0, _objects.outerCircle)(innerWidth / 5, innerHeight / 9));
+      this.stage.addChild((0, _objects.createCircle)(innerWidth / 5, innerHeight / 9));
+      this.secondLetters = ["K", "D"];
+    }
+  }, {
+    key: 'generateLevel2',
+    value: function generateLevel2() {
+      var _this = this;
+
+      var start_time = 30000;
+      this.levelTwo = setInterval(function () {
+        start_time += _this.random_intervals[1];
+        var letter = _this.stage.addChild((0, _objects.createLetter)(_this.secondLetters[Math.floor(Math.random() + 0.5)], innerWidth / 5, innerHeight / 8));
+        console.log(start_time);
+        _this.letters_array.push({ letter: letter, start_time: start_time });
+      }, this.random_intervals[1]);
     }
   }, {
     key: 'generateLetters',
     value: function generateLetters() {
-      var _this = this;
+      var _this2 = this;
 
-      var start_time = 0;
+      this.start_time = 0;
       this.stage.addChild(this.Timer);
       this.stage.addChild(this.Combo);
       this.startLetters = setInterval(function () {
-        start_time += _this.random_intervals[_this.counter];
-        var letter = _this.stage.addChild((0, _objects.createLetter)(_this.firstLetters[Math.floor(Math.random() + 0.5)]));
-        _this.letters_array.push({ letter: letter, start_time: start_time });
-      }, this.random_intervals[this.counter]);
+        _this2.start_time += _this2.random_intervals[0];
+        var letter = _this2.stage.addChild((0, _objects.createLetter)(_this2.firstLetters[Math.floor(Math.random() + 0.5)]));
+        _this2.letters_array.push({ letter: letter, start_time: _this2.start_time });
+      }, this.random_intervals[0]);
     }
   }, {
     key: 'stopLetters',
@@ -242,9 +255,20 @@ var Game = function () {
     value: function updateLetter(letter, time) {
       letter.x += Math.cos(Math.PI * 2 / 2 * (time / 3000)) * 3;
       letter.y += Math.sin(Math.PI * 2 / 2 * (time / 3000)) * 3;
-      if (letter.children[1].x + letter.x >= innerWidth / 2 + 20 && time > 3000) {
+      if (letter.y < 10 && letter.x > 10 && time > 6000) {
         this.stage.removeChild(letter);
         this.letters_array.shift();
+      }
+    }
+  }, {
+    key: 'increase_lifepoints',
+    value: function increase_lifepoints() {
+      if (this.lifepoints <= 800) {
+        this.lifepoints += 125;
+        this.lifeBar.scaleY -= .125;
+      } else if (this.lifepoints > 800) {
+        this.lifepoints = 30000;
+        this.lifeBar.scaleY = 0;
       }
     }
   }, {
@@ -274,16 +298,17 @@ var Game = function () {
   }, {
     key: 'tick',
     value: function tick(event) {
-      var _this2 = this;
+      var _this3 = this;
 
       this.letters_array.forEach(function (obj) {
-        _this2.updateLetter(obj.letter, event.runTime - _this2.pauseTime - obj.start_time);
+        _this3.updateLetter(obj.letter, event.runTime - _this3.pauseTime - obj.start_time);
       });
       this.lifepoints -= 1;
       this.lifeBar.scaleY += 0.001;
       this.eventTime = event.runTime;
       this.Timer.text = 'Timer: ' + Math.round((this.eventTime - this.pauseTime) / 1000);
       this.Combo.text = 'Combo ' + this.comboCount;
+
       if (this.lifepoints > 1) {
         this.stage.update(event);
       } else {
@@ -322,10 +347,10 @@ var Game = function () {
   }, {
     key: 'inCircle',
     value: function inCircle(letter) {
-      var _this3 = this;
+      var _this4 = this;
 
       return this.letters_array.some(function (obj) {
-        return obj.letter.y < 5 && _this3.eventTime - _this3.pauseTime - obj.start_time > 3000 && obj.letter.children[1].text === letter;
+        return obj.letter.y < 5 && _this4.eventTime - _this4.pauseTime - obj.start_time > 5000 && obj.letter.children[1].text === letter;
       });
     }
   }]);
@@ -344,16 +369,23 @@ start.addEventListener('click', function () {
     newGame.restart();
     newGame.first_level();
     newGame.generateLetters();
+
     newGame.addEvent();
     start.style.visibility = "hidden";
     instructions.style.visibility = "hidden";
     logo.style.visibility = "hidden";
   } else {
     newGame.generateLetters();
+
     newGame.addEvent();
     start.innerHTML = 'Restart';
     start.style.visibility = "hidden";
+    instructions.style.visibility = "hidden";
     logo.style.visibility = "hidden";
+    setTimeout(function () {
+      newGame.second_level();
+      newGame.generateLevel2();
+    }, 30000);
   }
 });
 
@@ -369,7 +401,6 @@ function keyDownTextField(e) {
     newGame.lifeBar.scaleY += 0.05;
     newGame.lifepoints -= 50;
     newGame.comboCount = 0;
-    console.log(newGame.lifepoints);
   }
 }
 

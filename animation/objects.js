@@ -1,23 +1,23 @@
 import 'yuki-createjs';
 
-export const createCircle = () => {
+export const createCircle = (x=innerWidth/2,y=innerHeight/2) => {
   var inputCircle = new createjs.Shape();
   inputCircle.graphics.setStrokeStyle(10,"round").beginFill("#F87060").beginStroke("#F1F0CC")
   .drawCircle(0, 0, 30);
-  inputCircle.x = innerWidth/2;
-  inputCircle.y = innerHeight/2;
+  inputCircle.x = x;
+  inputCircle.y = y;
   return inputCircle;
 };
 
-export const createLetter = (letter = 'r') => {
+export const createLetter = (letter = 'r', x= innerWidth/2, y= innerHeight/2) => {
   let object = new createjs.Text(letter, "30px Roboto", "#102542");
-  object.x = innerWidth/2-10;
-  object.y = innerHeight/2-17;
+  object.x = x-10;
+  object.y = y-17;
   var inputCircle = new createjs.Shape();
   inputCircle.graphics.setStrokeStyle(3,"round").beginStroke("black")
   .drawCircle(0, 0, 20);
-  inputCircle.x = innerWidth/2
-  inputCircle.y = innerHeight/2
+  inputCircle.x = x;
+  inputCircle.y = y;
 
   var button1 = new createjs.Container();
   button1.addChild(inputCircle, object);
