@@ -18,13 +18,13 @@ let count = 0;
 
 class Game {
   constructor() {
-      this.random_intervals = [1700, 2500, 2000, 6000, 3000];
+      this.random_intervals = [1700, 2500, 4000, 6000, 3000];
       this.stage = new createjs.Stage("root");
       this.letters_array = [];
       this.tick = this.tick.bind(this);
-      this.lifepoints = 30000;
+      this.lifepoints = 1000;
       this.lifeBar = lifeBar();
-      this.firstLetters = ['F','J'];
+      this.firstLetters = ['F','J','D','K'];
       this.eventTime = 0;
       this.pauseTime = 0;
       this.Timer = Timer();
@@ -44,7 +44,13 @@ class Game {
   second_level() {
     this.stage.addChild(outerCircle(innerWidth/5,innerHeight/9));
     this.stage.addChild(createCircle(innerWidth/5,innerHeight/9));
-    this.secondLetters = ["K","D"];
+    this.secondLetters = ["A","S","L"];
+  }
+
+  third_level() {
+    this.stage.addChild(outerCircle(innerWidth*(4/5),innerHeight/9));
+    this.stage.addChild(createCircle(innerWidth*(4/5),innerHeight/9));
+    this.thirdLetters = ["G","H"];
   }
 
   generateLevel2() {
@@ -52,21 +58,36 @@ class Game {
     this.levelTwo = setInterval(() => {
       start_time += this.random_intervals[1];
       let letter = this.stage
-        .addChild(createLetter(this.secondLetters[Math.floor(Math.random()+0.5)],
+        .addChild(createLetter(this.thirdLetters[Math.floor(Math.random()*3)],
         innerWidth/5,innerHeight/8));
-        console.log(start_time);
+      this.letters_array.push({ letter, start_time});
+    }, this.random_intervals[1]);
+  }
+
+  generateLevel3() {
+    let start_time = 7777;
+    this.levelTwo = setInterval(() => {
+      start_time += this.random_intervals[1];
+      console.log(this.random_intervals);
+      let letter = this.stage
+        .addChild(createLetter(this.secondLetters[Math.floor(Math.random()*2)],
+        innerWidth*(4/5),innerHeight/8));
       this.letters_array.push({ letter, start_time});
     }, this.random_intervals[1]);
   }
 
   generateLetters() {
     this.start_time = 0;
+    this.second_stage = setTimeout(()=> {
+      this.third_level();
+      this.generateLevel3();
+    }, 7777);
     this.stage.addChild(this.Timer);
     this.stage.addChild(this.Combo);
     this.startLetters = setInterval(() => {
       this.start_time += this.random_intervals[0];
       let letter = this.stage
-        .addChild(createLetter(this.firstLetters[Math.floor(Math.random()+0.5)] ));
+        .addChild(createLetter(this.firstLetters[Math.floor(Math.random()*4)] ));
       this.letters_array.push({ letter, start_time: this.start_time });
     }, this.random_intervals[0]);
   }
@@ -81,6 +102,8 @@ class Game {
     if (letter.y < 10 && letter.x > 10 && time > 6000) {
       this.stage.removeChild(letter);
       this.letters_array.shift();
+      this.lifepoints -= 125;
+      this.lifeBar.scaleY += .125;
     }
   }
 
@@ -89,7 +112,7 @@ class Game {
       this.lifepoints += 125;
       this.lifeBar.scaleY -= .125;
     } else if (this.lifepoints> 800) {
-      this.lifepoints = 30000;
+      this.lifepoints = 1000;
       this.lifeBar.scaleY = 0;
     }
   }
@@ -133,13 +156,19 @@ class Game {
       this.Timer.text = "GAME OVER";
       this.stage.update();
 
+      this.clear_intervals();
 
-      clearInterval(this.startLetters);
       document.getElementById('start').style.visibility = 'visible';
       document.getElementById('instructions').style.visibility = 'visible';
       document.getElementById('logo').style.visibility = 'visible';
     }
     }
+
+  clear_intervals() {
+    clearInterval(this.levelTwo);
+    clearInterval(this.startLetters);
+    clearInterval(this.second_stage);
+  }
 
   restart() {
     this.stage = new createjs.Stage("root");
@@ -181,21 +210,15 @@ start.addEventListener('click', ()=>{
     start.style.visibility = "hidden";
     instructions.style.visibility = "hidden";
     logo.style.visibility = "hidden";
-
   } else {
     newGame.generateLetters();
-
     newGame.addEvent();
     start.innerHTML = 'Restart';
     start.style.visibility = "hidden";
     instructions.style.visibility = "hidden";
     logo.style.visibility = "hidden";
-    setTimeout(()=> {
-      newGame.second_level();
-      newGame.generateLevel2();
-    }, 30000);
   }
-  }
+}
 );
 
 document.addEventListener("keydown", keyDownTextField, false);
