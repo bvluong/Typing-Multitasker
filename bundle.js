@@ -86,7 +86,7 @@ __webpack_require__(9)
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Combo = exports.Timer = exports.lifeBarBorder = exports.lifeBar = exports.outerCircle = exports.createLetter = exports.createCircle = undefined;
+exports.gameOver = exports.Combo = exports.Timer = exports.lifeBarBorder = exports.lifeBar = exports.outerCircle = exports.createLetter = exports.createCircle = undefined;
 
 __webpack_require__(0);
 
@@ -160,6 +160,13 @@ var Combo = exports.Combo = function Combo() {
   return object;
 };
 
+var gameOver = exports.gameOver = function gameOver() {
+  var object = new createjs.Text('GAME OVER', "50px Roboto", "#102542");
+  object.x = innerWidth / 2.5;
+  object.y = 50;
+  return object;
+};
+
 /***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -187,7 +194,7 @@ var Game = function () {
   function Game() {
     _classCallCheck(this, Game);
 
-    this.random_intervals = [1700, 2500, 4000, 6000, 3000];
+    this.random_intervals = [1222, 2700, 4000];
     this.stage = new createjs.Stage("root");
     this.letters_array = [];
     this.tick = this.tick.bind(this);
@@ -216,14 +223,14 @@ var Game = function () {
     value: function second_level() {
       this.stage.addChild((0, _objects.outerCircle)(innerWidth / 5, innerHeight / 9));
       this.stage.addChild((0, _objects.createCircle)(innerWidth / 5, innerHeight / 9));
-      this.secondLetters = ["A", "S", "L"];
+      this.secondLetters = ["S", "L"];
     }
   }, {
     key: 'third_level',
     value: function third_level() {
       this.stage.addChild((0, _objects.outerCircle)(innerWidth * (4 / 5), innerHeight / 9));
       this.stage.addChild((0, _objects.createCircle)(innerWidth * (4 / 5), innerHeight / 9));
-      this.thirdLetters = ["G", "H"];
+      this.thirdLetters = ["A"];
     }
   }, {
     key: 'generateLevel2',
@@ -233,7 +240,7 @@ var Game = function () {
       var start_time = 30000;
       this.levelTwo = setInterval(function () {
         start_time += _this.random_intervals[1];
-        var letter = _this.stage.addChild((0, _objects.createLetter)(_this.thirdLetters[Math.floor(Math.random() * 3)], innerWidth / 5, innerHeight / 8));
+        var letter = _this.stage.addChild((0, _objects.createLetter)(_this.secondLetters[Math.floor(Math.random() * 2)], innerWidth / 5, innerHeight / 8));
         _this.letters_array.push({ letter: letter, start_time: start_time });
       }, this.random_intervals[1]);
     }
@@ -242,13 +249,12 @@ var Game = function () {
     value: function generateLevel3() {
       var _this2 = this;
 
-      var start_time = 7777;
-      this.levelTwo = setInterval(function () {
-        start_time += _this2.random_intervals[1];
-        console.log(_this2.random_intervals);
-        var letter = _this2.stage.addChild((0, _objects.createLetter)(_this2.secondLetters[Math.floor(Math.random() * 2)], innerWidth * (4 / 5), innerHeight / 8));
+      var start_time = 60000;
+      this.levelThree = setInterval(function () {
+        start_time += _this2.random_intervals[2];
+        var letter = _this2.stage.addChild((0, _objects.createLetter)(_this2.thirdLetters[0], innerWidth * (4 / 5), innerHeight / 8));
         _this2.letters_array.push({ letter: letter, start_time: start_time });
-      }, this.random_intervals[1]);
+      }, this.random_intervals[2]);
     }
   }, {
     key: 'generateLetters',
@@ -257,9 +263,13 @@ var Game = function () {
 
       this.start_time = 0;
       this.second_stage = setTimeout(function () {
+        _this3.second_level();
+        _this3.generateLevel2();
+      }, 30000);
+      this.third_stage = setTimeout(function () {
         _this3.third_level();
         _this3.generateLevel3();
-      }, 7777);
+      }, 60000);
       this.stage.addChild(this.Timer);
       this.stage.addChild(this.Combo);
       this.startLetters = setInterval(function () {
@@ -340,23 +350,22 @@ var Game = function () {
         this.pauseTime = event.runTime;
         createjs.Ticker.paused = true;
         createjs.Ticker.removeAllEventListeners();
-        this.stage.removeChild(this.Combo);
-        this.Timer.text = "GAME OVER";
+        this.stage.addChild((0, _objects.gameOver)());
         this.stage.update();
 
         this.clear_intervals();
-
         document.getElementById('start').style.visibility = 'visible';
         document.getElementById('instructions').style.visibility = 'visible';
-        document.getElementById('logo').style.visibility = 'visible';
       }
     }
   }, {
     key: 'clear_intervals',
     value: function clear_intervals() {
       clearInterval(this.levelTwo);
+      clearInterval(this.levelThree);
       clearInterval(this.startLetters);
       clearInterval(this.second_stage);
+      clearInterval(this.third_stage);
     }
   }, {
     key: 'restart',

@@ -4,6 +4,7 @@ import { createCircle, outerCircle,
           lifeBarBorder,
           Timer,
           Combo,
+          gameOver,
           createLetter } from './animation/objects';
 
 
@@ -18,7 +19,7 @@ let count = 0;
 
 class Game {
   constructor() {
-      this.random_intervals = [1700, 2500, 4000, 6000, 3000];
+      this.random_intervals = [1222, 2700, 4000];
       this.stage = new createjs.Stage("root");
       this.letters_array = [];
       this.tick = this.tick.bind(this);
@@ -44,13 +45,13 @@ class Game {
   second_level() {
     this.stage.addChild(outerCircle(innerWidth/5,innerHeight/9));
     this.stage.addChild(createCircle(innerWidth/5,innerHeight/9));
-    this.secondLetters = ["A","S","L"];
+    this.secondLetters = ["S","L"];
   }
 
   third_level() {
     this.stage.addChild(outerCircle(innerWidth*(4/5),innerHeight/9));
     this.stage.addChild(createCircle(innerWidth*(4/5),innerHeight/9));
-    this.thirdLetters = ["G","H"];
+    this.thirdLetters = ["A"];
   }
 
   generateLevel2() {
@@ -58,30 +59,33 @@ class Game {
     this.levelTwo = setInterval(() => {
       start_time += this.random_intervals[1];
       let letter = this.stage
-        .addChild(createLetter(this.thirdLetters[Math.floor(Math.random()*3)],
+        .addChild(createLetter(this.secondLetters[Math.floor(Math.random()*2)],
         innerWidth/5,innerHeight/8));
       this.letters_array.push({ letter, start_time});
     }, this.random_intervals[1]);
   }
 
   generateLevel3() {
-    let start_time = 7777;
-    this.levelTwo = setInterval(() => {
-      start_time += this.random_intervals[1];
-      console.log(this.random_intervals);
+    let start_time = 60000;
+    this.levelThree = setInterval(() => {
+      start_time += this.random_intervals[2];
       let letter = this.stage
-        .addChild(createLetter(this.secondLetters[Math.floor(Math.random()*2)],
+        .addChild(createLetter(this.thirdLetters[0],
         innerWidth*(4/5),innerHeight/8));
       this.letters_array.push({ letter, start_time});
-    }, this.random_intervals[1]);
+    }, this.random_intervals[2]);
   }
 
   generateLetters() {
     this.start_time = 0;
     this.second_stage = setTimeout(()=> {
+      this.second_level();
+      this.generateLevel2();
+    }, 30000);
+    this.third_stage = setTimeout(()=> {
       this.third_level();
       this.generateLevel3();
-    }, 7777);
+    }, 60000);
     this.stage.addChild(this.Timer);
     this.stage.addChild(this.Combo);
     this.startLetters = setInterval(() => {
@@ -152,22 +156,21 @@ class Game {
       this.pauseTime = event.runTime;
       createjs.Ticker.paused = true;
       createjs.Ticker.removeAllEventListeners();
-      this.stage.removeChild(this.Combo);
-      this.Timer.text = "GAME OVER";
+      this.stage.addChild(gameOver());
       this.stage.update();
 
       this.clear_intervals();
-
       document.getElementById('start').style.visibility = 'visible';
       document.getElementById('instructions').style.visibility = 'visible';
-      document.getElementById('logo').style.visibility = 'visible';
     }
     }
 
   clear_intervals() {
     clearInterval(this.levelTwo);
+    clearInterval(this.levelThree);
     clearInterval(this.startLetters);
     clearInterval(this.second_stage);
+    clearInterval(this.third_stage);
   }
 
   restart() {

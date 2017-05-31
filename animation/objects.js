@@ -64,3 +64,10 @@ export const Combo = () => {
   object.y = 10;
   return object;
 };
+
+export const gameOver = () => {
+  let object = new createjs.Text('GAME OVER', "50px Roboto", "#102542");
+  object.x = innerWidth/2.5;
+  object.y = 50;
+  return object;
+};
