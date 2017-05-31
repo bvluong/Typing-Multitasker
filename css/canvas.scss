@@ -1,8 +1,54 @@
 canvas {
   border: 1px solid black;
   background: white;
+  font-family: Roboto;
 }
 
 body {
   margin: 0;
+  font-family: Roboto;
+}
+
+button {
+  position: absolute;
+  width: 100px;
+  height: 30px;
+  font-size: 20px;
+  border-radius: 3px;
+  background: #F5E0B7;
+  font-family: Roboto;
+  bottom: 30%;
+  right: 50px;
+}
+
+h3 {
+  position: absolute;
+  margin: 0;
+  top: 10px;
+  left: 20px;
+  font-size: 30px;
+  font-family: Roboto;
+  background: transparent;
+}
+
+.instructions {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  width: 180px;
+  bottom: 12%;
+  right: 0;
+}
+
+h2 {
+  padding: 0;
+  margin: 0;
+}
+p {
+  padding: 0;
+  margin: 0;
+}
+
+hidden {
+  display: hidden;
 }
