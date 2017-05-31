@@ -2,6 +2,8 @@ import 'yuki-createjs';
 import { createCircle, outerCircle,
           lifeBar,
           lifeBarBorder,
+          Timer,
+          Combo,
           createLetter } from './animation/objects';
 
 
@@ -26,7 +28,9 @@ class Game {
       this.firstLetters = ['F','J'];
       this.eventTime = 0;
       this.pauseTime = 0;
-
+      this.Timer = Timer();
+      this.comboCount = 0;
+      this.Combo = Combo();
   }
 
   first_level() {
@@ -37,17 +41,12 @@ class Game {
     this.lifeBar.scaleY = 0;
     this.stage.update();
 
-    // this.background = setInterval( () => {
-    //   canvas.style.background = ["#F5E0B7", "#8B635C", "#C1DBB3", "#F5E0B7"][count%4];
-    //   canvas.style.transition = "2s";
-    //   count += 0;
-    // }, 10000);
   }
 
   increase_lifepoints() {
     if (this.lifepoints<=800) {
-      this.lifepoints += 200;
-      this.lifeBar.scaleY -= .2;
+      this.lifepoints += 125;
+      this.lifeBar.scaleY -= .125;
     } else if (this.lifepoints> 800) {
       this.lifepoints = 1000;
       this.lifeBar.scaleY = 0;
@@ -56,6 +55,8 @@ class Game {
 
   generateLetters() {
     let start_time = 0;
+    this.stage.addChild(this.Timer);
+    this.stage.addChild(this.Combo);
     this.startLetters = setInterval(() => {
       start_time += this.random_intervals[this.counter];
       let letter = this.stage
@@ -103,17 +104,23 @@ class Game {
     this.lifepoints -= 1;
     this.lifeBar.scaleY += 0.001;
     this.eventTime = event.runTime;
+    this.Timer.text = `Timer: ${Math.round((this.eventTime-this.pauseTime)/1000)}`;
+    this.Combo.text = `Combo ${this.comboCount}`;
     if (this.lifepoints>1) {
       this.stage.update(event);
     } else {
       this.pauseTime = event.runTime;
       createjs.Ticker.paused = true;
       createjs.Ticker.removeAllEventListeners();
-      // clearInterval(this.background);
-      console.log("Game Over");
+      this.stage.removeChild(this.Combo);
+      this.Timer.text = "GAME OVER";
+      this.stage.update();
+
+
       clearInterval(this.startLetters);
       document.getElementById('start').style.visibility = 'visible';
       document.getElementById('instructions').style.visibility = 'visible';
+      document.getElementById('logo').style.visibility = 'visible';
     }
     }
 
@@ -125,6 +132,7 @@ class Game {
     this.tick = this.tick.bind(this);
     this.lifepoints = 1000;
     this.eventTime = 0;
+    this.comboCount = 0;
   }
 
   letterPositions() {
@@ -141,6 +149,7 @@ class Game {
 
 const start = document.getElementById('start');
 const instructions = document.getElementById('instructions');
+const logo = document.getElementById('logo');
 let newGame = new Game;
 newGame.first_level();
 
@@ -152,13 +161,14 @@ start.addEventListener('click', ()=>{
     newGame.addEvent();
     start.style.visibility = "hidden";
     instructions.style.visibility = "hidden";
+    logo.style.visibility = "hidden";
 
   } else {
     newGame.generateLetters();
     newGame.addEvent();
     start.innerHTML = 'Restart';
     start.style.visibility = "hidden";
-    instructions.style.visibility = "hidden";
+    logo.style.visibility = "hidden";
   }
 
   }
@@ -168,13 +178,14 @@ document.addEventListener("keydown", keyDownTextField, false);
 
 function keyDownTextField(e) {
   const keyInput = e.key;
-  var paused = !createjs.Ticker.getPaused();
   if (newGame.inCircle(keyInput.toUpperCase())) {
       newGame.removeLetter();
+      newGame.comboCount += 1;
       newGame.increase_lifepoints();
   } else {
-    newGame.lifeBar.scaleY += 0.1;
-    newGame.lifepoints -= 100;
+    newGame.lifeBar.scaleY += 0.05;
+    newGame.lifepoints -= 50;
+    newGame.comboCount = 0;
     console.log(newGame.lifepoints);
   }
 

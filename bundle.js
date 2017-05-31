@@ -86,7 +86,7 @@ __webpack_require__(9)
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.lifeBarBorder = exports.lifeBar = exports.outerCircle = exports.createLetter = exports.createCircle = undefined;
+exports.Combo = exports.Timer = exports.lifeBarBorder = exports.lifeBar = exports.outerCircle = exports.createLetter = exports.createCircle = undefined;
 
 __webpack_require__(0);
 
@@ -141,6 +141,20 @@ var lifeBarBorder = exports.lifeBarBorder = function lifeBarBorder() {
   return lifebar;
 };
 
+var Timer = exports.Timer = function Timer() {
+  var object = new createjs.Text('Timer', "30px Roboto", "#102542");
+  object.x = innerWidth / 2.2;
+  object.y = 10;
+  return object;
+};
+
+var Combo = exports.Combo = function Combo() {
+  var object = new createjs.Text('Combo', "30px Roboto", "#102542");
+  object.x = 10;
+  object.y = 10;
+  return object;
+};
+
 /***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -178,6 +192,9 @@ var Game = function () {
     this.firstLetters = ['F', 'J'];
     this.eventTime = 0;
     this.pauseTime = 0;
+    this.Timer = (0, _objects.Timer)();
+    this.comboCount = 0;
+    this.Combo = (0, _objects.Combo)();
   }
 
   _createClass(Game, [{
@@ -189,19 +206,13 @@ var Game = function () {
       this.stage.addChild(this.lifeBar);
       this.lifeBar.scaleY = 0;
       this.stage.update();
-
-      // this.background = setInterval( () => {
-      //   canvas.style.background = ["#F5E0B7", "#8B635C", "#C1DBB3", "#F5E0B7"][count%4];
-      //   canvas.style.transition = "2s";
-      //   count += 0;
-      // }, 10000);
     }
   }, {
     key: 'increase_lifepoints',
     value: function increase_lifepoints() {
       if (this.lifepoints <= 800) {
-        this.lifepoints += 200;
-        this.lifeBar.scaleY -= .2;
+        this.lifepoints += 125;
+        this.lifeBar.scaleY -= .125;
       } else if (this.lifepoints > 800) {
         this.lifepoints = 1000;
         this.lifeBar.scaleY = 0;
@@ -213,6 +224,8 @@ var Game = function () {
       var _this = this;
 
       var start_time = 0;
+      this.stage.addChild(this.Timer);
+      this.stage.addChild(this.Combo);
       this.startLetters = setInterval(function () {
         start_time += _this.random_intervals[_this.counter];
         var letter = _this.stage.addChild((0, _objects.createLetter)(_this.firstLetters[Math.floor(Math.random() + 0.5)]));
@@ -269,17 +282,22 @@ var Game = function () {
       this.lifepoints -= 1;
       this.lifeBar.scaleY += 0.001;
       this.eventTime = event.runTime;
+      this.Timer.text = 'Timer: ' + Math.round((this.eventTime - this.pauseTime) / 1000);
+      this.Combo.text = 'Combo ' + this.comboCount;
       if (this.lifepoints > 1) {
         this.stage.update(event);
       } else {
         this.pauseTime = event.runTime;
         createjs.Ticker.paused = true;
         createjs.Ticker.removeAllEventListeners();
-        // clearInterval(this.background);
-        console.log("Game Over");
+        this.stage.removeChild(this.Combo);
+        this.Timer.text = "GAME OVER";
+        this.stage.update();
+
         clearInterval(this.startLetters);
         document.getElementById('start').style.visibility = 'visible';
         document.getElementById('instructions').style.visibility = 'visible';
+        document.getElementById('logo').style.visibility = 'visible';
       }
     }
   }, {
@@ -292,6 +310,7 @@ var Game = function () {
       this.tick = this.tick.bind(this);
       this.lifepoints = 1000;
       this.eventTime = 0;
+      this.comboCount = 0;
     }
   }, {
     key: 'letterPositions',
@@ -316,6 +335,7 @@ var Game = function () {
 
 var start = document.getElementById('start');
 var instructions = document.getElementById('instructions');
+var logo = document.getElementById('logo');
 var newGame = new Game();
 newGame.first_level();
 
@@ -327,12 +347,13 @@ start.addEventListener('click', function () {
     newGame.addEvent();
     start.style.visibility = "hidden";
     instructions.style.visibility = "hidden";
+    logo.style.visibility = "hidden";
   } else {
     newGame.generateLetters();
     newGame.addEvent();
     start.innerHTML = 'Restart';
     start.style.visibility = "hidden";
-    instructions.style.visibility = "hidden";
+    logo.style.visibility = "hidden";
   }
 });
 
@@ -340,13 +361,14 @@ document.addEventListener("keydown", keyDownTextField, false);
 
 function keyDownTextField(e) {
   var keyInput = e.key;
-  var paused = !createjs.Ticker.getPaused();
   if (newGame.inCircle(keyInput.toUpperCase())) {
     newGame.removeLetter();
+    newGame.comboCount += 1;
     newGame.increase_lifepoints();
   } else {
-    newGame.lifeBar.scaleY += 0.1;
-    newGame.lifepoints -= 100;
+    newGame.lifeBar.scaleY += 0.05;
+    newGame.lifepoints -= 50;
+    newGame.comboCount = 0;
     console.log(newGame.lifepoints);
   }
 }

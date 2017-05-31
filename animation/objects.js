@@ -50,3 +50,17 @@ export const lifeBarBorder = () => {
   lifebar.y = innerHeight/1.7;
   return lifebar;
 };
+
+export const Timer = () => {
+  let object = new createjs.Text('Timer', "30px Roboto", "#102542");
+  object.x = innerWidth/2.2;
+  object.y = 10;
+  return object;
+};
+
+export const Combo = () => {
+  let object = new createjs.Text('Combo', "30px Roboto", "#102542");
+  object.x = 10;
+  object.y = 10;
+  return object;
+};
