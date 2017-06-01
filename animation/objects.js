@@ -47,7 +47,7 @@ export const lifeBar = () => {
 
 export const lifeBarBorder = () => {
   var lifebar = new createjs.Shape();
-  lifebar.graphics.beginFill("#f74121")
+  lifebar.graphics.beginLinearGradientFill(["#f77a21","#f74121"], [0, 1], 0, 20, 0, 120)
     .drawRect(0, 0, 80, 200);
   lifebar.x = innerWidth/16;
   lifebar.y = innerHeight/1.7;
@@ -55,14 +55,14 @@ export const lifeBarBorder = () => {
 };
 
 export const Timer = () => {
-  let object = new createjs.Text('Timer', "30px Roboto", "white");
+  let object = new createjs.Text('Timer', "30px Roboto", "#49fcf3");
   object.x = innerWidth/2.2;
   object.y = 10;
   return object;
 };
 
 export const Combo = () => {
-  let object = new createjs.Text('Combo', "30px Iceland", "#FF1177");
+  let object = new createjs.Text('Combo', "30px Iceland", "#49fcf3");
   object.x = 10;
   object.y = 10;
   return object;

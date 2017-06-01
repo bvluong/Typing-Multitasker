@@ -26,22 +26,27 @@ body {
 button {
   position: absolute;
   width: 100px;
-  height: 30px;
-  font-size: 20px;
+  height: 40px;
+  font-size: 30px;
   border-radius: 3px;
   background: transparent;
-  border: 1px solid #003463;
+  border: 2px solid #003463;
   color: #8ecaff;
-  font-family: Roboto;
-  bottom: 30%;
-  right: 50px;
+  font-family: Iceland;
+  bottom: 40%;
+  right: 115px;
+  transition: all 0.5s;
+  text-shadow: 0 0 10px #fff, 0 0 15px #003463
 }
 
 button:hover {
   cursor: pointer;
   border: 3px solid white;
-  background: white;
-  color: black;
+  // background: white;
+  // color: black;
+  animation: neon2 1.5s ease-in-out infinite alternate;
+  -webkit-animation: neon2 1.5s ease-in-out infinite alternate;
+  color: #ffffff;
 }
 
 h3 {
@@ -53,7 +58,7 @@ h3 {
   font-family: Iceland;
   background: transparent;
   color: #49fcf3;
-  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 40px #49fcf3
+  text-shadow: 0 0 10px #fff, 0 0 15px #49fcf3
 }
 
 #middle-glow {
@@ -84,10 +89,10 @@ h3 {
   position: absolute;
   top: 13px;
   left: 6px;
-  width: 120px;
+  width: 130px;
   height: 27px;
   border-radius: 4px;
-  box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #FF1177, 0 0 70px #FF1177, 0 0 80px #228DFF;
+  box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #49fcf3
 }
 
 .instructions {
@@ -95,17 +100,11 @@ h3 {
   margin: 0;
   padding: 0;
   width: 160px;
-  bottom: 12%;
-  right: 0;
+  bottom: calc( 40% - 100px);
+  right: 50px;
   color: white;
   font-family: Roboto;
   font-size: 15px;
-}
-
-h2 {
-  color: #f4911f;
-  padding: 0;
-  margin: 0;
 }
 
 h4, h5, h6 {
@@ -114,18 +113,37 @@ h4, h5, h6 {
   font-size: 15px;
 }
 
+h2 {
+  color: #fce15d;
+  padding: 0;
+  margin: 0;
+  text-shadow: 0 0 2px #fff, 0 0 10px #fce15d;
+}
+
 h4 {
-  color: #fcac5d;
+  color: #fcc95d;
+  text-shadow: 0 0 3px #fff, 0 0 10px #fcac5d;
 }
 
 h5 {
-  color: #fcc95d;
+  color: #fcac5d;
+  text-shadow: 0 0 4px #fcac5d, 0 0 10px #fcac5d
 }
 
 h6{
-  color: #fce15d;
+  color: #ffaf54;
+  text-shadow: 0 0 5px #ffaf54, 0 0 15px #ffaf54
 }
 
 hidden {
   display: hidden;
+}
+
+@keyframes neon2 {
+  from {
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #228DFF, 0 0 70px #228DFF, 0 0 80px #228DFF;
+  }
+  to {
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #228DFF, 0 0 35px #228DFF, 0 0 40px #228DFF, 0 0 50px #228DFF, 0 0 75px #228DFF;
+  }
 }
