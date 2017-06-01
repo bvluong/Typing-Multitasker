@@ -9,16 +9,18 @@ export const createCircle = (x=innerWidth/2,y=innerHeight/2) => {
   return inputCircle;
 };
 
+function randomColor() {
+  return 'rgb(0,' + Math.floor(255 - 42.5 * (Math.random()*6)) + ',' + Math.floor(255 - 42.5 * (Math.random()*6)) + ')'
+}
+
 export const createLetter = (letter = 'r', x= innerWidth/2, y= innerHeight/2) => {
   let object = new createjs.Text(letter, "30px Roboto", "white");
   object.x = x-10;
   object.y = y-17;
   var inputCircle = new createjs.Shape();
-  inputCircle.graphics.setStrokeStyle(3,"round").beginFill("black").beginStroke(
-    'rgb(0,' + Math.floor(255 - 42.5 * (Math.random()*6)) + ',' + Math.floor(255 - 42.5 * (Math.random()*6)) + ')')
+  inputCircle.graphics.setStrokeStyle(3,"round").beginFill("black").beginRadialGradientStroke(
+    [randomColor(), 'white'], [0, 1], 100, 100, 0, 100, 100, 300)
   .drawCircle(0, 0, 20);
-
-;
   inputCircle.x = x;
   inputCircle.y = y;
 
@@ -29,7 +31,7 @@ export const createLetter = (letter = 'r', x= innerWidth/2, y= innerHeight/2) =>
 
 export const outerCircle = (x= innerWidth/2, y=innerHeight/2) => {
   var outercircle = new createjs.Shape();
-  outercircle.graphics.setStrokeStyle(10,"round").beginStroke("#95e9f9")
+  outercircle.graphics.setStrokeStyle(10,"round").beginRadialGradientStroke(["#1b3366","#95e9f9"], [0, 1], 100, 100, 0, 100, 100, 600)
     .drawCircle(0, 0, 130);
   outercircle.x = x;
   outercircle.y = y+130;
@@ -47,7 +49,7 @@ export const lifeBar = () => {
 
 export const lifeBarBorder = () => {
   var lifebar = new createjs.Shape();
-  lifebar.graphics.beginLinearGradientFill(["#f77a21","#f74121"], [0, 1], 0, 20, 0, 120)
+  lifebar.graphics.beginLinearGradientFill(["#f75221","#ff2511"], [0, 1], 0, 20, 0, 120)
     .drawRect(0, 0, 80, 200);
   lifebar.x = innerWidth/16;
   lifebar.y = innerHeight/1.7;
@@ -70,8 +72,14 @@ export const Combo = () => {
 
 export const gameOver = () => {
   let object = new createjs.Text('GAME OVER', "50px Iceland", "white");
-  object.x = innerWidth/2.6+5;
+  object.x = innerWidth/2 - 120;
   object.y = 50;
+  return object;
+};
+export const highScore = (text) => {
+  let object = new createjs.Text(text, "70px Iceland", "white");
+  object.x = innerWidth/2 - 200;
+  object.y = 100;
   return object;
 };
 

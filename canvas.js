@@ -6,6 +6,7 @@ import { createCircle, outerCircle,
           Combo,
           gameOver,
           createLetter,
+          highScore,
           Awesome,
           Bad} from './animation/objects';
 import { glow, hideVisibility } from './animation/background_glow';
@@ -136,10 +137,6 @@ class Game {
 
 
   correctKeyAnimation(letter) {
-
-    let audio = document.getElementById(
-      ['audio1','audio2','audio3','audio4'][Math.floor(Math.random() * 4)]);
-    audio.play();
     let awesome = Awesome(letter.x, letter.y);
     this.stage.addChild(awesome);
     createjs.Tween.get(awesome).to({alpha: 0},500);
@@ -147,8 +144,13 @@ class Game {
   }
 
   correctCircleAnimation(letter) {
+    const audio1 = document.getElementById('audio1');
+    const audio2 = document.getElementById('audio2');
     switch (letter.text) {
       case 'S', 'L' :
+        audio1.pause();
+        audio1.currentTime = 0;
+        audio2.play();
         this.outerCircle2.scaleX = 1.1;
         this.outerCircle2.scaleY = 1.1;
         this.innerCircle2.scaleX = 1.15;
@@ -157,6 +159,9 @@ class Game {
         createjs.Tween.get(this.outerCircle2).to({alpha: 1, scaleX: 1, scaleY: 1},700);
         break;
       default:
+        audio2.pause();
+        audio2.currentTime = 0;
+        audio1.play();
         this.outerCircle.scaleX = 1.1;
         this.outerCircle.scaleY = 1.1;
         this.innerCircle.scaleX = 1.15;
@@ -212,6 +217,7 @@ class Game {
       createjs.Ticker.paused = true;
       createjs.Ticker.removeAllEventListeners();
       this.stage.addChild(gameOver());
+      this.stage.addChild(highScore(`HIGH SCORE: ${this.score}`));
       this.stage.update();
 
       this.clear_intervals();
@@ -259,6 +265,7 @@ class Game {
     this.lifepoints = 1000;
     this.eventTime = 0;
     this.comboCount = 0;
+    this.score = 0;
   }
 
   letterPositions() {
@@ -301,6 +308,7 @@ function keyDownTextField(e) {
       console.log(keyInput);
       newGame.removeLetter();
       newGame.comboCount += 1;
+      newGame.score += 1;
       newGame.increase_lifepoints();
   } else {
     newGame.lifeBar.scaleY += 0.04;
