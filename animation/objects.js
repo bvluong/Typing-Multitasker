@@ -59,30 +59,28 @@ export const Timer = () => {
 };
 
 export const Combo = () => {
-  let object = new createjs.Text('Combo', "30px Iceland", "white");
+  let object = new createjs.Text('Combo', "30px Iceland", "#FF1177");
   object.x = 10;
   object.y = 10;
-  object.shadowColor = 'white';
-  object.shadowBlur = 7 ;
   return object;
 };
 
 export const gameOver = () => {
-  let object = new createjs.Text('GAME OVER', "50px Roboto", "white");
-  object.x = innerWidth/2.5;
+  let object = new createjs.Text('GAME OVER', "50px Iceland", "white");
+  object.x = innerWidth/2.6+5;
   object.y = 50;
   return object;
 };
 
 export const Awesome = (x,y) => {
-  let object = new createjs.Text('Awesome!', "20px Baloo", "grey");
+  let object = new createjs.Text('Awesome!', "20px Iceland", "grey");
   object.x = x/1.05;
   object.y = y/1.2;
   return object;
 };
 
 export const Bad = (x,y) => {
-  let object = new createjs.Text('Bad!', "20px Baloo", "grey");
+  let object = new createjs.Text('Bad!', "20px Iceland", "grey");
   object.x = x/1.05;
   object.y = y/1.2;
   return object;

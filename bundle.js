@@ -154,30 +154,28 @@ var Timer = exports.Timer = function Timer() {
 };
 
 var Combo = exports.Combo = function Combo() {
-  var object = new createjs.Text('Combo', "30px Iceland", "white");
+  var object = new createjs.Text('Combo', "30px Iceland", "#FF1177");
   object.x = 10;
   object.y = 10;
-  object.shadowColor = 'white';
-  object.shadowBlur = 7;
   return object;
 };
 
 var gameOver = exports.gameOver = function gameOver() {
-  var object = new createjs.Text('GAME OVER', "50px Roboto", "white");
-  object.x = innerWidth / 2.5;
+  var object = new createjs.Text('GAME OVER', "50px Iceland", "white");
+  object.x = innerWidth / 2.6 + 5;
   object.y = 50;
   return object;
 };
 
 var Awesome = exports.Awesome = function Awesome(x, y) {
-  var object = new createjs.Text('Awesome!', "20px Baloo", "grey");
+  var object = new createjs.Text('Awesome!', "20px Iceland", "grey");
   object.x = x / 1.05;
   object.y = y / 1.2;
   return object;
 };
 
 var Bad = exports.Bad = function Bad(x, y) {
-  var object = new createjs.Text('Bad!', "20px Baloo", "grey");
+  var object = new createjs.Text('Bad!', "20px Iceland", "grey");
   object.x = x / 1.05;
   object.y = y / 1.2;
   return object;
@@ -213,7 +211,7 @@ var Game = function () {
   function Game() {
     _classCallCheck(this, Game);
 
-    this.random_intervals = [1222, 2700, 4333];
+    this.random_intervals = [1222, 2700, 3333];
     this.stage = new createjs.Stage("root");
     this.letters_array = [];
     this.tick = this.tick.bind(this);
@@ -245,6 +243,7 @@ var Game = function () {
     value: function second_level() {
       this.stage.addChild((0, _objects.outerCircle)(innerWidth / 5, innerHeight / 9));
       this.stage.addChild((0, _objects.createCircle)(innerWidth / 5, innerHeight / 9));
+      document.getElementById('middle-glow-2').style.visibility = "visible";
       this.secondLetters = ["S", "L"];
     }
   }, {
@@ -252,6 +251,7 @@ var Game = function () {
     value: function third_level() {
       this.stage.addChild((0, _objects.outerCircle)(innerWidth * (4 / 5), innerHeight / 9));
       this.stage.addChild((0, _objects.createCircle)(innerWidth * (4 / 5), innerHeight / 9));
+      document.getElementById('middle-glow-3').style.visibility = "visible";
       this.thirdLetters = ["A"];
     }
   }, {
@@ -284,17 +284,7 @@ var Game = function () {
       var _this3 = this;
 
       this.start_time = 0;
-      this.second_stage = setTimeout(function () {
-        _this3.frequency = 6;
-        _this3.second_level();
-        _this3.generateLevel2();
-      }, 20000);
-      this.third_stage = setTimeout(function () {
-        _this3.frequency = 8;
-        _this3.third_level();
-        _this3.generateLevel3();
-      }, 60000);
-
+      this.addLevels();
       this.stage.addChild(this.Timer);
       this.stage.addChild(this.Combo);
       this.startLetters = setInterval(function () {
@@ -304,6 +294,25 @@ var Game = function () {
           _this3.letters_array.push({ letter: letter, start_time: _this3.start_time });
         }
       }, this.random_intervals[0]);
+    }
+  }, {
+    key: 'addLevels',
+    value: function addLevels() {
+      var _this4 = this;
+
+      this.second_stage = setTimeout(function () {
+        _this4.frequency = 5;
+        _this4.second_level();
+        _this4.generateLevel2();
+      }, 20000);
+      this.middle_stage = setTimeout(function () {
+        _this4.frequency = 4;
+      }, 40000);
+      this.third_stage = setTimeout(function () {
+        _this4.frequency = 5;
+        _this4.third_level();
+        _this4.generateLevel3();
+      }, 60000);
     }
   }, {
     key: 'stopLetters',
@@ -328,15 +337,16 @@ var Game = function () {
   }, {
     key: 'correctKeyAnimation',
     value: function correctKeyAnimation(letter) {
-      var audio = document.getElementById('audio');
+
+      var audio = document.getElementById(['audio1', 'audio2', 'audio3', 'audio4'][Math.floor(Math.random() * 4)]);
       audio.play();
       var awesome = (0, _objects.Awesome)(letter.x, letter.y);
       this.stage.addChild(awesome);
       createjs.Tween.get(awesome).to({ alpha: 0 }, 500);
       this.innerCircle.alpha = 1;
       this.outerCircle.alpha = 1;
-      this.innerCircle.scaleX = 1.1;
-      this.innerCircle.scaleY = 1.1;
+      this.innerCircle.scaleX = 1.15;
+      this.innerCircle.scaleY = 1.15;
       createjs.Tween.get(this.innerCircle).to({ alpha: 1.2, scaleX: 1, scaleY: 1 }, 700);
       createjs.Tween.get(this.outerCircle).to({ alpha: 1.2 }, 700);
     }
@@ -347,10 +357,12 @@ var Game = function () {
       this.stage.addChild(bad);
       createjs.Tween.get(bad).to({ alpha: 0 }, 500);
       this.comboCount = 0;
-      this.innerCircle.alpha = 0.7;
-      this.outerCircle.alpha = 0.7;
-      createjs.Tween.get(this.innerCircle).to({ alpha: 1 }, 700);
-      createjs.Tween.get(this.outerCircle).to({ alpha: 1 }, 700);
+      this.innerCircle.alpha = 0.6;
+      this.outerCircle.alpha = 0.6;
+      this.outerCircle.scaleX = 1.1;
+      this.outerCircle.scaleY = 1.1;
+      createjs.Tween.get(this.innerCircle).to({ alpha: 1 }, 1000);
+      createjs.Tween.get(this.outerCircle).to({ alpha: 1, scaleX: 1, scaleY: 1 }, 700);
     }
   }, {
     key: 'addLetter',
@@ -371,13 +383,13 @@ var Game = function () {
       if (this.comboCount > 10) {
         canvas.style.background = "#0d0d0d";
       } else if (this.comboCount > 20) {
-        canvas.style.background = "#1a1a1a";
-      } else if (this.comboCount > 30) {
         canvas.style.background = "#262626";
-      } else if (this.comboCount > 40) {
+      } else if (this.comboCount > 30) {
         canvas.style.background = "#333333";
-      } else if (this.comboCount > 50) {
+      } else if (this.comboCount > 40) {
         canvas.style.background = "#404040";
+      } else if (this.comboCount > 50) {
+        canvas.style.background = "white";
       } else {
         canvas.style.background = "black";
       }
@@ -385,10 +397,10 @@ var Game = function () {
   }, {
     key: 'tick',
     value: function tick(event) {
-      var _this4 = this;
+      var _this5 = this;
 
       this.letters_array.forEach(function (obj) {
-        _this4.updateLetter(obj.letter, event.runTime - _this4.pauseTime - obj.start_time);
+        _this5.updateLetter(obj.letter, event.runTime - _this5.pauseTime - obj.start_time);
       });
       this.lifepoints -= 1;
       this.lifeBar.scaleY += 0.001;
@@ -417,8 +429,8 @@ var Game = function () {
     key: 'increase_lifepoints',
     value: function increase_lifepoints() {
       if (this.lifepoints <= 800) {
-        this.lifepoints += 125;
-        this.lifeBar.scaleY -= .125;
+        this.lifepoints += 100;
+        this.lifeBar.scaleY -= .1;
       } else if (this.lifepoints > 800) {
         this.lifepoints = 1000;
         this.lifeBar.scaleY = 0;
@@ -443,6 +455,7 @@ var Game = function () {
       clearInterval(this.levelThree);
       clearInterval(this.startLetters);
       clearInterval(this.second_stage);
+      clearInterval(this.middle_stage);
       clearInterval(this.third_stage);
     }
   }, {
@@ -467,10 +480,10 @@ var Game = function () {
   }, {
     key: 'inCircle',
     value: function inCircle(letter) {
-      var _this5 = this;
+      var _this6 = this;
 
       return this.letters_array.some(function (obj) {
-        return obj.letter.y < 5 && _this5.eventTime - _this5.pauseTime - obj.start_time > 5000 && obj.letter.children[1].text === letter;
+        return obj.letter.y < 5 && _this6.eventTime - _this6.pauseTime - obj.start_time > 5000 && obj.letter.children[1].text === letter;
       });
     }
   }]);
@@ -500,12 +513,13 @@ document.addEventListener("keydown", keyDownTextField, false);
 function keyDownTextField(e) {
   var keyInput = e.key;
   if (newGame.inCircle(keyInput.toUpperCase())) {
+    console.log(keyInput);
     newGame.removeLetter();
     newGame.comboCount += 1;
     newGame.increase_lifepoints();
   } else {
-    newGame.lifeBar.scaleY += 0.05;
-    newGame.lifepoints -= 50;
+    newGame.lifeBar.scaleY += 0.04;
+    newGame.lifepoints -= 40;
     newGame.comboCount = 0;
   }
 }
@@ -32698,8 +32712,13 @@ var glow = exports.glow = function glow() {
   middleGlow.style.top = window.innerHeight / 2 - 28 + 'px';
   middleGlow.style.left = window.innerWidth / 2 - 30 + 'px';
   var middleGlow2 = document.getElementById('middle-glow-2');
-  middleGlow2.style.top = window.innerHeight / 9 - 26 + 'px';
-  middleGlow2.style.left = window.innerWidth / 5 - 26 + 'px';
+  middleGlow2.style.visibility = "hidden";
+  middleGlow2.style.top = window.innerHeight / 9 - 25 + 'px';
+  middleGlow2.style.left = window.innerWidth / 5 - 25 + 'px';
+  var middleGlow3 = document.getElementById('middle-glow-3');
+  middleGlow3.style.visibility = "hidden";
+  middleGlow3.style.top = window.innerHeight / 9 - 23 + 'px';
+  middleGlow3.style.left = window.innerWidth * (4 / 5) - 33 + 'px';
   document.getElementById('combo-glow').style.visibility = 'hidden';
 };
 
@@ -32711,6 +32730,8 @@ var hideVisibility = exports.hideVisibility = function hideVisibility() {
   start.innerHTML = 'Restart';
   start.style.visibility = "hidden";
   instructions.style.visibility = "hidden";
+  document.getElementById('middle-glow-2').style.visibility = "hidden";
+  document.getElementById('middle-glow-3').style.visibility = "hidden";
   logo.style.visibility = "hidden";
   combo.style.visibility = "visible";
 };

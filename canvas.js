@@ -22,7 +22,7 @@ let count = 0;
 
 class Game {
   constructor() {
-      this.random_intervals = [1222, 2700, 4333];
+      this.random_intervals = [1222, 2700, 3333];
       this.stage = new createjs.Stage("root");
       this.letters_array = [];
       this.tick = this.tick.bind(this);
@@ -51,12 +51,14 @@ class Game {
   second_level() {
     this.stage.addChild(outerCircle(innerWidth/5,innerHeight/9));
     this.stage.addChild(createCircle(innerWidth/5,innerHeight/9));
+    document.getElementById('middle-glow-2').style.visibility = "visible";
     this.secondLetters = ["S","L"];
   }
 
   third_level() {
     this.stage.addChild(outerCircle(innerWidth*(4/5),innerHeight/9));
     this.stage.addChild(createCircle(innerWidth*(4/5),innerHeight/9));
+    document.getElementById('middle-glow-3').style.visibility = "visible";
     this.thirdLetters = ["A"];
   }
 
@@ -84,17 +86,7 @@ class Game {
 
   generateLetters() {
     this.start_time = 0;
-    this.second_stage = setTimeout(()=> {
-      this.frequency = 6;
-      this.second_level();
-      this.generateLevel2();
-    }, 20000);
-    this.third_stage = setTimeout(()=> {
-      this.frequency = 8;
-      this.third_level();
-      this.generateLevel3();
-    }, 60000);
-
+    this.addLevels();
     this.stage.addChild(this.Timer);
     this.stage.addChild(this.Combo);
     this.startLetters = setInterval(() => {
@@ -107,6 +99,21 @@ class Game {
     }, this.random_intervals[0]);
   }
 
+  addLevels() {
+    this.second_stage = setTimeout(()=> {
+      this.frequency = 5;
+      this.second_level();
+      this.generateLevel2();
+    }, 20000);
+    this.middle_stage = setTimeout(()=> {
+      this.frequency = 4;
+    }, 40000);
+    this.third_stage = setTimeout(()=> {
+      this.frequency = 5;
+      this.third_level();
+      this.generateLevel3();
+    }, 60000);
+  }
 
   stopLetters() {
     clearInterval(this.startLetters);
@@ -126,15 +133,17 @@ class Game {
 
 
   correctKeyAnimation(letter) {
-    let audio = document.getElementById('audio');
+
+    let audio = document.getElementById(
+      ['audio1','audio2','audio3','audio4'][Math.floor(Math.random() * 4)]);
     audio.play();
     let awesome = Awesome(letter.x, letter.y);
     this.stage.addChild(awesome);
     createjs.Tween.get(awesome).to({alpha: 0},500);
     this.innerCircle.alpha = 1;
     this.outerCircle.alpha = 1;
-    this.innerCircle.scaleX = 1.1;
-    this.innerCircle.scaleY = 1.1;
+    this.innerCircle.scaleX = 1.15;
+    this.innerCircle.scaleY = 1.15;
     createjs.Tween.get(this.innerCircle).to({alpha: 1.2, scaleX: 1, scaleY: 1},700);
     createjs.Tween.get(this.outerCircle).to({alpha: 1.2},700);
   }
@@ -144,10 +153,12 @@ class Game {
     this.stage.addChild(bad);
     createjs.Tween.get(bad).to({alpha: 0},500);
     this.comboCount = 0;
-    this.innerCircle.alpha = 0.7;
-    this.outerCircle.alpha = 0.7
-    createjs.Tween.get(this.innerCircle).to({alpha: 1},700);
-    createjs.Tween.get(this.outerCircle).to({alpha: 1},700);
+    this.innerCircle.alpha = 0.6;
+    this.outerCircle.alpha = 0.6;
+    this.outerCircle.scaleX = 1.1;
+    this.outerCircle.scaleY = 1.1;
+    createjs.Tween.get(this.innerCircle).to({alpha: 1},1000);
+    createjs.Tween.get(this.outerCircle).to({alpha: 1,scaleX: 1, scaleY:1},700);
   }
 
   addLetter(letter) {
@@ -165,13 +176,13 @@ class Game {
     if (this.comboCount > 10) {
       canvas.style.background = "#0d0d0d";
     } else if (this.comboCount > 20) {
-      canvas.style.background = "#1a1a1a";
-    } else if (this.comboCount > 30) {
       canvas.style.background = "#262626";
-    } else if (this.comboCount > 40) {
+    } else if (this.comboCount > 30) {
       canvas.style.background = "#333333";
-    } else if (this.comboCount > 50) {
+    } else if (this.comboCount > 40) {
       canvas.style.background = "#404040";
+    } else if (this.comboCount > 50) {
+      canvas.style.background = "white";
     } else {
       canvas.style.background = "black";
     }
@@ -206,8 +217,8 @@ class Game {
 
   increase_lifepoints() {
     if (this.lifepoints<=800) {
-      this.lifepoints += 125;
-      this.lifeBar.scaleY -= .125;
+      this.lifepoints += 100;
+      this.lifeBar.scaleY -= .1;
     } else if (this.lifepoints> 800) {
       this.lifepoints = 1000;
       this.lifeBar.scaleY = 0;
@@ -229,6 +240,7 @@ class Game {
     clearInterval(this.levelThree);
     clearInterval(this.startLetters);
     clearInterval(this.second_stage);
+    clearInterval(this.middle_stage);
     clearInterval(this.third_stage);
   }
 
@@ -280,12 +292,13 @@ document.addEventListener("keydown", keyDownTextField, false);
 function keyDownTextField(e) {
   const keyInput = e.key;
   if (newGame.inCircle(keyInput.toUpperCase())) {
+      console.log(keyInput);
       newGame.removeLetter();
       newGame.comboCount += 1;
       newGame.increase_lifepoints();
   } else {
-    newGame.lifeBar.scaleY += 0.05;
-    newGame.lifepoints -= 50;
+    newGame.lifeBar.scaleY += 0.04;
+    newGame.lifepoints -= 40;
     newGame.comboCount = 0;
   }
 }

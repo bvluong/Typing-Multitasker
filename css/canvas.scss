@@ -61,12 +61,21 @@ h3 {
   box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #228DFF, 0 0 70px #228DFF, 0 0 80px #228DFF;
 }
 
+#middle-glow-3 {
+  position: absolute;
+  border-radius: 20px;
+  width: 45px;
+  height: 45px;
+  box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #228DFF, 0 0 70px #228DFF, 0 0 80px #228DFF;
+}
+
 #combo-glow {
   position: absolute;
-  top: 15px;
-  left: 10px;
+  top: 13px;
+  left: 6px;
   width: 120px;
-  height: 20px;
+  height: 27px;
+  border-radius: 4px;
   box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #228DFF, 0 0 70px #228DFF, 0 0 80px #228DFF;
 }
 
