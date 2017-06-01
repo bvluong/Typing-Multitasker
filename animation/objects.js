@@ -2,7 +2,7 @@ import 'yuki-createjs';
 
 export const createCircle = (x=innerWidth/2,y=innerHeight/2) => {
   var inputCircle = new createjs.Shape();
-  inputCircle.graphics.setStrokeStyle(10,"round").beginFill("#228DFF").beginStroke("#FF9900")
+  inputCircle.graphics.setStrokeStyle(10,"round").beginFill("#228DFF").beginStroke("white")
   .drawCircle(0, 0, 30);
   inputCircle.x = x;
   inputCircle.y = y;
@@ -14,7 +14,7 @@ export const createLetter = (letter = 'r', x= innerWidth/2, y= innerHeight/2) =>
   object.x = x-10;
   object.y = y-17;
   var inputCircle = new createjs.Shape();
-  inputCircle.graphics.setStrokeStyle(3,"round").beginStroke("white")
+  inputCircle.graphics.setStrokeStyle(3,"round").beginFill("black").beginStroke("white")
   .drawCircle(0, 0, 20);
   inputCircle.x = x;
   inputCircle.y = y;
@@ -26,7 +26,7 @@ export const createLetter = (letter = 'r', x= innerWidth/2, y= innerHeight/2) =>
 
 export const outerCircle = (x= innerWidth/2, y=innerHeight/2) => {
   var outercircle = new createjs.Shape();
-  outercircle.graphics.setStrokeStyle(10,"round").beginStroke("#FF9900")
+  outercircle.graphics.setStrokeStyle(10,"round").beginStroke("#228DFF")
     .drawCircle(0, 0, 130);
   outercircle.x = x;
   outercircle.y = y+130;
@@ -59,9 +59,11 @@ export const Timer = () => {
 };
 
 export const Combo = () => {
-  let object = new createjs.Text('Combo', "30px Roboto", "white");
+  let object = new createjs.Text('Combo', "30px Iceland", "white");
   object.x = 10;
   object.y = 10;
+  object.shadowColor = 'white';
+  object.shadowBlur = 7 ;
   return object;
 };
 

@@ -8,12 +8,13 @@ import { createCircle, outerCircle,
           createLetter,
           Awesome,
           Bad} from './animation/objects';
-
+import { glow, hideVisibility } from './animation/background_glow';
 
 var canvas = document.getElementById('root');
+glow();
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-canvas.style.background = "black";
+canvas.style.background = 'black';
 var c = canvas.getContext('2d');
 
 let count = 0;
@@ -60,7 +61,7 @@ class Game {
   }
 
   generateLevel2() {
-    let start_time = 30000;
+    let start_time = 20000;
     this.levelTwo = setInterval(() => {
       start_time += this.random_intervals[1];
       let letter = this.stage
@@ -87,7 +88,7 @@ class Game {
       this.frequency = 6;
       this.second_level();
       this.generateLevel2();
-    }, 30000);
+    }, 20000);
     this.third_stage = setTimeout(()=> {
       this.frequency = 8;
       this.third_level();
@@ -119,7 +120,6 @@ class Game {
       this.letters_array.shift();
       this.lifepoints -= 125;
       this.lifeBar.scaleY += .125;
-
       this.incorrectKeyAnimation(letter.children);
     }
   }
@@ -200,6 +200,7 @@ class Game {
       this.clear_intervals();
       document.getElementById('start').style.visibility = 'visible';
       document.getElementById('instructions').style.visibility = 'visible';
+      document.getElementById('combo-glow').style.visibility = 'hidden';
     }
   }
 
@@ -253,9 +254,7 @@ class Game {
   }
 }
 
-const start = document.getElementById('start');
-const instructions = document.getElementById('instructions');
-const logo = document.getElementById('logo');
+
 let newGame = new Game;
 newGame.first_level();
 
@@ -265,21 +264,16 @@ start.addEventListener('click', ()=>{
     newGame.restart();
     newGame.first_level();
     newGame.generateLetters();
-
     newGame.addEvent();
-    start.style.visibility = "hidden";
-    instructions.style.visibility = "hidden";
-    logo.style.visibility = "hidden";
+    hideVisibility();
   } else {
     newGame.generateLetters();
     newGame.addEvent();
-    start.innerHTML = 'Restart';
-    start.style.visibility = "hidden";
-    instructions.style.visibility = "hidden";
-    logo.style.visibility = "hidden";
+    hideVisibility();
   }
 }
 );
+
 
 document.addEventListener("keydown", keyDownTextField, false);
 

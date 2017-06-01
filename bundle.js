@@ -95,7 +95,7 @@ var createCircle = exports.createCircle = function createCircle() {
   var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : innerHeight / 2;
 
   var inputCircle = new createjs.Shape();
-  inputCircle.graphics.setStrokeStyle(10, "round").beginFill("#228DFF").beginStroke("#FF9900").drawCircle(0, 0, 30);
+  inputCircle.graphics.setStrokeStyle(10, "round").beginFill("#228DFF").beginStroke("white").drawCircle(0, 0, 30);
   inputCircle.x = x;
   inputCircle.y = y;
   return inputCircle;
@@ -110,7 +110,7 @@ var createLetter = exports.createLetter = function createLetter() {
   object.x = x - 10;
   object.y = y - 17;
   var inputCircle = new createjs.Shape();
-  inputCircle.graphics.setStrokeStyle(3, "round").beginStroke("white").drawCircle(0, 0, 20);
+  inputCircle.graphics.setStrokeStyle(3, "round").beginFill("black").beginStroke("white").drawCircle(0, 0, 20);
   inputCircle.x = x;
   inputCircle.y = y;
 
@@ -124,7 +124,7 @@ var outerCircle = exports.outerCircle = function outerCircle() {
   var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : innerHeight / 2;
 
   var outercircle = new createjs.Shape();
-  outercircle.graphics.setStrokeStyle(10, "round").beginStroke("#FF9900").drawCircle(0, 0, 130);
+  outercircle.graphics.setStrokeStyle(10, "round").beginStroke("#228DFF").drawCircle(0, 0, 130);
   outercircle.x = x;
   outercircle.y = y + 130;
   return outercircle;
@@ -154,9 +154,11 @@ var Timer = exports.Timer = function Timer() {
 };
 
 var Combo = exports.Combo = function Combo() {
-  var object = new createjs.Text('Combo', "30px Roboto", "white");
+  var object = new createjs.Text('Combo', "30px Iceland", "white");
   object.x = 10;
   object.y = 10;
+  object.shadowColor = 'white';
+  object.shadowBlur = 7;
   return object;
 };
 
@@ -194,12 +196,15 @@ __webpack_require__(0);
 
 var _objects = __webpack_require__(1);
 
+var _background_glow = __webpack_require__(10);
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var canvas = document.getElementById('root');
+(0, _background_glow.glow)();
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-canvas.style.background = "black";
+canvas.style.background = 'black';
 var c = canvas.getContext('2d');
 
 var count = 0;
@@ -254,7 +259,7 @@ var Game = function () {
     value: function generateLevel2() {
       var _this = this;
 
-      var start_time = 30000;
+      var start_time = 20000;
       this.levelTwo = setInterval(function () {
         start_time += _this.random_intervals[1];
         var letter = _this.stage.addChild((0, _objects.createLetter)(_this.secondLetters[Math.floor(Math.random() * 2)], innerWidth / 5, innerHeight / 8));
@@ -283,7 +288,7 @@ var Game = function () {
         _this3.frequency = 6;
         _this3.second_level();
         _this3.generateLevel2();
-      }, 30000);
+      }, 20000);
       this.third_stage = setTimeout(function () {
         _this3.frequency = 8;
         _this3.third_level();
@@ -317,7 +322,6 @@ var Game = function () {
         this.letters_array.shift();
         this.lifepoints -= 125;
         this.lifeBar.scaleY += .125;
-
         this.incorrectKeyAnimation(letter.children);
       }
     }
@@ -406,6 +410,7 @@ var Game = function () {
         this.clear_intervals();
         document.getElementById('start').style.visibility = 'visible';
         document.getElementById('instructions').style.visibility = 'visible';
+        document.getElementById('combo-glow').style.visibility = 'hidden';
       }
     }
   }, {
@@ -473,9 +478,6 @@ var Game = function () {
   return Game;
 }();
 
-var start = document.getElementById('start');
-var instructions = document.getElementById('instructions');
-var logo = document.getElementById('logo');
 var newGame = new Game();
 newGame.first_level();
 
@@ -484,18 +486,12 @@ start.addEventListener('click', function () {
     newGame.restart();
     newGame.first_level();
     newGame.generateLetters();
-
     newGame.addEvent();
-    start.style.visibility = "hidden";
-    instructions.style.visibility = "hidden";
-    logo.style.visibility = "hidden";
+    (0, _background_glow.hideVisibility)();
   } else {
     newGame.generateLetters();
     newGame.addEvent();
-    start.innerHTML = 'Restart';
-    start.style.visibility = "hidden";
-    instructions.style.visibility = "hidden";
-    logo.style.visibility = "hidden";
+    (0, _background_glow.hideVisibility)();
   }
 });
 
@@ -32686,6 +32682,38 @@ window.createjs = window.createjs || {};
 
 })();
 
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var glow = exports.glow = function glow() {
+  var middleGlow = document.getElementById('middle-glow');
+  middleGlow.style.top = window.innerHeight / 2 - 28 + 'px';
+  middleGlow.style.left = window.innerWidth / 2 - 30 + 'px';
+  var middleGlow2 = document.getElementById('middle-glow-2');
+  middleGlow2.style.top = window.innerHeight / 9 - 26 + 'px';
+  middleGlow2.style.left = window.innerWidth / 5 - 26 + 'px';
+  document.getElementById('combo-glow').style.visibility = 'hidden';
+};
+
+var hideVisibility = exports.hideVisibility = function hideVisibility() {
+  var start = document.getElementById('start');
+  var instructions = document.getElementById('instructions');
+  var logo = document.getElementById('logo');
+  var combo = document.getElementById('combo-glow');
+  start.innerHTML = 'Restart';
+  start.style.visibility = "hidden";
+  instructions.style.visibility = "hidden";
+  logo.style.visibility = "hidden";
+  combo.style.visibility = "visible";
+};
 
 /***/ })
 /******/ ]);
