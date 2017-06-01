@@ -99,6 +99,9 @@ var glow = exports.glow = function glow() {
   middleGlow3.style.top = window.innerHeight / 9 - 23 + 'px';
   middleGlow3.style.left = window.innerWidth * (4 / 5) - 24 + 'px';
   document.getElementById('combo-glow').style.visibility = 'hidden';
+  var heart = document.getElementById('heart');
+  heart.style.top = window.innerHeight / 1.7 - 100 + 'px';
+  heart.style.left = window.innerWidth / 16 - 10 + 'px';
 };
 
 var hideVisibility = exports.hideVisibility = function hideVisibility() {
@@ -260,7 +263,7 @@ var Game = function () {
   function Game() {
     _classCallCheck(this, Game);
 
-    this.random_intervals = [1222, 2700, 3333];
+    this.random_intervals = [1222, 1751, 2000];
     this.stage = new createjs.Stage("root");
     this.letters_array = [];
     this.tick = this.tick.bind(this);
@@ -292,8 +295,8 @@ var Game = function () {
     key: 'second_level',
     value: function second_level() {
       this.outerCircle2 = (0, _objects.outerCircle)(innerWidth / 5, innerHeight / 9);
-      this.stage.addChild(this.outerCircle2);
       this.innerCircle2 = (0, _objects.createCircle)(innerWidth / 5, innerHeight / 9);
+      this.stage.addChild(this.outerCircle2);
       this.stage.addChild(this.innerCircle2);
       document.getElementById('middle-glow-2').style.visibility = "visible";
       this.secondLetters = ["S", "L"];
@@ -301,8 +304,10 @@ var Game = function () {
   }, {
     key: 'third_level',
     value: function third_level() {
-      this.stage.addChild((0, _objects.outerCircle)(innerWidth * (4 / 5), innerHeight / 9));
-      this.stage.addChild((0, _objects.createCircle)(innerWidth * (4 / 5), innerHeight / 9));
+      this.outerCircle3 = (0, _objects.outerCircle)(innerWidth * (4 / 5), innerHeight / 9);
+      this.innerCircle3 = (0, _objects.createCircle)(innerWidth * (4 / 5), innerHeight / 9);
+      this.stage.addChild(this.outerCircle3);
+      this.stage.addChild(this.innerCircle3);
       document.getElementById('middle-glow-3').style.visibility = "visible";
       this.thirdLetters = ["A"];
     }
@@ -314,8 +319,10 @@ var Game = function () {
       var start_time = 20000;
       this.levelTwo = setInterval(function () {
         start_time += _this.random_intervals[1];
-        var letter = _this.stage.addChild((0, _objects.createLetter)(_this.secondLetters[Math.floor(Math.random() * 2)], innerWidth / 5, innerHeight / 8.7));
-        _this.letters_array.push({ letter: letter, start_time: start_time });
+        if (Math.floor(Math.random() * _this.frequency) < 3) {
+          var letter = _this.stage.addChild((0, _objects.createLetter)(_this.secondLetters[Math.floor(Math.random() * 2)], innerWidth / 5, innerHeight / 8.7));
+          _this.letters_array.push({ letter: letter, start_time: start_time });
+        }
       }, this.random_intervals[1]);
     }
   }, {
@@ -326,8 +333,10 @@ var Game = function () {
       var start_time = 60000;
       this.levelThree = setInterval(function () {
         start_time += _this2.random_intervals[2];
-        var letter = _this2.stage.addChild((0, _objects.createLetter)(_this2.thirdLetters[0], innerWidth * (4 / 5), innerHeight / 8.7));
-        _this2.letters_array.push({ letter: letter, start_time: start_time });
+        if (Math.floor(Math.random() * _this2.frequency) < 3) {
+          var letter = _this2.stage.addChild((0, _objects.createLetter)(_this2.thirdLetters[0], innerWidth * (4 / 5), innerHeight / 8.7));
+          _this2.letters_array.push({ letter: letter, start_time: start_time });
+        }
       }, this.random_intervals[2]);
     }
   }, {
@@ -453,7 +462,7 @@ var Game = function () {
   }, {
     key: 'updateBackground',
     value: function updateBackground() {
-      background.style.filter = 'brightness(' + this.comboCount * 2 + '%)';
+      background.style.filter = 'brightness(' + this.comboCount * 1.5 + '%)';
     }
   }, {
     key: 'tick',
@@ -467,7 +476,7 @@ var Game = function () {
       this.lifeBar.scaleY += 0.001;
       this.eventTime = event.runTime;
       this.Timer.text = 'Timer: ' + Math.round((this.eventTime - this.pauseTime) / 1000);
-      this.Combo.text = 'Combo ' + this.comboCount;
+      this.Combo.text = 'Combo: ' + this.comboCount + '  Score: ' + this.score;
 
       this.updateBackground();
 

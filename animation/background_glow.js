@@ -12,6 +12,10 @@ export const glow = () => {
   middleGlow3.style.top = window.innerHeight/9-23+'px';
   middleGlow3.style.left = window.innerWidth*(4/5)-24+'px';
   document.getElementById('combo-glow').style.visibility = 'hidden';
+  var heart = document.getElementById('heart');
+  heart.style.top = window.innerHeight/1.7-100+'px';
+  heart.style.left = window.innerWidth/16-10+'px';
+
 };
 
 export const hideVisibility = () => {

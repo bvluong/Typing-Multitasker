@@ -36,17 +36,17 @@ button {
   bottom: 40%;
   right: 105px;
   transition: all 0.5s;
-  text-shadow: 0 0 10px #fff, 0 0 15px #003463
+  animation: neon2 1.5s ease-in-out infinite alternate;
+  -webkit-animation: neon2 1.5s ease-in-out infinite alternate;
+  color: #ffffff;
 }
 
 button:hover {
   cursor: pointer;
   border: 3px solid white;
+  text-shadow: 0 0 10px #fff, 0 0 15px #003463;
   // background: white;
   // color: black;
-  animation: neon2 1.5s ease-in-out infinite alternate;
-  -webkit-animation: neon2 1.5s ease-in-out infinite alternate;
-  color: #ffffff;
 }
 
 h3 {
@@ -87,10 +87,10 @@ h3 {
 
 #combo-glow {
   position: absolute;
-  top: 13px;
+  top: 0px;
   left: 6px;
-  width: 130px;
-  height: 27px;
+  width: 280px;
+  height: 50px;
   border-radius: 4px;
   box-shadow: 0 0 10px #fff, 0 0 20px #fff
 }
@@ -135,15 +135,19 @@ h6{
   text-shadow: 0 0 5px #ffaf54, 0 0 15px #ffaf54
 }
 
-hidden {
-  display: hidden;
+img {
+  position: absolute;
+  left: 50px;
+  height: 100px;
+  width: 100px;
+  bottom: 100px;
 }
 
 @keyframes neon2 {
   from {
-    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #228DFF, 0 0 70px #228DFF, 0 0 80px #228DFF;
+    text-shadow: 0 0 10px #fff, 0 0 30px #228DFF, 0 0 50px #228DFF, 0 0 60px #228DFF;
   }
   to {
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #228DFF, 0 0 35px #228DFF, 0 0 40px #228DFF, 0 0 50px #228DFF, 0 0 75px #228DFF;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #228DFF, 0 0 35px #228DFF, 0 0 40px #228DFF;
   }
 }

@@ -23,7 +23,7 @@ let count = 0;
 
 class Game {
   constructor() {
-      this.random_intervals = [1222, 2700, 3333];
+      this.random_intervals = [1222, 1751, 2000];
       this.stage = new createjs.Stage("root");
       this.letters_array = [];
       this.tick = this.tick.bind(this);
@@ -52,16 +52,18 @@ class Game {
 
   second_level() {
     this.outerCircle2 = outerCircle(innerWidth/5,innerHeight/9);
-    this.stage.addChild(this.outerCircle2);
     this.innerCircle2 = createCircle(innerWidth/5,innerHeight/9);
+    this.stage.addChild(this.outerCircle2);
     this.stage.addChild(this.innerCircle2);
     document.getElementById('middle-glow-2').style.visibility = "visible";
     this.secondLetters = ["S","L"];
   }
 
   third_level() {
-    this.stage.addChild(outerCircle(innerWidth*(4/5),innerHeight/9));
-    this.stage.addChild(createCircle(innerWidth*(4/5),innerHeight/9));
+    this.outerCircle3 = outerCircle(innerWidth*(4/5),innerHeight/9);
+    this.innerCircle3 = createCircle(innerWidth*(4/5),innerHeight/9);
+    this.stage.addChild(this.outerCircle3);
+    this.stage.addChild(this.innerCircle3);
     document.getElementById('middle-glow-3').style.visibility = "visible";
     this.thirdLetters = ["A"];
   }
@@ -70,10 +72,12 @@ class Game {
     let start_time = 20000;
     this.levelTwo = setInterval(() => {
       start_time += this.random_intervals[1];
-      let letter = this.stage
-        .addChild(createLetter(this.secondLetters[Math.floor(Math.random()*2)],
-        innerWidth/5,innerHeight/8.7));
-      this.letters_array.push({ letter, start_time});
+      if (Math.floor(Math.random()*this.frequency) < 3) {
+        let letter = this.stage
+          .addChild(createLetter(this.secondLetters[Math.floor(Math.random()*2)],
+          innerWidth/5,innerHeight/8.7));
+        this.letters_array.push({ letter, start_time});
+      }
     }, this.random_intervals[1]);
   }
 
@@ -81,10 +85,12 @@ class Game {
     let start_time = 60000;
     this.levelThree = setInterval(() => {
       start_time += this.random_intervals[2];
-      let letter = this.stage
-        .addChild(createLetter(this.thirdLetters[0],
-        innerWidth*(4/5),innerHeight/8.7));
-      this.letters_array.push({ letter, start_time});
+      if (Math.floor(Math.random()*this.frequency) < 3) {
+        let letter = this.stage
+          .addChild(createLetter(this.thirdLetters[0],
+          innerWidth*(4/5),innerHeight/8.7));
+        this.letters_array.push({ letter, start_time});
+      }
     }, this.random_intervals[2]);
   }
 
@@ -196,7 +202,7 @@ class Game {
   }
 
   updateBackground() {
-    background.style.filter = `brightness(${this.comboCount*2}%)`;
+    background.style.filter = `brightness(${this.comboCount*1.5}%)`;
   }
 
   tick(event) {
@@ -206,7 +212,7 @@ class Game {
     this.lifeBar.scaleY += 0.001;
     this.eventTime = event.runTime;
     this.Timer.text = `Timer: ${Math.round((this.eventTime-this.pauseTime)/1000)}`;
-    this.Combo.text = `Combo ${this.comboCount}`;
+    this.Combo.text = `Combo: ${this.comboCount}  Score: ${this.score}`;
 
     this.updateBackground()
 
