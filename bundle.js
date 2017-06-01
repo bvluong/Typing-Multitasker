@@ -63,21 +63,60 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(6)
 __webpack_require__(7)
 __webpack_require__(8)
 __webpack_require__(9)
+__webpack_require__(10)
 
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var glow = exports.glow = function glow() {
+  var middleGlow = document.getElementById('middle-glow');
+  middleGlow.style.top = window.innerHeight / 2 - 23 + 'px';
+  middleGlow.style.left = window.innerWidth / 2 - 23 + 'px';
+  var middleGlow2 = document.getElementById('middle-glow-2');
+  middleGlow2.style.visibility = "hidden";
+  middleGlow2.style.top = window.innerHeight / 9 - 24 + 'px';
+  middleGlow2.style.left = window.innerWidth / 5 - 23 + 'px';
+  var middleGlow3 = document.getElementById('middle-glow-3');
+  middleGlow3.style.visibility = "hidden";
+  middleGlow3.style.top = window.innerHeight / 9 - 23 + 'px';
+  middleGlow3.style.left = window.innerWidth * (4 / 5) - 24 + 'px';
+  document.getElementById('combo-glow').style.visibility = 'hidden';
+};
+
+var hideVisibility = exports.hideVisibility = function hideVisibility() {
+  var start = document.getElementById('start');
+  var instructions = document.getElementById('instructions');
+  var logo = document.getElementById('logo');
+  var combo = document.getElementById('combo-glow');
+  start.innerHTML = 'Restart';
+  start.style.visibility = "hidden";
+  instructions.style.visibility = "hidden";
+  document.getElementById('middle-glow-2').style.visibility = "hidden";
+  document.getElementById('middle-glow-3').style.visibility = "hidden";
+  logo.style.visibility = "hidden";
+  combo.style.visibility = "visible";
+};
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -110,7 +149,9 @@ var createLetter = exports.createLetter = function createLetter() {
   object.x = x - 10;
   object.y = y - 17;
   var inputCircle = new createjs.Shape();
-  inputCircle.graphics.setStrokeStyle(3, "round").beginFill("black").beginStroke("white").drawCircle(0, 0, 20);
+  inputCircle.graphics.setStrokeStyle(3, "round").beginFill("black").beginStroke('rgb(0,' + Math.floor(255 - 42.5 * (Math.random() * 6)) + ',' + Math.floor(255 - 42.5 * (Math.random() * 6)) + ')').drawCircle(0, 0, 20);
+
+  ;
   inputCircle.x = x;
   inputCircle.y = y;
 
@@ -124,7 +165,7 @@ var outerCircle = exports.outerCircle = function outerCircle() {
   var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : innerHeight / 2;
 
   var outercircle = new createjs.Shape();
-  outercircle.graphics.setStrokeStyle(10, "round").beginStroke("#228DFF").drawCircle(0, 0, 130);
+  outercircle.graphics.setStrokeStyle(10, "round").beginStroke("#95e9f9").drawCircle(0, 0, 130);
   outercircle.x = x;
   outercircle.y = y + 130;
   return outercircle;
@@ -132,7 +173,7 @@ var outerCircle = exports.outerCircle = function outerCircle() {
 
 var lifeBar = exports.lifeBar = function lifeBar() {
   var lifebar = new createjs.Shape();
-  lifebar.graphics.beginFill("white").drawRect(0, 0, 80, 200);
+  lifebar.graphics.beginFill("black").drawRect(0, 0, 80, 200);
   lifebar.x = innerWidth / 16;
   lifebar.y = innerHeight / 1.7;
   return lifebar;
@@ -140,7 +181,7 @@ var lifeBar = exports.lifeBar = function lifeBar() {
 
 var lifeBarBorder = exports.lifeBarBorder = function lifeBarBorder() {
   var lifebar = new createjs.Shape();
-  lifebar.graphics.setStrokeStyle(5).beginFill("#FF1177").beginStroke("white").drawRect(0, 0, 80, 200);
+  lifebar.graphics.beginFill("#f74121").drawRect(0, 0, 80, 200);
   lifebar.x = innerWidth / 16;
   lifebar.y = innerHeight / 1.7;
   return lifebar;
@@ -182,7 +223,7 @@ var Bad = exports.Bad = function Bad(x, y) {
 };
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -192,17 +233,17 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 __webpack_require__(0);
 
-var _objects = __webpack_require__(1);
+var _objects = __webpack_require__(2);
 
-var _background_glow = __webpack_require__(10);
+var _background_glow = __webpack_require__(1);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var canvas = document.getElementById('root');
+var background = document.getElementById('background');
 (0, _background_glow.glow)();
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-canvas.style.background = 'black';
 var c = canvas.getContext('2d');
 
 var count = 0;
@@ -226,6 +267,7 @@ var Game = function () {
     this.frequency = 4;
     this.innerCircle = (0, _objects.createCircle)();
     this.outerCircle = (0, _objects.outerCircle)();
+    this.score = 0;
   }
 
   _createClass(Game, [{
@@ -241,8 +283,10 @@ var Game = function () {
   }, {
     key: 'second_level',
     value: function second_level() {
-      this.stage.addChild((0, _objects.outerCircle)(innerWidth / 5, innerHeight / 9));
-      this.stage.addChild((0, _objects.createCircle)(innerWidth / 5, innerHeight / 9));
+      this.outerCircle2 = (0, _objects.outerCircle)(innerWidth / 5, innerHeight / 9);
+      this.stage.addChild(this.outerCircle2);
+      this.innerCircle2 = (0, _objects.createCircle)(innerWidth / 5, innerHeight / 9);
+      this.stage.addChild(this.innerCircle2);
       document.getElementById('middle-glow-2').style.visibility = "visible";
       this.secondLetters = ["S", "L"];
     }
@@ -262,7 +306,7 @@ var Game = function () {
       var start_time = 20000;
       this.levelTwo = setInterval(function () {
         start_time += _this.random_intervals[1];
-        var letter = _this.stage.addChild((0, _objects.createLetter)(_this.secondLetters[Math.floor(Math.random() * 2)], innerWidth / 5, innerHeight / 8));
+        var letter = _this.stage.addChild((0, _objects.createLetter)(_this.secondLetters[Math.floor(Math.random() * 2)], innerWidth / 5, innerHeight / 8.7));
         _this.letters_array.push({ letter: letter, start_time: start_time });
       }, this.random_intervals[1]);
     }
@@ -274,7 +318,7 @@ var Game = function () {
       var start_time = 60000;
       this.levelThree = setInterval(function () {
         start_time += _this2.random_intervals[2];
-        var letter = _this2.stage.addChild((0, _objects.createLetter)(_this2.thirdLetters[0], innerWidth * (4 / 5), innerHeight / 8));
+        var letter = _this2.stage.addChild((0, _objects.createLetter)(_this2.thirdLetters[0], innerWidth * (4 / 5), innerHeight / 8.7));
         _this2.letters_array.push({ letter: letter, start_time: start_time });
       }, this.random_intervals[2]);
     }
@@ -343,12 +387,28 @@ var Game = function () {
       var awesome = (0, _objects.Awesome)(letter.x, letter.y);
       this.stage.addChild(awesome);
       createjs.Tween.get(awesome).to({ alpha: 0 }, 500);
-      this.innerCircle.alpha = 1;
-      this.outerCircle.alpha = 1;
-      this.innerCircle.scaleX = 1.15;
-      this.innerCircle.scaleY = 1.15;
-      createjs.Tween.get(this.innerCircle).to({ alpha: 1.2, scaleX: 1, scaleY: 1 }, 700);
-      createjs.Tween.get(this.outerCircle).to({ alpha: 1.2 }, 700);
+      this.correctCircleAnimation(letter);
+    }
+  }, {
+    key: 'correctCircleAnimation',
+    value: function correctCircleAnimation(letter) {
+      switch (letter.text) {
+        case ('S', 'L'):
+          this.outerCircle2.scaleX = 1.1;
+          this.outerCircle2.scaleY = 1.1;
+          this.innerCircle2.scaleX = 1.15;
+          this.innerCircle2.scaleY = 1.15;
+          createjs.Tween.get(this.innerCircle2).to({ alpha: 1, scaleX: 1, scaleY: 1 }, 700);
+          createjs.Tween.get(this.outerCircle2).to({ alpha: 1, scaleX: 1, scaleY: 1 }, 700);
+          break;
+        default:
+          this.outerCircle.scaleX = 1.1;
+          this.outerCircle.scaleY = 1.1;
+          this.innerCircle.scaleX = 1.15;
+          this.innerCircle.scaleY = 1.15;
+          createjs.Tween.get(this.innerCircle).to({ alpha: 1, scaleX: 1, scaleY: 1 }, 700);
+          createjs.Tween.get(this.outerCircle).to({ alpha: 1, scaleX: 1, scaleY: 1 }, 700);
+      }
     }
   }, {
     key: 'incorrectKeyAnimation',
@@ -359,8 +419,8 @@ var Game = function () {
       this.comboCount = 0;
       this.innerCircle.alpha = 0.6;
       this.outerCircle.alpha = 0.6;
-      this.outerCircle.scaleX = 1.1;
-      this.outerCircle.scaleY = 1.1;
+      this.outerCircle.scaleX = 0.9;
+      this.outerCircle.scaleY = 0.9;
       createjs.Tween.get(this.innerCircle).to({ alpha: 1 }, 1000);
       createjs.Tween.get(this.outerCircle).to({ alpha: 1, scaleX: 1, scaleY: 1 }, 700);
     }
@@ -380,19 +440,7 @@ var Game = function () {
   }, {
     key: 'updateBackground',
     value: function updateBackground() {
-      if (this.comboCount > 10) {
-        canvas.style.background = "#0d0d0d";
-      } else if (this.comboCount > 20) {
-        canvas.style.background = "#262626";
-      } else if (this.comboCount > 30) {
-        canvas.style.background = "#333333";
-      } else if (this.comboCount > 40) {
-        canvas.style.background = "#404040";
-      } else if (this.comboCount > 50) {
-        canvas.style.background = "white";
-      } else {
-        canvas.style.background = "black";
-      }
+      background.style.filter = 'brightness(' + this.comboCount * 2 + '%)';
     }
   }, {
     key: 'tick',
@@ -524,8 +572,13 @@ function keyDownTextField(e) {
   }
 }
 
+// Find browser game, update css.
+// Add high score.
+// Update the sounds, one for each circle.
+// Add easy medium hard level
+
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -534,7 +587,7 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports) {
 
 var g;
@@ -561,7 +614,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -589,7 +642,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 /*!
@@ -14008,7 +14061,7 @@ window.createjs = window.createjs || {};
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -14997,7 +15050,7 @@ window.createjs = window.createjs || {};
 ;(function () {
   // Detect the `define` function exposed by asynchronous module loaders. The
   // strict `define` check is necessary for compatibility with `r.js`.
-  var isLoader = "function" === "function" && __webpack_require__(3);
+  var isLoader = "function" === "function" && __webpack_require__(4);
 
   // A set of types used to distinguish objects from primitives.
   var objectTypes = {
@@ -21313,10 +21366,10 @@ window.createjs = window.createjs || {};
 
 }());
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)(module), __webpack_require__(4)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)(module), __webpack_require__(5)))
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports) {
 
 /*!
@@ -29271,7 +29324,7 @@ window.createjs = window.createjs || {};
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports) {
 
 /*!
@@ -32696,45 +32749,6 @@ window.createjs = window.createjs || {};
 
 })();
 
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var glow = exports.glow = function glow() {
-  var middleGlow = document.getElementById('middle-glow');
-  middleGlow.style.top = window.innerHeight / 2 - 28 + 'px';
-  middleGlow.style.left = window.innerWidth / 2 - 30 + 'px';
-  var middleGlow2 = document.getElementById('middle-glow-2');
-  middleGlow2.style.visibility = "hidden";
-  middleGlow2.style.top = window.innerHeight / 9 - 25 + 'px';
-  middleGlow2.style.left = window.innerWidth / 5 - 25 + 'px';
-  var middleGlow3 = document.getElementById('middle-glow-3');
-  middleGlow3.style.visibility = "hidden";
-  middleGlow3.style.top = window.innerHeight / 9 - 23 + 'px';
-  middleGlow3.style.left = window.innerWidth * (4 / 5) - 33 + 'px';
-  document.getElementById('combo-glow').style.visibility = 'hidden';
-};
-
-var hideVisibility = exports.hideVisibility = function hideVisibility() {
-  var start = document.getElementById('start');
-  var instructions = document.getElementById('instructions');
-  var logo = document.getElementById('logo');
-  var combo = document.getElementById('combo-glow');
-  start.innerHTML = 'Restart';
-  start.style.visibility = "hidden";
-  instructions.style.visibility = "hidden";
-  document.getElementById('middle-glow-2').style.visibility = "hidden";
-  document.getElementById('middle-glow-3').style.visibility = "hidden";
-  logo.style.visibility = "hidden";
-  combo.style.visibility = "visible";
-};
 
 /***/ })
 /******/ ]);

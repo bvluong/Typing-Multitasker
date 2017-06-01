@@ -14,8 +14,11 @@ export const createLetter = (letter = 'r', x= innerWidth/2, y= innerHeight/2) =>
   object.x = x-10;
   object.y = y-17;
   var inputCircle = new createjs.Shape();
-  inputCircle.graphics.setStrokeStyle(3,"round").beginFill("black").beginStroke("white")
+  inputCircle.graphics.setStrokeStyle(3,"round").beginFill("black").beginStroke(
+    'rgb(0,' + Math.floor(255 - 42.5 * (Math.random()*6)) + ',' + Math.floor(255 - 42.5 * (Math.random()*6)) + ')')
   .drawCircle(0, 0, 20);
+
+;
   inputCircle.x = x;
   inputCircle.y = y;
 
@@ -26,7 +29,7 @@ export const createLetter = (letter = 'r', x= innerWidth/2, y= innerHeight/2) =>
 
 export const outerCircle = (x= innerWidth/2, y=innerHeight/2) => {
   var outercircle = new createjs.Shape();
-  outercircle.graphics.setStrokeStyle(10,"round").beginStroke("#228DFF")
+  outercircle.graphics.setStrokeStyle(10,"round").beginStroke("#95e9f9")
     .drawCircle(0, 0, 130);
   outercircle.x = x;
   outercircle.y = y+130;
@@ -35,7 +38,7 @@ export const outerCircle = (x= innerWidth/2, y=innerHeight/2) => {
 
 export const lifeBar = () => {
   var lifebar = new createjs.Shape();
-  lifebar.graphics.beginFill("white")
+  lifebar.graphics.beginFill("black")
     .drawRect(0, 0, 80, 200);
   lifebar.x = innerWidth/16;
   lifebar.y = innerHeight/1.7;
@@ -44,7 +47,7 @@ export const lifeBar = () => {
 
 export const lifeBarBorder = () => {
   var lifebar = new createjs.Shape();
-  lifebar.graphics.setStrokeStyle(5).beginFill("#FF1177").beginStroke("white")
+  lifebar.graphics.beginFill("#f74121")
     .drawRect(0, 0, 80, 200);
   lifebar.x = innerWidth/16;
   lifebar.y = innerHeight/1.7;

@@ -1,6 +1,5 @@
 canvas {
-  border: 1px solid black;
-  background: white;
+  background: transparent;
   width: 100%;
   height: 100%;
   font-family: Roboto;
@@ -8,8 +7,20 @@ canvas {
 }
 
 body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+#background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: url("https://s-media-cache-ak0.pinimg.com/originals/c1/af/d0/c1afd046a390c4376f38b954e19e7d03.jpg");
+  -webkit-background: url("https://s-media-cache-ak0.pinimg.com/originals/c1/af/d0/c1afd046a390c4376f38b954e19e7d03.jpg");
+  background-size: 100%;
   margin: 0;
   font-family: Roboto;
+  filter: brightness(0%);
 }
 
 button {
@@ -19,8 +30,8 @@ button {
   font-size: 20px;
   border-radius: 3px;
   background: transparent;
-  border: 1px solid white;
-  color: white;
+  border: 1px solid #003463;
+  color: #8ecaff;
   font-family: Roboto;
   bottom: 30%;
   right: 50px;
@@ -41,8 +52,8 @@ h3 {
   font-size: 30px;
   font-family: Iceland;
   background: transparent;
-  color: #FF1177;
-  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #228DFF
+  color: #49fcf3;
+  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 40px #49fcf3
 }
 
 #middle-glow {
@@ -76,26 +87,43 @@ h3 {
   width: 120px;
   height: 27px;
   border-radius: 4px;
-  box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #228DFF, 0 0 70px #228DFF, 0 0 80px #228DFF;
+  box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #FF1177, 0 0 70px #FF1177, 0 0 80px #228DFF;
 }
 
 .instructions {
   position: absolute;
   margin: 0;
   padding: 0;
-  width: 180px;
+  width: 160px;
   bottom: 12%;
   right: 0;
-  color: white
+  color: white;
+  font-family: Roboto;
+  font-size: 15px;
 }
 
 h2 {
+  color: #f4911f;
   padding: 0;
   margin: 0;
 }
-p {
-  padding: 0;
+
+h4, h5, h6 {
   margin: 0;
+  padding: 0;
+  font-size: 15px;
+}
+
+h4 {
+  color: #fcac5d;
+}
+
+h5 {
+  color: #fcc95d;
+}
+
+h6{
+  color: #fce15d;
 }
 
 hidden {

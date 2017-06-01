@@ -11,10 +11,10 @@ import { createCircle, outerCircle,
 import { glow, hideVisibility } from './animation/background_glow';
 
 var canvas = document.getElementById('root');
+var background = document.getElementById('background');
 glow();
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-canvas.style.background = 'black';
 var c = canvas.getContext('2d');
 
 let count = 0;
@@ -37,6 +37,7 @@ class Game {
       this.frequency = 4;
       this.innerCircle = createCircle();
       this.outerCircle = outerCircle();
+      this.score = 0;
   }
 
   first_level() {
@@ -49,8 +50,10 @@ class Game {
   }
 
   second_level() {
-    this.stage.addChild(outerCircle(innerWidth/5,innerHeight/9));
-    this.stage.addChild(createCircle(innerWidth/5,innerHeight/9));
+    this.outerCircle2 = outerCircle(innerWidth/5,innerHeight/9);
+    this.stage.addChild(this.outerCircle2);
+    this.innerCircle2 = createCircle(innerWidth/5,innerHeight/9);
+    this.stage.addChild(this.innerCircle2);
     document.getElementById('middle-glow-2').style.visibility = "visible";
     this.secondLetters = ["S","L"];
   }
@@ -68,7 +71,7 @@ class Game {
       start_time += this.random_intervals[1];
       let letter = this.stage
         .addChild(createLetter(this.secondLetters[Math.floor(Math.random()*2)],
-        innerWidth/5,innerHeight/8));
+        innerWidth/5,innerHeight/8.7));
       this.letters_array.push({ letter, start_time});
     }, this.random_intervals[1]);
   }
@@ -79,7 +82,7 @@ class Game {
       start_time += this.random_intervals[2];
       let letter = this.stage
         .addChild(createLetter(this.thirdLetters[0],
-        innerWidth*(4/5),innerHeight/8));
+        innerWidth*(4/5),innerHeight/8.7));
       this.letters_array.push({ letter, start_time});
     }, this.random_intervals[2]);
   }
@@ -140,12 +143,27 @@ class Game {
     let awesome = Awesome(letter.x, letter.y);
     this.stage.addChild(awesome);
     createjs.Tween.get(awesome).to({alpha: 0},500);
-    this.innerCircle.alpha = 1;
-    this.outerCircle.alpha = 1;
-    this.innerCircle.scaleX = 1.15;
-    this.innerCircle.scaleY = 1.15;
-    createjs.Tween.get(this.innerCircle).to({alpha: 1.2, scaleX: 1, scaleY: 1},700);
-    createjs.Tween.get(this.outerCircle).to({alpha: 1.2},700);
+    this.correctCircleAnimation(letter);
+  }
+
+  correctCircleAnimation(letter) {
+    switch (letter.text) {
+      case 'S', 'L' :
+        this.outerCircle2.scaleX = 1.1;
+        this.outerCircle2.scaleY = 1.1;
+        this.innerCircle2.scaleX = 1.15;
+        this.innerCircle2.scaleY = 1.15;
+        createjs.Tween.get(this.innerCircle2).to({alpha: 1, scaleX: 1, scaleY: 1},700);
+        createjs.Tween.get(this.outerCircle2).to({alpha: 1, scaleX: 1, scaleY: 1},700);
+        break;
+      default:
+        this.outerCircle.scaleX = 1.1;
+        this.outerCircle.scaleY = 1.1;
+        this.innerCircle.scaleX = 1.15;
+        this.innerCircle.scaleY = 1.15;
+        createjs.Tween.get(this.innerCircle).to({alpha: 1, scaleX: 1, scaleY: 1},700);
+        createjs.Tween.get(this.outerCircle).to({alpha: 1, scaleX: 1, scaleY: 1},700);
+    }
   }
 
   incorrectKeyAnimation(letter) {
@@ -155,8 +173,8 @@ class Game {
     this.comboCount = 0;
     this.innerCircle.alpha = 0.6;
     this.outerCircle.alpha = 0.6;
-    this.outerCircle.scaleX = 1.1;
-    this.outerCircle.scaleY = 1.1;
+    this.outerCircle.scaleX = 0.9;
+    this.outerCircle.scaleY = 0.9;
     createjs.Tween.get(this.innerCircle).to({alpha: 1},1000);
     createjs.Tween.get(this.outerCircle).to({alpha: 1,scaleX: 1, scaleY:1},700);
   }
@@ -173,19 +191,7 @@ class Game {
   }
 
   updateBackground() {
-    if (this.comboCount > 10) {
-      canvas.style.background = "#0d0d0d";
-    } else if (this.comboCount > 20) {
-      canvas.style.background = "#262626";
-    } else if (this.comboCount > 30) {
-      canvas.style.background = "#333333";
-    } else if (this.comboCount > 40) {
-      canvas.style.background = "#404040";
-    } else if (this.comboCount > 50) {
-      canvas.style.background = "white";
-    } else {
-      canvas.style.background = "black";
-    }
+    background.style.filter = `brightness(${this.comboCount*2}%)`;
   }
 
   tick(event) {
@@ -302,3 +308,8 @@ function keyDownTextField(e) {
     newGame.comboCount = 0;
   }
 }
+
+// Find browser game, update css.
+// Add high score.
+// Update the sounds, one for each circle.
+// Add easy medium hard level
