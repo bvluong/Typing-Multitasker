@@ -1,12 +1,12 @@
-import Game from './src/game';
-import { glow, hideVisibility } from './src/background_glow';
-
-
 const canvas = document.getElementById('root');
-glow();
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 const c = canvas.getContext('2d');
+
+import Game from './src/game';
+import { glow, hideVisibility } from './src/background_glow';
+
+glow();
 const newGame = new Game;
 newGame.first_level();
 
