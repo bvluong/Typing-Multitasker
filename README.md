@@ -21,7 +21,7 @@ Typing Multitasker utilizes the following:
 
 ## Gameplay
 
-![game-play](http://res.cloudinary.com/djrgebhxz/image/upload/v1496370380/547d2b366730d5c86136e46007c1cb6f_brqtup.gif)
+![game-play](https://res.cloudinary.com/djrgebhxz/image/upload/v1496370380/547d2b366730d5c86136e46007c1cb6f_brqtup.gif)
 
 Typing Multitasker is a single player game that is played with three circles which rotate a set of letters. Once the letter reaches the top of the circle, the user will need to hit the correct key in order to raise their life bar. The game starts off with one circle of rotating letters, but as the game progresses other circles will  appear and rotating their own letters.
 
