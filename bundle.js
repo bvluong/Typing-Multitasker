@@ -113,6 +113,7 @@ var hideVisibility = exports.hideVisibility = function hideVisibility() {
   instructions.style.visibility = "hidden";
   document.getElementById('middle-glow-2').style.visibility = "hidden";
   document.getElementById('middle-glow-3').style.visibility = "hidden";
+  document.getElementById('navFooter').style.visibility = "hidden";
   logo.style.visibility = "hidden";
   combo.style.visibility = "visible";
 };
@@ -160,11 +161,7 @@ var Game = function () {
     this.outerCircle3 = (0, _objects.outerCircle)(innerWidth * (4 / 5), innerHeight / 9);
     this.innerCircle3 = (0, _objects.createCircle)(innerWidth * (4 / 5), innerHeight / 9);
     this.score = 0;
-<<<<<<< HEAD
-    this.speed = [2, 3];
-=======
     this.startLifeCount = false;
->>>>>>> gh-pages
   }
 
   _createClass(Game, [{
@@ -228,11 +225,7 @@ var Game = function () {
   }, {
     key: 'updateLetter',
     value: function updateLetter(letter, time) {
-<<<<<<< HEAD
-      var speed = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [4, 1.5];
-=======
       var speed = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [1, 3];
->>>>>>> gh-pages
 
       letter.x += Math.cos(Math.PI * speed[0] * (time / 3000)) * speed[1];
       letter.y += Math.sin(Math.PI * speed[0] * (time / 3000)) * speed[1];
@@ -437,6 +430,7 @@ var Game = function () {
       document.getElementById('start').style.visibility = 'visible';
       document.getElementById('instructions').style.visibility = 'visible';
       document.getElementById('combo-glow').style.visibility = 'hidden';
+      document.getElementById('navFooter').style.visibility = "visible";
     }
   }, {
     key: 'increase_lifepoints',
