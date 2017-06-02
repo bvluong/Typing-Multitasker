@@ -32,6 +32,7 @@ class Game {
       this.outerCircle3 = outerCircle(innerWidth*(4/5),innerHeight/9);
       this.innerCircle3 = createCircle(innerWidth*(4/5),innerHeight/9);
       this.score = 0;
+      this.speed = [2, 3];
   }
 
   otherCircles() {
@@ -81,7 +82,7 @@ class Game {
     }, 60000);
   }
 
-  updateLetter(letter,time, speed = [2,3]) {
+  updateLetter(letter,time, speed = [4,1.5]) {
     letter.x += Math.cos( ((Math.PI*2) /speed[0]) * (time / 3000))*speed[1];
     letter.y += Math.sin( ((Math.PI*2) /speed[0]) * (time / 3000))*speed[1];
     if (letter.y < 10 && letter.x > 10 && time > 6000) {
