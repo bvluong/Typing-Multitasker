@@ -27,6 +27,7 @@ export const hideVisibility = () => {
   instructions.style.visibility = "hidden";
   document.getElementById('middle-glow-2').style.visibility = "hidden";
   document.getElementById('middle-glow-3').style.visibility = "hidden";
+  document.getElementById('navFooter').style.visibility = "hidden";
   logo.style.visibility = "hidden";
   combo.style.visibility = "visible";
 };

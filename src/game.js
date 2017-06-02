@@ -32,7 +32,7 @@ class Game {
       this.outerCircle3 = outerCircle(innerWidth*(4/5),innerHeight/9);
       this.innerCircle3 = createCircle(innerWidth*(4/5),innerHeight/9);
       this.score = 0;
-      this.speed = [2, 3];
+      this.startLifeCount = false;
   }
 
   otherCircles() {
@@ -42,7 +42,8 @@ class Game {
 
   levels() {
     return [this.levelTwo, this.levelThree, this.startLetters,
-      this.second_stage, this.middle_stage, this.third_stage];
+      this.second_stage, this.middle_stage,
+      this.third_stage, this.startLifeCounter];
   }
 
   first_level() {
@@ -68,6 +69,9 @@ class Game {
   }
 
   addLevels() {
+    this.startLifeCounter = setTimeout(()=> {
+      this.startLifeCount = true;
+    }, 7000);
     this.second_stage = setTimeout(()=> {
       this.frequency = 5;
       this.second_level();
@@ -82,9 +86,9 @@ class Game {
     }, 60000);
   }
 
-  updateLetter(letter,time, speed = [4,1.5]) {
-    letter.x += Math.cos( ((Math.PI*2) /speed[0]) * (time / 3000))*speed[1];
-    letter.y += Math.sin( ((Math.PI*2) /speed[0]) * (time / 3000))*speed[1];
+  updateLetter(letter,time, speed = [1,3]) {
+    letter.x += Math.cos((Math.PI * speed[0]) * (time / 3000))*speed[1];
+    letter.y += Math.sin((Math.PI * speed[0]) * (time / 3000))*speed[1];
     if (letter.y < 10 && letter.x > 10 && time > 6000) {
       this.stage.removeChild(letter);
       this.letters_array.shift();
@@ -224,8 +228,10 @@ class Game {
   }
 
   updateLife() {
-    this.lifepoints -= 1;
-    this.lifeBar.scaleY += 0.001;
+    if (this.startLifeCount) {
+      this.lifepoints -= 1;
+      this.lifeBar.scaleY += 0.001;
+    }
   }
 
   updateCounter() {
@@ -262,6 +268,7 @@ class Game {
     document.getElementById('start').style.visibility = 'visible';
     document.getElementById('instructions').style.visibility = 'visible';
     document.getElementById('combo-glow').style.visibility = 'hidden';
+    document.getElementById('navFooter').style.visibility = "visible";
   }
 
   increase_lifepoints() {
@@ -303,6 +310,7 @@ class Game {
     this.innerCircle2 = createCircle(innerWidth/5,innerHeight/9);
     this.outerCircle3 = outerCircle(innerWidth*(4/5),innerHeight/9);
     this.innerCircle3 = createCircle(innerWidth*(4/5),innerHeight/9);
+    this.startLifeCount = false;
   }
 
   letterPositions() {

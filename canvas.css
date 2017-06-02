@@ -134,7 +134,21 @@ h6{
   text-shadow: 0 0 5px #ffaf54, 0 0 15px #ffaf54
 }
 
-img {
+h7 {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  bottom: calc( 40% - 140px);
+  right: 10px;
+  font-family: Roboto;
+  font-size: 15px;
+  color: #8ecaff;
+  filter: drop-shadow(2px 2px 2px #228DFF);
+}
+
+
+#heart {
   position: absolute;
   left: 50px;
   height: 100px;
@@ -143,6 +157,48 @@ img {
   transition: all 0.5s;
   animation: neon3 1s ease-in-out infinite alternate;
   -webkit-animation: neon3 1s ease-in-out infinite alternate;
+  color: #ffffff;
+}
+
+.nav-footer {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  width: 80px;
+  height: 70px;
+  bottom: calc( 40% - 220px);
+  right: 130px;
+  color: white;
+  font-family: Roboto;
+  font-size: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.nav-footer a {
+  height: 35px;
+  width: 35px;
+  display: flex;
+  align-items: center;
+}
+
+.nav-footer img {
+  height: 35px;
+  width: 35px;
+  background: transparent;
+  filter: drop-shadow(2px 2px 2px #228DFF);
+}
+
+.nav-footer .linkened {
+  height: 30px;
+  width: 30px;
+}
+
+.nav-footer img:hover {
+  transition: all 0.5s;
+  animation: neon4 1s ease-in-out infinite alternate;
+  -webkit-animation: neon4 1s ease-in-out infinite alternate;
   color: #ffffff;
 }
 
@@ -161,5 +217,14 @@ img {
   }
   to {
     filter: drop-shadow(0px 0px 0px #9c21cc);
+  }
+}
+
+@keyframes neon4 {
+  from {
+    filter: drop-shadow(4px 4px 4px #228DFF);
+  }
+  to {
+    filter: drop-shadow(0px 0px 0px #228DFF);
   }
 }

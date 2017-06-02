@@ -160,6 +160,7 @@ var Game = function () {
     this.outerCircle3 = (0, _objects.outerCircle)(innerWidth * (4 / 5), innerHeight / 9);
     this.innerCircle3 = (0, _objects.createCircle)(innerWidth * (4 / 5), innerHeight / 9);
     this.score = 0;
+    this.startLifeCount = false;
   }
 
   _createClass(Game, [{
@@ -170,7 +171,7 @@ var Game = function () {
   }, {
     key: 'levels',
     value: function levels() {
-      return [this.levelTwo, this.levelThree, this.startLetters, this.second_stage, this.middle_stage, this.third_stage];
+      return [this.levelTwo, this.levelThree, this.startLetters, this.second_stage, this.middle_stage, this.third_stage, this.startLifeCounter];
     }
   }, {
     key: 'first_level',
@@ -204,6 +205,9 @@ var Game = function () {
     value: function addLevels() {
       var _this2 = this;
 
+      this.startLifeCounter = setTimeout(function () {
+        _this2.startLifeCount = true;
+      }, 7000);
       this.second_stage = setTimeout(function () {
         _this2.frequency = 5;
         _this2.second_level();
@@ -220,10 +224,10 @@ var Game = function () {
   }, {
     key: 'updateLetter',
     value: function updateLetter(letter, time) {
-      var speed = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [2, 3];
+      var speed = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [1, 3];
 
-      letter.x += Math.cos(Math.PI * 2 / speed[0] * (time / 3000)) * speed[1];
-      letter.y += Math.sin(Math.PI * 2 / speed[0] * (time / 3000)) * speed[1];
+      letter.x += Math.cos(Math.PI * speed[0] * (time / 3000)) * speed[1];
+      letter.y += Math.sin(Math.PI * speed[0] * (time / 3000)) * speed[1];
       if (letter.y < 10 && letter.x > 10 && time > 6000) {
         this.stage.removeChild(letter);
         this.letters_array.shift();
@@ -378,8 +382,10 @@ var Game = function () {
   }, {
     key: 'updateLife',
     value: function updateLife() {
-      this.lifepoints -= 1;
-      this.lifeBar.scaleY += 0.001;
+      if (this.startLifeCount) {
+        this.lifepoints -= 1;
+        this.lifeBar.scaleY += 0.001;
+      }
     }
   }, {
     key: 'updateCounter',
@@ -471,6 +477,7 @@ var Game = function () {
       this.innerCircle2 = (0, _objects.createCircle)(innerWidth / 5, innerHeight / 9);
       this.outerCircle3 = (0, _objects.outerCircle)(innerWidth * (4 / 5), innerHeight / 9);
       this.innerCircle3 = (0, _objects.createCircle)(innerWidth * (4 / 5), innerHeight / 9);
+      this.startLifeCount = false;
     }
   }, {
     key: 'letterPositions',
