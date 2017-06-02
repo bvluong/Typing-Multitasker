@@ -527,10 +527,11 @@ var _background_glow = __webpack_require__(1);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var canvas = document.getElementById('root');
-(0, _background_glow.glow)();
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 var c = canvas.getContext('2d');
+
+(0, _background_glow.glow)();
 var newGame = new _game2.default();
 newGame.first_level();
 
