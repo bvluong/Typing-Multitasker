@@ -1,9 +1,8 @@
-import Game from './animation/game';
-import { glow, hideVisibility } from './animation/background_glow';
+import Game from './src/game';
+import { glow, hideVisibility } from './src/background_glow';
 
 
 const canvas = document.getElementById('root');
-const background = document.getElementById('background');
 glow();
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -21,7 +20,6 @@ start.addEventListener('click', ()=>{
   newGame.removeCircles();
   hideVisibility();
 });
-
 
 document.addEventListener("keydown", keyDownTextField, false);
 

@@ -2,61 +2,57 @@
 
 ### Background
 
-Typing Multitasker is a typing game that utilizes rhythm, timing, and multi-tasking inspired by  **Gyroshi**. This is a single player game that is played three circles which rotate a pair of letters per circle. Once the letter reaches the top of the circle, the user will need to hit the correct key in order to raise their life bar. The game starts off with one circle of rotating letters, but as the game progresses other circles will  appear and rotating their own letters. In additional to more circles appearing, the speed at which the letters revolve around the circle will also increase.
+![screen-page](docs/typing_multitasking.png)
 
-Game Instructions:
+Typing Multitasker is a typing game that utilizes rhythm, timing, and multi-tasking inspired by  **Gyroshi**.
 
-- When a letter floats over the circle above the outer circle, press the corresponding letter on the keyboard
-- The life bar will gradually decrease as time passes. Once your life bar is depleted, the game is over.
-- Hitting the correct letters at the right time will increase your life bar.
-- Keep playing until you lose, try to set your highest combo or longest time alive.
-
-### Functionality & MVP  
-
-- [ ] Click on Letter inside circle and obtain feedback(sound/animation) if hit correctly.
-- [ ] Letters will rotate inside the circle and disappear after one rotation.
-- [ ] A combo meter to show how many letters that are hit in a row.
-- [ ] Life bar that will end the game if a certain number of incorrect keys are hit.
-- [ ] Generate multiple outer circles as game progresses.
-- [ ] Start and Restart button for when the player loses
-- [ ] A production Readme
-
-### Wireframes
-
-This app will consist of a single screen with game board, game controls, and nav links to the Github, my LinkedIn, and the About modal.  Game controls will include any letter on the keyboard.
-![wireframes](docs/wireframe.png)
-
-### Architecture and Technologies
+Live Site: [Typing-Multitasker-App](www.slouch-app.com)
 
 
-This project will be implemented with the following technologies:
+## Technology
 
-- Vanilla JavaScript - For the game logic, ie switch statements for when correct/incorrect keys are pressed.
+Typing Multitasker utilizes the following:
+
+- Vanilla JavaScript - For the game logic and event handlers.
 - HTML5 Canvas & Easeljs - For creating animations, backgrounds, and rendering shapes.
 - Webpack - To bundle up all the code and allow for import/export.
 - Babel - For compiling javascript.
 - yuki-createjs - To allow Easaljs to work with webpack bundler.
 
-`canvas.js`: this script will handle the game logic. Such as intervals to generate letters, when correct keys are pressed, when incorrect keys are pressed, and when to increase the difficulty.
+## Gameplay
 
-`circle.js`: will generate the background circles.
+![game-play](http://res.cloudinary.com/djrgebhxz/image/upload/v1496370380/547d2b366730d5c86136e46007c1cb6f_brqtup.gif)
 
-`letters.js`: will generate the letters floating in outer circle.
+Typing Multitasker is a single player game that is played three circles which rotate a pair of letters per circle. Once the letter reaches the top of the circle, the user will need to hit the correct key in order to raise their life bar. The game starts off with one circle of rotating letters, but as the game progresses other circles will  appear and rotating their own letters.
 
+```javascript
+document.addEventListener("keydown", keyDownTextField, false);
+function keyDownTextField(e) {
+  const keyInput = e.key;
+  if (newGame.inCircle(keyInput.toUpperCase())) {
+      newGame.removeLetter();
+      newGame.comboCount += 1;
+      newGame.score += 1;
+      newGame.increase_lifepoints();
+  } else {
+    newGame.lifeBar.scaleY += 0.04;
+    newGame.lifepoints -= 40;
+    newGame.comboCount = 0;
+  }
+}
 
-### Implementation Timeline
+```
 
-**Day 1**: Setup files, babel, webpack, canvas, and easel.js. Create a factory function to generate moving letters that will appear after a set interval. Create a switch function to manage the event listener for key strokes.
+## Features
 
-**Day 2**: Create and handle the game logic for one circle so that when the letter is within 50pixels of the input circle that a correct response is returned.
+![end-game](docs/end_game.png)
 
-**Day 3**: Add more letters into the circle so that a constant stream of letters will appear within a circle.
+### Wireframe
 
-**Day 4**: Style the frontend, add different colors to the circles. Add some fade or movement as
+![wireframes](docs/wireframe.png)
 
 ### Bonus features
 
-- [ ] Animations/Sounds in the background when letters clicked correctly
 - [ ] The input circle moves along the outer circle.
 - [ ] The outer circles also start moving.
 - [ ] Music for when certain combo lengths are reached.

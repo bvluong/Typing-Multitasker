@@ -218,6 +218,7 @@ class Game {
   }
 
   updateBackground() {
+    const background = document.getElementById('background');
     background.style.filter = `brightness(${this.comboCount*1.5}%)`;
   }
 
@@ -251,7 +252,7 @@ class Game {
     } else {
       this.pauseTime = event.runTime;
       createjs.Ticker.paused = true;
-      createjs.Ticker.removeAllEventListeners();
+      event.remove();
       this.endGame();
     }
   }
@@ -287,15 +288,20 @@ class Game {
   }
 
   restart() {
-    this.stage = new createjs.Stage("root");
+    this.stage.removeAllChildren();
     this.letters_array = [];
     this.counter = 0;
-    createjs.Ticker.removeAllEventListeners();
     this.tick = this.tick.bind(this);
     this.lifepoints = 1000;
     this.eventTime = 0;
     this.comboCount = 0;
     this.score = 0;
+    this.innerCircle = createCircle();
+    this.outerCircle = outerCircle();
+    this.outerCircle2 = outerCircle(innerWidth/5,innerHeight/9);
+    this.innerCircle2 = createCircle(innerWidth/5,innerHeight/9);
+    this.outerCircle3 = outerCircle(innerWidth*(4/5),innerHeight/9);
+    this.innerCircle3 = createCircle(innerWidth*(4/5),innerHeight/9);
   }
 
   letterPositions() {
