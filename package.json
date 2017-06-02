@@ -5,7 +5,8 @@
   "main": "canvas.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "webpack": "webpack --watch"
+    "webpack": "webpack --watch",
+    "postinstall": "webpack",
   },
   "keywords": [],
   "author": "",
