@@ -669,7 +669,7 @@ var gameOver = exports.gameOver = function gameOver() {
 };
 var highScore = exports.highScore = function highScore(text) {
   var object = new createjs.Text(text, "60px Iceland", "white");
-  object.x = innerWidth / 2 - 200;
+  object.x = innerWidth / 2 - 180;
   object.y = 100;
   return object;
 };

@@ -79,7 +79,7 @@ export const gameOver = () => {
 };
 export const highScore = (text) => {
   let object = new createjs.Text(text, "60px Iceland", "white");
-  object.x = innerWidth/2 - 200;
+  object.x = innerWidth/2 - 180;
   object.y = 100;
   return object;
 };
