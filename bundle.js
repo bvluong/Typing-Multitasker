@@ -160,6 +160,7 @@ var Game = function () {
     this.outerCircle3 = (0, _objects.outerCircle)(innerWidth * (4 / 5), innerHeight / 9);
     this.innerCircle3 = (0, _objects.createCircle)(innerWidth * (4 / 5), innerHeight / 9);
     this.score = 0;
+    this.speed = [2, 3];
   }
 
   _createClass(Game, [{
@@ -220,7 +221,7 @@ var Game = function () {
   }, {
     key: 'updateLetter',
     value: function updateLetter(letter, time) {
-      var speed = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [2, 3];
+      var speed = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [4, 1.5];
 
       letter.x += Math.cos(Math.PI * 2 / speed[0] * (time / 3000)) * speed[1];
       letter.y += Math.sin(Math.PI * 2 / speed[0] * (time / 3000)) * speed[1];
