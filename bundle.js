@@ -114,6 +114,7 @@ var hideVisibility = exports.hideVisibility = function hideVisibility() {
   document.getElementById('middle-glow-2').style.visibility = "hidden";
   document.getElementById('middle-glow-3').style.visibility = "hidden";
   document.getElementById('navFooter').style.visibility = "hidden";
+  document.getElementById('createdBy').style.visibility = "hidden";
   logo.style.visibility = "hidden";
   combo.style.visibility = "visible";
 };
@@ -431,6 +432,7 @@ var Game = function () {
       document.getElementById('instructions').style.visibility = 'visible';
       document.getElementById('combo-glow').style.visibility = 'hidden';
       document.getElementById('navFooter').style.visibility = "visible";
+      document.getElementById('createdBy').style.visibility = "visible";
     }
   }, {
     key: 'increase_lifepoints',

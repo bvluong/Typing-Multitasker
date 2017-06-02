@@ -269,6 +269,7 @@ class Game {
     document.getElementById('instructions').style.visibility = 'visible';
     document.getElementById('combo-glow').style.visibility = 'hidden';
     document.getElementById('navFooter').style.visibility = "visible";
+    document.getElementById('createdBy').style.visibility = "visible";
   }
 
   increase_lifepoints() {
