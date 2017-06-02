@@ -21,10 +21,6 @@ Game Instructions:
 - [ ] Start and Restart button for when the player loses
 - [ ] A production Readme
 
-### Wireframes
-
-This app will consist of a single screen with game board, game controls, and nav links to the Github, my LinkedIn, and the About modal.  Game controls will include any letter on the keyboard.
-![wireframes](docs/wireframe.png)
 
 ### Architecture and Technologies
 
@@ -53,10 +49,3 @@ This project will be implemented with the following technologies:
 **Day 3**: Add more letters into the circle so that a constant stream of letters will appear within a circle.
 
 **Day 4**: Style the frontend, add different colors to the circles. Add some fade or movement as
-
-### Bonus features
-
-- [ ] Animations/Sounds in the background when letters clicked correctly
-- [ ] The input circle moves along the outer circle.
-- [ ] The outer circles also start moving.
-- [ ] Music for when certain combo lengths are reached.
