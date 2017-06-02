@@ -212,8 +212,8 @@ var gameOver = exports.gameOver = function gameOver() {
   return object;
 };
 var highScore = exports.highScore = function highScore(text) {
-  var object = new createjs.Text(text, "70px Iceland", "white");
-  object.x = innerWidth / 2 - 20;
+  var object = new createjs.Text(text, "60px Iceland", "white");
+  object.x = innerWidth / 2 - 200;
   object.y = 100;
   return object;
 };
@@ -287,14 +287,11 @@ var Game = function () {
   _createClass(Game, [{
     key: 'first_level',
     value: function first_level() {
-      this.stage.addChild(this.outerCircle);
-      this.stage.addChild(this.innerCircle);
-      this.stage.addChild(this.outerCircle2);
-      this.stage.addChild(this.innerCircle2);
-      this.stage.addChild(this.outerCircle3);
-      this.stage.addChild(this.innerCircle3);
-      this.stage.addChild((0, _objects.lifeBarBorder)());
-      this.stage.addChild(this.lifeBar);
+      var _this = this;
+
+      [this.outerCircle, this.innerCircle, this.outerCircle2, this.innerCircle2, this.outerCircle3, this.innerCircle3, (0, _objects.lifeBarBorder)(), this.lifeBar].forEach(function (circle) {
+        return _this.stage.addChild(circle);
+      });
       this.lifeBar.scaleY = 0;
       this.stage.update();
     }
@@ -317,65 +314,65 @@ var Game = function () {
   }, {
     key: 'generateLevel2',
     value: function generateLevel2() {
-      var _this = this;
+      var _this2 = this;
 
       var start_time = 20000;
       this.levelTwo = setInterval(function () {
-        start_time += _this.random_intervals[1];
-        if (Math.floor(Math.random() * _this.frequency) < 3) {
-          var letter = _this.stage.addChild((0, _objects.createLetter)(_this.secondLetters[Math.floor(Math.random() * 2)], innerWidth / 5, innerHeight / 8.7));
-          _this.letters_array.push({ letter: letter, start_time: start_time });
+        start_time += _this2.random_intervals[1];
+        if (Math.floor(Math.random() * _this2.frequency) < 3) {
+          var letter = _this2.stage.addChild((0, _objects.createLetter)(_this2.secondLetters[Math.floor(Math.random() * 2)], innerWidth / 5, innerHeight / 8.7));
+          _this2.letters_array.push({ letter: letter, start_time: start_time });
         }
       }, this.random_intervals[1]);
     }
   }, {
     key: 'generateLevel3',
     value: function generateLevel3() {
-      var _this2 = this;
+      var _this3 = this;
 
       var start_time = 60000;
       this.levelThree = setInterval(function () {
-        start_time += _this2.random_intervals[2];
-        if (Math.floor(Math.random() * _this2.frequency) < 3) {
-          var letter = _this2.stage.addChild((0, _objects.createLetter)(_this2.thirdLetters[0], innerWidth * (4 / 5), innerHeight / 8.7));
-          _this2.letters_array.push({ letter: letter, start_time: start_time });
+        start_time += _this3.random_intervals[2];
+        if (Math.floor(Math.random() * _this3.frequency) < 3) {
+          var letter = _this3.stage.addChild((0, _objects.createLetter)(_this3.thirdLetters[0], innerWidth * (4 / 5), innerHeight / 8.7));
+          _this3.letters_array.push({ letter: letter, start_time: start_time });
         }
       }, this.random_intervals[2]);
     }
   }, {
     key: 'generateLetters',
     value: function generateLetters() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.start_time = 0;
       this.addLevels();
       this.stage.addChild(this.Timer);
       this.stage.addChild(this.Combo);
       this.startLetters = setInterval(function () {
-        _this3.start_time += _this3.random_intervals[0];
-        if (Math.floor(Math.random() * _this3.frequency) < 4) {
-          var letter = _this3.stage.addChild((0, _objects.createLetter)(_this3.firstLetters[Math.floor(Math.random() * 4)]));
-          _this3.letters_array.push({ letter: letter, start_time: _this3.start_time });
+        _this4.start_time += _this4.random_intervals[0];
+        if (Math.floor(Math.random() * _this4.frequency) < 4) {
+          var letter = _this4.stage.addChild((0, _objects.createLetter)(_this4.firstLetters[Math.floor(Math.random() * 4)]));
+          _this4.letters_array.push({ letter: letter, start_time: _this4.start_time });
         }
       }, this.random_intervals[0]);
     }
   }, {
     key: 'addLevels',
     value: function addLevels() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.second_stage = setTimeout(function () {
-        _this4.frequency = 5;
-        _this4.second_level();
-        _this4.generateLevel2();
+        _this5.frequency = 5;
+        _this5.second_level();
+        _this5.generateLevel2();
       }, 20000);
       this.middle_stage = setTimeout(function () {
-        _this4.frequency = 4;
+        _this5.frequency = 4;
       }, 40000);
       this.third_stage = setTimeout(function () {
-        _this4.frequency = 5;
-        _this4.third_level();
-        _this4.generateLevel3();
+        _this5.frequency = 5;
+        _this5.third_level();
+        _this5.generateLevel3();
       }, 60000);
     }
   }, {
@@ -411,29 +408,39 @@ var Game = function () {
     value: function correctCircleAnimation(letter) {
       var audio1 = document.getElementById('audio1');
       var audio2 = document.getElementById('audio2');
+      var audio3 = document.getElementById('audio3');
+      this.pauseAudio([audio1, audio2, audio3]);
       switch (letter.text) {
         case ('S', 'L'):
-          audio1.pause();
-          audio1.currentTime = 0;
           audio2.play();
-          this.outerCircle2.scaleX = 1.1;
-          this.outerCircle2.scaleY = 1.1;
-          this.innerCircle2.scaleX = 1.15;
-          this.innerCircle2.scaleY = 1.15;
-          createjs.Tween.get(this.innerCircle2).to({ alpha: 1, scaleX: 1, scaleY: 1 }, 700);
-          createjs.Tween.get(this.outerCircle2).to({ alpha: 1, scaleX: 1, scaleY: 1 }, 700);
+          this.animateCircle(this.outerCircle2, this.innerCircle2);
           break;
+        case "A":
+          audio3.play();
+          this.animateCircle(this.outerCircle3, this.innerCircle3);
         default:
-          audio2.pause();
-          audio2.currentTime = 0;
+
           audio1.play();
-          this.outerCircle.scaleX = 1.1;
-          this.outerCircle.scaleY = 1.1;
-          this.innerCircle.scaleX = 1.15;
-          this.innerCircle.scaleY = 1.15;
-          createjs.Tween.get(this.innerCircle).to({ alpha: 1, scaleX: 1, scaleY: 1 }, 700);
-          createjs.Tween.get(this.outerCircle).to({ alpha: 1, scaleX: 1, scaleY: 1 }, 700);
+          this.animateCircle(this.outerCircle, this.innerCircle);
       }
+    }
+  }, {
+    key: 'pauseAudio',
+    value: function pauseAudio(audio_array) {
+      audio_array.forEach(function (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      });
+    }
+  }, {
+    key: 'animateCircle',
+    value: function animateCircle(bigCircle, smallCircle) {
+      bigCircle.scaleX = 1.1;
+      bigCircle.scaleY = 1.1;
+      smallCircle.scaleX = 1.15;
+      smallCircle.scaleY = 1.15;
+      createjs.Tween.get(smallCircle).to({ alpha: 1, scaleX: 1, scaleY: 1 }, 700);
+      createjs.Tween.get(bigCircle).to({ alpha: 1, scaleX: 1, scaleY: 1 }, 700);
     }
   }, {
     key: 'incorrectKeyAnimation',
@@ -470,10 +477,10 @@ var Game = function () {
   }, {
     key: 'tick',
     value: function tick(event) {
-      var _this5 = this;
+      var _this6 = this;
 
       this.letters_array.forEach(function (obj) {
-        _this5.updateLetter(obj.letter, event.runTime - _this5.pauseTime - obj.start_time);
+        _this6.updateLetter(obj.letter, event.runTime - _this6.pauseTime - obj.start_time);
       });
       this.lifepoints -= 1;
       this.lifeBar.scaleY += 0.001;
@@ -559,21 +566,27 @@ var Game = function () {
   }, {
     key: 'inCircle',
     value: function inCircle(letter) {
-      var _this6 = this;
+      var _this7 = this;
 
       return this.letters_array.some(function (obj) {
-        return obj.letter.y < 5 && _this6.eventTime - _this6.pauseTime - obj.start_time > 5000 && obj.letter.children[1].text === letter;
+        return obj.letter.y < 5 && _this7.eventTime - _this7.pauseTime - obj.start_time > 5000 && obj.letter.children[1].text === letter;
       });
+    }
+  }, {
+    key: 'otherCircles',
+    value: function otherCircles() {
+      return [this.outerCircle2, this.innerCircle2, this.outerCircle3, this.innerCircle3];
     }
   }, {
     key: 'removeCircles',
     value: function removeCircles() {
+      var _this8 = this;
+
       document.getElementById('middle-glow-2').style.visibility = "hidden";
       document.getElementById('middle-glow-3').style.visibility = "hidden";
-      this.stage.removeChild(this.outerCircle2);
-      this.stage.removeChild(this.innerCircle2);
-      this.stage.removeChild(this.outerCircle3);
-      this.stage.removeChild(this.innerCircle3);
+      this.otherCircles().forEach(function (circle) {
+        return _this8.stage.removeChild(circle);
+      });
     }
   }]);
 
@@ -589,7 +602,6 @@ start.addEventListener('click', function () {
     newGame.first_level();
     newGame.generateLetters();
     newGame.addEvent();
-    newGame.removeCircles();
     (0, _background_glow.hideVisibility)();
   } else {
     newGame.generateLetters();
@@ -615,11 +627,6 @@ function keyDownTextField(e) {
     newGame.comboCount = 0;
   }
 }
-
-// Find browser game, update css.
-// Add high score.
-// Update the sounds, one for each circle.
-// Add easy medium hard level
 
 /***/ }),
 /* 4 */

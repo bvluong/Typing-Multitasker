@@ -46,17 +46,13 @@ class Game {
   }
 
   first_level() {
-    this.stage.addChild(this.outerCircle);
-    this.stage.addChild(this.innerCircle);
-    this.stage.addChild(this.outerCircle2);
-    this.stage.addChild(this.innerCircle2);
-    this.stage.addChild(this.outerCircle3);
-    this.stage.addChild(this.innerCircle3);
-    this.stage.addChild(lifeBarBorder());
-    this.stage.addChild(this.lifeBar);
+    [this.outerCircle,this.innerCircle,this.outerCircle2,this.innerCircle2,
+     this.outerCircle3,this.innerCircle3, lifeBarBorder(), this.lifeBar]
+     .forEach(circle => this.stage.addChild(circle));
     this.lifeBar.scaleY = 0;
     this.stage.update();
   }
+
 
   second_level() {
     this.stage.addChild(this.outerCircle2);
@@ -156,29 +152,37 @@ class Game {
   correctCircleAnimation(letter) {
     const audio1 = document.getElementById('audio1');
     const audio2 = document.getElementById('audio2');
+    const audio3 = document.getElementById('audio3');
+    this.pauseAudio([audio1,audio2,audio3]);
     switch (letter.text) {
       case 'S', 'L' :
-        audio1.pause();
-        audio1.currentTime = 0;
         audio2.play();
-        this.outerCircle2.scaleX = 1.1;
-        this.outerCircle2.scaleY = 1.1;
-        this.innerCircle2.scaleX = 1.15;
-        this.innerCircle2.scaleY = 1.15;
-        createjs.Tween.get(this.innerCircle2).to({alpha: 1, scaleX: 1, scaleY: 1},700);
-        createjs.Tween.get(this.outerCircle2).to({alpha: 1, scaleX: 1, scaleY: 1},700);
+        this.animateCircle(this.outerCircle2, this.innerCircle2);
         break;
+      case "A":
+        audio3.play();
+        this.animateCircle(this.outerCircle3, this.innerCircle3);
       default:
-        audio2.pause();
-        audio2.currentTime = 0;
+
         audio1.play();
-        this.outerCircle.scaleX = 1.1;
-        this.outerCircle.scaleY = 1.1;
-        this.innerCircle.scaleX = 1.15;
-        this.innerCircle.scaleY = 1.15;
-        createjs.Tween.get(this.innerCircle).to({alpha: 1, scaleX: 1, scaleY: 1},700);
-        createjs.Tween.get(this.outerCircle).to({alpha: 1, scaleX: 1, scaleY: 1},700);
+        this.animateCircle(this.outerCircle, this.innerCircle);
     }
+  }
+
+  pauseAudio(audio_array) {
+    audio_array.forEach(audio => {
+      audio.pause();
+      audio.currentTime = 0;
+    });
+  }
+
+  animateCircle(bigCircle, smallCircle) {
+    bigCircle.scaleX = 1.1;
+    bigCircle.scaleY = 1.1;
+    smallCircle.scaleX = 1.15;
+    smallCircle.scaleY = 1.15;
+    createjs.Tween.get(smallCircle).to({alpha: 1, scaleX: 1, scaleY: 1},700);
+    createjs.Tween.get(bigCircle).to({alpha: 1, scaleX: 1, scaleY: 1},700);
   }
 
   incorrectKeyAnimation(letter) {
@@ -291,13 +295,15 @@ class Game {
       this.eventTime-this.pauseTime - obj.start_time > 5000 && obj.letter.children[1].text === letter));
   }
 
+  otherCircles() {
+    return [this.outerCircle2,this.innerCircle2,
+      this.outerCircle3,this.innerCircle3]
+  }
+
   removeCircles() {
     document.getElementById('middle-glow-2').style.visibility = "hidden";
     document.getElementById('middle-glow-3').style.visibility = "hidden";
-    this.stage.removeChild(this.outerCircle2);
-    this.stage.removeChild(this.innerCircle2);
-    this.stage.removeChild(this.outerCircle3);
-    this.stage.removeChild(this.innerCircle3);
+    this.otherCircles().forEach(circle => this.stage.removeChild(circle));
   }
 }
 
@@ -312,7 +318,6 @@ start.addEventListener('click', ()=>{
     newGame.first_level();
     newGame.generateLetters();
     newGame.addEvent();
-    newGame.removeCircles();
     hideVisibility();
   } else {
     newGame.generateLetters();
@@ -320,8 +325,7 @@ start.addEventListener('click', ()=>{
     newGame.removeCircles();
     hideVisibility();
   }
-}
-);
+});
 
 
 document.addEventListener("keydown", keyDownTextField, false);
@@ -340,8 +344,3 @@ function keyDownTextField(e) {
     newGame.comboCount = 0;
   }
 }
-
-// Find browser game, update css.
-// Add high score.
-// Update the sounds, one for each circle.
-// Add easy medium hard level
