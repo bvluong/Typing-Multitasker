@@ -37,7 +37,7 @@ class Game {
 
   otherCircles() {
     return [this.outerCircle2,this.innerCircle2,
-      this.outerCircle3,this.innerCircle3]
+      this.outerCircle3,this.innerCircle3];
   }
 
   levels() {
