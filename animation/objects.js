@@ -49,7 +49,8 @@ export const lifeBar = () => {
 
 export const lifeBarBorder = () => {
   var lifebar = new createjs.Shape();
-  lifebar.graphics.beginLinearGradientFill(["#f75221","#ff2511"], [0, 1], 0, 20, 0, 120)
+  lifebar.graphics.setStrokeStyle(1).beginStroke("#ff2511")
+  .beginLinearGradientFill(["#f75221","#ff2511"], [0, 1], 0, 20, 0, 120)
     .drawRect(0, 0, 80, 200);
   lifebar.x = innerWidth/16;
   lifebar.y = innerHeight/1.7;
@@ -78,7 +79,7 @@ export const gameOver = () => {
 };
 export const highScore = (text) => {
   let object = new createjs.Text(text, "70px Iceland", "white");
-  object.x = innerWidth/2 - 200;
+  object.x = innerWidth/2 - 20;
   object.y = 100;
   return object;
 };

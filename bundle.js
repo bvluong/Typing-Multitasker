@@ -91,11 +91,10 @@ var glow = exports.glow = function glow() {
   middleGlow.style.top = window.innerHeight / 2 - 23 + 'px';
   middleGlow.style.left = window.innerWidth / 2 - 23 + 'px';
   var middleGlow2 = document.getElementById('middle-glow-2');
-  middleGlow2.style.visibility = "hidden";
   middleGlow2.style.top = window.innerHeight / 9 - 24 + 'px';
   middleGlow2.style.left = window.innerWidth / 5 - 23 + 'px';
   var middleGlow3 = document.getElementById('middle-glow-3');
-  middleGlow3.style.visibility = "hidden";
+
   middleGlow3.style.top = window.innerHeight / 9 - 23 + 'px';
   middleGlow3.style.left = window.innerWidth * (4 / 5) - 24 + 'px';
   document.getElementById('combo-glow').style.visibility = 'hidden';
@@ -186,7 +185,7 @@ var lifeBar = exports.lifeBar = function lifeBar() {
 
 var lifeBarBorder = exports.lifeBarBorder = function lifeBarBorder() {
   var lifebar = new createjs.Shape();
-  lifebar.graphics.beginLinearGradientFill(["#f75221", "#ff2511"], [0, 1], 0, 20, 0, 120).drawRect(0, 0, 80, 200);
+  lifebar.graphics.setStrokeStyle(1).beginStroke("#ff2511").beginLinearGradientFill(["#f75221", "#ff2511"], [0, 1], 0, 20, 0, 120).drawRect(0, 0, 80, 200);
   lifebar.x = innerWidth / 16;
   lifebar.y = innerHeight / 1.7;
   return lifebar;
@@ -214,7 +213,7 @@ var gameOver = exports.gameOver = function gameOver() {
 };
 var highScore = exports.highScore = function highScore(text) {
   var object = new createjs.Text(text, "70px Iceland", "white");
-  object.x = innerWidth / 2 - 200;
+  object.x = innerWidth / 2 - 20;
   object.y = 100;
   return object;
 };
@@ -278,6 +277,10 @@ var Game = function () {
     this.frequency = 4;
     this.innerCircle = (0, _objects.createCircle)();
     this.outerCircle = (0, _objects.outerCircle)();
+    this.outerCircle2 = (0, _objects.outerCircle)(innerWidth / 5, innerHeight / 9);
+    this.innerCircle2 = (0, _objects.createCircle)(innerWidth / 5, innerHeight / 9);
+    this.outerCircle3 = (0, _objects.outerCircle)(innerWidth * (4 / 5), innerHeight / 9);
+    this.innerCircle3 = (0, _objects.createCircle)(innerWidth * (4 / 5), innerHeight / 9);
     this.score = 0;
   }
 
@@ -286,6 +289,10 @@ var Game = function () {
     value: function first_level() {
       this.stage.addChild(this.outerCircle);
       this.stage.addChild(this.innerCircle);
+      this.stage.addChild(this.outerCircle2);
+      this.stage.addChild(this.innerCircle2);
+      this.stage.addChild(this.outerCircle3);
+      this.stage.addChild(this.innerCircle3);
       this.stage.addChild((0, _objects.lifeBarBorder)());
       this.stage.addChild(this.lifeBar);
       this.lifeBar.scaleY = 0;
@@ -294,8 +301,6 @@ var Game = function () {
   }, {
     key: 'second_level',
     value: function second_level() {
-      this.outerCircle2 = (0, _objects.outerCircle)(innerWidth / 5, innerHeight / 9);
-      this.innerCircle2 = (0, _objects.createCircle)(innerWidth / 5, innerHeight / 9);
       this.stage.addChild(this.outerCircle2);
       this.stage.addChild(this.innerCircle2);
       document.getElementById('middle-glow-2').style.visibility = "visible";
@@ -304,8 +309,6 @@ var Game = function () {
   }, {
     key: 'third_level',
     value: function third_level() {
-      this.outerCircle3 = (0, _objects.outerCircle)(innerWidth * (4 / 5), innerHeight / 9);
-      this.innerCircle3 = (0, _objects.createCircle)(innerWidth * (4 / 5), innerHeight / 9);
       this.stage.addChild(this.outerCircle3);
       this.stage.addChild(this.innerCircle3);
       document.getElementById('middle-glow-3').style.visibility = "visible";
@@ -489,12 +492,16 @@ var Game = function () {
         this.stage.addChild((0, _objects.gameOver)());
         this.stage.addChild((0, _objects.highScore)('HIGH SCORE: ' + this.score));
         this.stage.update();
-
+        this.hideOptions();
         this.clear_intervals();
-        document.getElementById('start').style.visibility = 'visible';
-        document.getElementById('instructions').style.visibility = 'visible';
-        document.getElementById('combo-glow').style.visibility = 'hidden';
       }
+    }
+  }, {
+    key: 'hideOptions',
+    value: function hideOptions() {
+      document.getElementById('start').style.visibility = 'visible';
+      document.getElementById('instructions').style.visibility = 'visible';
+      document.getElementById('combo-glow').style.visibility = 'hidden';
     }
   }, {
     key: 'increase_lifepoints',
@@ -558,6 +565,16 @@ var Game = function () {
         return obj.letter.y < 5 && _this6.eventTime - _this6.pauseTime - obj.start_time > 5000 && obj.letter.children[1].text === letter;
       });
     }
+  }, {
+    key: 'removeCircles',
+    value: function removeCircles() {
+      document.getElementById('middle-glow-2').style.visibility = "hidden";
+      document.getElementById('middle-glow-3').style.visibility = "hidden";
+      this.stage.removeChild(this.outerCircle2);
+      this.stage.removeChild(this.innerCircle2);
+      this.stage.removeChild(this.outerCircle3);
+      this.stage.removeChild(this.innerCircle3);
+    }
   }]);
 
   return Game;
@@ -572,10 +589,12 @@ start.addEventListener('click', function () {
     newGame.first_level();
     newGame.generateLetters();
     newGame.addEvent();
+    newGame.removeCircles();
     (0, _background_glow.hideVisibility)();
   } else {
     newGame.generateLetters();
     newGame.addEvent();
+    newGame.removeCircles();
     (0, _background_glow.hideVisibility)();
   }
 });

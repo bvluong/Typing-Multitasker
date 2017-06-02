@@ -38,12 +38,20 @@ class Game {
       this.frequency = 4;
       this.innerCircle = createCircle();
       this.outerCircle = outerCircle();
+      this.outerCircle2 = outerCircle(innerWidth/5,innerHeight/9);
+      this.innerCircle2 = createCircle(innerWidth/5,innerHeight/9);
+      this.outerCircle3 = outerCircle(innerWidth*(4/5),innerHeight/9);
+      this.innerCircle3 = createCircle(innerWidth*(4/5),innerHeight/9);
       this.score = 0;
   }
 
   first_level() {
     this.stage.addChild(this.outerCircle);
     this.stage.addChild(this.innerCircle);
+    this.stage.addChild(this.outerCircle2);
+    this.stage.addChild(this.innerCircle2);
+    this.stage.addChild(this.outerCircle3);
+    this.stage.addChild(this.innerCircle3);
     this.stage.addChild(lifeBarBorder());
     this.stage.addChild(this.lifeBar);
     this.lifeBar.scaleY = 0;
@@ -51,8 +59,6 @@ class Game {
   }
 
   second_level() {
-    this.outerCircle2 = outerCircle(innerWidth/5,innerHeight/9);
-    this.innerCircle2 = createCircle(innerWidth/5,innerHeight/9);
     this.stage.addChild(this.outerCircle2);
     this.stage.addChild(this.innerCircle2);
     document.getElementById('middle-glow-2').style.visibility = "visible";
@@ -60,8 +66,6 @@ class Game {
   }
 
   third_level() {
-    this.outerCircle3 = outerCircle(innerWidth*(4/5),innerHeight/9);
-    this.innerCircle3 = createCircle(innerWidth*(4/5),innerHeight/9);
     this.stage.addChild(this.outerCircle3);
     this.stage.addChild(this.innerCircle3);
     document.getElementById('middle-glow-3').style.visibility = "visible";
@@ -225,12 +229,15 @@ class Game {
       this.stage.addChild(gameOver());
       this.stage.addChild(highScore(`HIGH SCORE: ${this.score}`));
       this.stage.update();
-
+      this.hideOptions();
       this.clear_intervals();
-      document.getElementById('start').style.visibility = 'visible';
-      document.getElementById('instructions').style.visibility = 'visible';
-      document.getElementById('combo-glow').style.visibility = 'hidden';
     }
+  }
+
+  hideOptions() {
+    document.getElementById('start').style.visibility = 'visible';
+    document.getElementById('instructions').style.visibility = 'visible';
+    document.getElementById('combo-glow').style.visibility = 'hidden';
   }
 
   increase_lifepoints() {
@@ -283,6 +290,15 @@ class Game {
       ( obj.letter.y < 5 &&
       this.eventTime-this.pauseTime - obj.start_time > 5000 && obj.letter.children[1].text === letter));
   }
+
+  removeCircles() {
+    document.getElementById('middle-glow-2').style.visibility = "hidden";
+    document.getElementById('middle-glow-3').style.visibility = "hidden";
+    this.stage.removeChild(this.outerCircle2);
+    this.stage.removeChild(this.innerCircle2);
+    this.stage.removeChild(this.outerCircle3);
+    this.stage.removeChild(this.innerCircle3);
+  }
 }
 
 
@@ -296,10 +312,12 @@ start.addEventListener('click', ()=>{
     newGame.first_level();
     newGame.generateLetters();
     newGame.addEvent();
+    newGame.removeCircles();
     hideVisibility();
   } else {
     newGame.generateLetters();
     newGame.addEvent();
+    newGame.removeCircles();
     hideVisibility();
   }
 }

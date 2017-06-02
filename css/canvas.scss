@@ -141,6 +141,10 @@ img {
   height: 100px;
   width: 100px;
   bottom: 100px;
+  transition: all 0.5s;
+  animation: neon3 1s ease-in-out infinite alternate;
+  -webkit-animation: neon3 1s ease-in-out infinite alternate;
+  color: #ffffff;
 }
 
 @keyframes neon2 {
@@ -149,5 +153,14 @@ img {
   }
   to {
     text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #228DFF, 0 0 35px #228DFF, 0 0 40px #228DFF;
+  }
+}
+
+@keyframes neon3 {
+  from {
+    filter: drop-shadow(3px 3px 3px #c32aff);
+  }
+  to {
+    filter: drop-shadow(0px 0px 0px #9c21cc);
   }
 }
