@@ -213,7 +213,6 @@ var Game = function () {
         _this2.frequency = 4;
       }, 40000);
       this.third_stage = setTimeout(function () {
-        _this2.frequency = 5;
         _this2.third_level();
         _this2.generateLevel3();
       }, 60000);
@@ -323,6 +322,7 @@ var Game = function () {
         case "A":
           audio3.play();
           this.animateCircle(this.outerCircle3, this.innerCircle3);
+          break;
         default:
           audio1.play();
           this.animateCircle(this.outerCircle, this.innerCircle);

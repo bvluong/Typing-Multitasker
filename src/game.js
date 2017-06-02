@@ -76,7 +76,6 @@ class Game {
       this.frequency = 4;
     }, 40000);
     this.third_stage = setTimeout(()=> {
-      this.frequency = 5;
       this.third_level();
       this.generateLevel3();
     }, 60000);
@@ -175,6 +174,7 @@ class Game {
       case "A":
         audio3.play();
         this.animateCircle(this.outerCircle3, this.innerCircle3);
+        break;
       default:
         audio1.play();
         this.animateCircle(this.outerCircle, this.innerCircle);
