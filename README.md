@@ -6,7 +6,7 @@
 
 Typing Multitasker is a typing game that utilizes rhythm, timing, and multi-tasking inspired by  **Gyroshi**.
 
-Live Site: [Typing-Multitasker-App](www.slouch-app.com)
+Live Site: [Typing-Multitasker-App](https://bvluong.github.io/Typing-Multitasker/)
 
 
 ## Technology
