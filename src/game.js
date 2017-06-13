@@ -170,18 +170,20 @@ class Game {
     const audio1 = document.getElementById('audio1');
     const audio2 = document.getElementById('audio2');
     const audio3 = document.getElementById('audio3');
-    this.pauseAudio([audio1,audio2,audio3]);
+    const audio4 = document.getElementById('audio4');
+    let audio_array = [audio1, audio2, audio3, audio4];
+    this.pauseAudio([audio1,audio2,audio3, audio4]);
     switch (letter.text) {
       case 'S', 'L' :
-        audio2.play();
+        audio_array[Math.floor(Math.random()*4)].play();
         this.animateCircle(this.outerCircle2, this.innerCircle2);
         break;
       case "A":
-        audio3.play();
+        audio_array[Math.floor(Math.random()*4)].play();
         this.animateCircle(this.outerCircle3, this.innerCircle3);
         break;
       default:
-        audio1.play();
+        audio_array[Math.floor(Math.random()*4)].play();
         this.animateCircle(this.outerCircle, this.innerCircle);
     }
   }
