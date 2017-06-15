@@ -99,7 +99,7 @@ var glow = exports.glow = function glow() {
   middleGlow3.style.left = window.innerWidth * (4 / 5) - 24 + 'px';
   document.getElementById('combo-glow').style.visibility = 'hidden';
   var heart = document.getElementById('heart');
-  heart.style.top = window.innerHeight / 1.7 - 100 + 'px';
+  heart.style.top = window.innerHeight / 1.55 - 100 + 'px';
   heart.style.left = window.innerWidth / 16 - 10 + 'px';
 };
 
@@ -640,7 +640,7 @@ var lifeBar = exports.lifeBar = function lifeBar() {
   var lifebar = new createjs.Shape();
   lifebar.graphics.beginFill("black").drawRect(0, 0, 80, 200);
   lifebar.x = innerWidth / 16;
-  lifebar.y = innerHeight / 1.7;
+  lifebar.y = innerHeight / 1.55;
   return lifebar;
 };
 
@@ -648,7 +648,7 @@ var lifeBarBorder = exports.lifeBarBorder = function lifeBarBorder() {
   var lifebar = new createjs.Shape();
   lifebar.graphics.setStrokeStyle(1).beginStroke("#ff2511").beginLinearGradientFill(["#f75221", "#ff2511"], [0, 1], 0, 20, 0, 120).drawRect(0, 0, 80, 200);
   lifebar.x = innerWidth / 16;
-  lifebar.y = innerHeight / 1.7;
+  lifebar.y = innerHeight / 1.55;
   return lifebar;
 };
 
